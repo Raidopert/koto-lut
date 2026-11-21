@@ -1,0 +1,4 @@
+{
+  "cleanUrls": true,
+  "rewrites": [{ "source": "/koto-lut", "destination": "/index.html" }]
+}
