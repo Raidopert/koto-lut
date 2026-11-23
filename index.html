@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Кото-Лут — лут героя</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23241C12'/%3E%3Ctext x='50' y='74' font-size='62' text-anchor='middle'%3E🐟%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#F4B400">
+<meta name="description" content="Кото-Лут — лут-РПГ: кот Рыбец, герой-рыцарь, колесо Рыбов, гача духов и барахолка Мурзика.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Russo+One&display=swap" rel="stylesheet">
@@ -76,14 +81,16 @@ canvas#cv{display:block;width:100%;height:auto}
 
 .rowline{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:space-between;margin-bottom:6px;font-size:clamp(12px,3vw,15px)}
 .badge{display:inline-block;background:linear-gradient(180deg,#FFC85B,#F49B06);color:#221505;padding:1px 9px;font-size:clamp(10px,2.6vw,12px);border-radius:999px;font-weight:800}
-.bar{position:relative;height:14px;border:1px solid rgba(255,199,120,.35);background:rgba(0,0,0,.45);border-radius:999px;overflow:hidden;margin-bottom:2px;box-shadow:inset 0 1px 3px rgba(0,0,0,.5)}
-.bar i{position:absolute;left:0;top:0;bottom:0;width:50%;display:block}
-.bar.hp i{background:linear-gradient(180deg,#FF8A65,#E76F51)}
-.bar.mp i{background:linear-gradient(180deg,#5FA8E0,#3B82C4)}
-.bar.boss i{background:linear-gradient(180deg,#7CC968,#57B54B)}
-.bar.xp i{background:linear-gradient(180deg,#FFC85B,#FF9F1C)}
-.bar.pity i{background:linear-gradient(180deg,#B47CE8,#9B5DE5)}
-.bar.pity.gold i{background:linear-gradient(180deg,#FFDF6B,#F4B400)}
+.bar{position:relative;height:16px;border:1px solid rgba(255,224,160,.4);background:linear-gradient(180deg,rgba(8,6,4,.62),rgba(24,18,12,.38));border-radius:999px;overflow:hidden;margin-bottom:2px;box-shadow:inset 0 2px 5px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.28)}
+.bar u{position:absolute;left:0;top:0;bottom:0;width:100%;display:block;background:linear-gradient(180deg,rgba(255,246,236,.85),rgba(255,232,220,.35));border-radius:999px;transition:width .9s cubic-bezier(.2,.7,.3,1) .22s;filter:blur(.5px)}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:50%;display:block;transition:width .22s ease-out;border-radius:999px}
+.bar i::after{content:'';position:absolute;left:2px;right:2px;top:2px;height:38%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.06))}
+.bar.hp i{background:linear-gradient(180deg,#FFA07A 0%,#F2694B 55%,#C64B32 100%)}
+.bar.mp i{background:linear-gradient(180deg,#7DBCF0 0%,#3B82C4 55%,#2C66A0 100%)}
+.bar.boss i{background:linear-gradient(180deg,#A8E884 0%,#57B54B 50%,#377E2C 100%)}
+.bar.xp i{background:linear-gradient(180deg,#FFD97A 0%,#FFB020 55%,#E08A0A 100%)}
+.bar.pity i{background:linear-gradient(180deg,#C99BF0 0%,#9B5DE5 55%,#7A3FB8 100%)}
+.bar.pity.gold i{background:linear-gradient(180deg,#FFE98C 0%,#F4B400 55%,#D1940A 100%)}
 .bartxt{font-size:clamp(10px,2.6vw,12px);color:var(--muted);margin-bottom:6px}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .btn{display:inline-flex;align-items:center;gap:6px;background:var(--glass2);border:1px solid var(--line2);border-radius:11px;padding:8px 13px;font-weight:800;font-size:clamp(11px,3vw,14px);color:var(--ink);text-decoration:none;letter-spacing:.3px;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:transform .1s,filter .15s}
@@ -151,15 +158,31 @@ table#lbTable{width:100%;border-collapse:separate;border-spacing:3px;font-size:c
 .overlay{position:fixed;inset:0;background:rgba(8,6,4,.62);display:flex;align-items:center;justify-content:center;z-index:50;padding:12px;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
 .modal{max-width:440px;width:100%;max-height:88vh;overflow-y:auto;margin:0;border-radius:18px}
 .modal h3{margin-bottom:6px}
-#toasts{position:fixed;top:10px;right:10px;z-index:60;display:flex;flex-direction:column;gap:6px;max-width:min(320px,86vw)}
-.toast{background:rgba(24,18,12,.92);color:#FFF3D9;border:1px solid var(--line2);border-radius:10px;padding:7px 11px;font-size:clamp(11px,2.8vw,13px);box-shadow:0 8px 22px rgba(0,0,0,.5);animation:tin .18s ease-out}
+/* v2.1b: уведомления — компактный мини-фид в одну строку справа под шапкой, не мешает видеть данные */
+#toasts{position:fixed;top:56px;right:10px;z-index:55;display:flex;flex-direction:column;align-items:flex-end;gap:4px;max-width:min(300px,62vw);pointer-events:none}
+.toast{background:rgba(24,18,12,.72);color:#FFF3D9;border:1px solid var(--line);border-radius:8px;padding:3px 9px;font-size:11px;box-shadow:0 6px 16px rgba(0,0,0,.35);animation:tin .18s ease-out;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.toast .ic{width:12px;height:12px}
 @keyframes tin{from{transform:translateY(-8px);opacity:0}to{transform:none;opacity:1}}
 
 /* интро */
 #intro .modal{text-align:center;padding:0;overflow:hidden}
 .introart-wrap{position:relative;height:clamp(170px,42vw,240px);overflow:hidden;border-bottom:1px solid var(--line2)}
-.introart-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+/* v2.1c: интро живое — медленный кен-бернс арта, тёплые блики, перелив логотипа */
+.introart-wrap img{width:100%;height:100%;object-fit:cover;display:block;animation:introDrift 16s ease-in-out infinite alternate}
+@keyframes introDrift{from{transform:scale(1.06) translateX(-1.5%)}to{transform:scale(1.13) translateX(1.5%)}}
+.introart-wrap::before{content:'';position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 18% 30%,rgba(255,214,110,.16),transparent 26%),radial-gradient(circle at 78% 22%,rgba(255,178,60,.14),transparent 22%),radial-gradient(circle at 55% 72%,rgba(255,236,180,.11),transparent 18%);animation:introGlow 7s ease-in-out infinite alternate}
+@keyframes introGlow{from{opacity:.35;transform:translateX(-2%)}to{opacity:.9;transform:translateX(2%)}}
 .introart-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,9,6,.12) 40%,rgba(24,18,12,.92) 100%)}
+.intromodal .logo{background-size:200% auto;animation:logoShine 3.6s linear infinite}
+@keyframes logoShine{to{background-position:200% center}}
+/* v2.1d: бейдж «трофеи ждут» на вкладке Арена */
+.tabbtn{position:relative}
+.tabbtn.wait::after{content:'';position:absolute;top:5px;right:7px;width:8px;height:8px;border-radius:50%;background:#FF9F1C;box-shadow:0 0 6px rgba(255,159,28,.8);animation:pulseDot 1s ease-in-out infinite}
+@keyframes pulseDot{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+/* v2.1e: счётчик сумки N/24 */
+.bagcnt{display:inline-block;margin-left:8px;padding:1px 8px;border-radius:9px;background:rgba(0,0,0,.35);border:1px solid var(--line2);font-size:10px;font-weight:400;color:var(--ink);vertical-align:2px}
+.bagcnt.warn{color:#FFC85B;border-color:#FFC85B}
+.bagcnt.full{color:#FF7A6B;border-color:#FF7A6B}
 .intromodal .logo,.intromodal .tagline,.intromodal .lore-p,.intromodal .nickrow,.intromodal .btn,.intromodal .hint{position:relative;z-index:1}
 .intromodal .logo{font-size:clamp(30px,9vw,44px);margin-top:10px}
 .lore-p{font-size:clamp(12px,3vw,14px);text-align:left;margin:10px 0}
@@ -366,6 +389,30 @@ nav#tabs{
 .wheeldisc{box-shadow:0 0 0 6px #3a3328,0 0 0 10px #241f18,0 14px 40px rgba(0,0,0,.55),0 0 46px rgba(255,201,61,.20)}
 .wheelptr{filter:drop-shadow(0 2px 4px rgba(0,0,0,.7)) drop-shadow(0 0 8px rgba(255,201,61,.6))}
 .wheelhub{box-shadow:0 3px 14px rgba(0,0,0,.6),0 0 22px rgba(255,201,61,.45)}
+/* v2.0: сетка-инвентарь в меню, чипы предметов и множитель лута */
+.ginv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:7px;margin:6px 0 10px}
+.gchip{display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:var(--glass2);border:1px solid var(--line2);border-radius:11px;padding:8px 10px;font:inherit;color:var(--ink);text-align:left;cursor:pointer;position:relative;transition:transform .1s,filter .15s}
+.gchip:hover{filter:brightness(1.15);border-color:rgba(255,220,140,.5)}
+.gchip:active{transform:translateY(1px)}
+.gchip b{font-size:clamp(11px,2.8vw,13px);padding-right:26px}
+.gchip i{font-style:normal;font-size:clamp(10px,2.6vw,12px);color:var(--muted)}
+.gchip u{text-decoration:none;position:absolute;top:6px;right:8px;background:linear-gradient(180deg,#FFDF6B,#F4B400);color:#221505;font-weight:800;font-size:10px;border-radius:8px;padding:1px 6px}
+.gchip.r-1{opacity:.55;border-style:dashed}
+.gchip.r0{border-color:rgba(141,153,174,.45)}
+.gchip.r1{border-color:rgba(59,130,196,.55)}
+.gchip.r2{border-color:rgba(155,93,229,.6)}
+.gchip.r3{border-color:rgba(244,180,0,.7);box-shadow:0 0 10px rgba(244,180,0,.22)}
+.chipup{background:linear-gradient(180deg,#FFDF6B,#F4B400);color:#221505;border-radius:8px;padding:1px 7px;font-weight:800;font-size:10px;margin-left:5px;vertical-align:2px}
+.badge.chip-loot{background:linear-gradient(180deg,#7AC46B,#4E9E42);color:#082408;border-color:rgba(180,240,150,.6);animation:lootpulse 1.6s ease-in-out infinite}
+@keyframes lootpulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3)}}
+/* v2.1: контекстные подсказки туториала */
+/* v2.1b: подсказка туториала — компактнее и справа, не по центру экрана */
+.kototip{position:fixed;right:10px;bottom:58px;left:auto;transform:none;z-index:60;display:flex;gap:8px;align-items:flex-start;max-width:min(86vw,440px);background:rgba(24,18,10,.88);border:1px solid rgba(244,180,0,.5);border-radius:12px;padding:8px 12px;box-shadow:0 12px 32px rgba(0,0,0,.5),0 0 20px rgba(244,180,0,.12);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:tipIn .3s cubic-bezier(.2,1.4,.4,1)}
+.kototip .tipic{font-size:20px;line-height:1}
+.kototip .tipbody{min-width:0}
+.kototip b{color:#FFD34D;font-size:10px;letter-spacing:.6px;text-transform:uppercase}
+.kototip p{margin:2px 0 0;font-size:clamp(10px,2.6vw,12px);color:#FFF3D9}
+@keyframes tipIn{from{transform:translateY(10px);opacity:0}to{transform:none;opacity:1}}
 /* рейд / настроение / гости */
 .raidrow{align-items:center;gap:12px}
 .raidimg{width:96px;height:96px;object-fit:contain;flex:0 0 auto;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--glassbrd);box-shadow:0 6px 18px rgba(0,0,0,.4)}
@@ -502,6 +549,60 @@ nav#tabs{
   .actions{gap:8px}
   .chip{max-width:46vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
+
+/* ===== v1.3 «Фестиваль»: бумажный комикс — халфтон, жирные обводки, offset-тени ===== */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(rgba(255,199,120,.07) 1.2px,transparent 1.35px);
+  background-size:13px 13px;
+}
+.panel,.gmenu-modal{border:2.5px solid #33261A;box-shadow:5px 5px 0 rgba(0,0,0,.4)}
+.btn{border:2px solid #33261A;box-shadow:3px 3px 0 rgba(0,0,0,.32)}
+.btn:active{transform:translate(2px,2px) scale(1);box-shadow:1px 1px 0 rgba(0,0,0,.32)}
+.card{border:2px solid #33261A;box-shadow:3px 3px 0 rgba(0,0,0,.3)}
+h1,h2,h3,.gtitle,.hero-title{text-shadow:2px 2px 0 rgba(0,0,0,.45)}
+.chip{border:1.5px solid #3A2C1E;box-shadow:2px 2px 0 rgba(0,0,0,.28)}
+.tabbtn.active{border-top:2.5px solid #FFD34D}
+.fchip{border:1.5px solid #3A2C1E}
+/* овердрайв-бар */
+#odWrap{display:flex;align-items:center;gap:10px;margin:8px 2px 2px}
+#odTrack{flex:1;height:14px;border-radius:999px;background:rgba(0,0,0,.45);border:2px solid #33261A;overflow:hidden;box-shadow:2px 2px 0 rgba(0,0,0,.3)}
+#odBar{height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#FF9F1C 60%,#FFD34D);transition:width .2s;border-radius:999px}
+#odBar.on{background:linear-gradient(90deg,#FF9F1C,#FFD34D 40%,#FFF3C4 70%,#FFD34D);animation:odPulse .5s ease-in-out infinite alternate}
+@keyframes odPulse{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+#odLbl{font-weight:800;font-size:clamp(10.5px,2.7vw,12px);color:var(--gold);white-space:nowrap;letter-spacing:.03em}
+
+/* ===== v1.4: колесо — ставки ×1/×5/×25/×100 ===== */
+.betrow{display:flex;gap:8px;justify-content:center;margin:10px 0 2px;flex-wrap:wrap}
+.betbtn{min-width:64px;padding:9px 14px;font-weight:800;font-size:clamp(13px,3.4vw,15px);letter-spacing:.02em}
+.betbtn.on{background:linear-gradient(135deg,#FF9F1C,#F4B400);color:#2E2418;border-color:#33261A;box-shadow:3px 3px 0 rgba(0,0,0,.35)}
+
+/* ===== v1.4: бумажная кукла героя ===== */
+.dollgrid{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch}
+.dollcol{display:flex;flex-direction:column;gap:8px}
+.dollcenter{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-width:96px;padding:6px;border-radius:12px;background:rgba(0,0,0,.25);border:1.5px dashed rgba(255,199,120,.35)}
+#dollFace{width:72px;height:72px;image-rendering:pixelated;filter:drop-shadow(0 3px 6px rgba(0,0,0,.45))}
+.dollcore{width:100%;font-size:11px}
+.dollcore .statrow{justify-content:space-between}
+.dollslot{position:relative;border:2px solid #3A2C1E;border-radius:11px;background:var(--glass2);padding:7px 8px;min-height:52px;cursor:pointer;box-shadow:2px 2px 0 rgba(0,0,0,.3);transition:background .15s,border-color .15s}
+.dollslot .dname{display:block;font-weight:700;font-size:clamp(10px,2.6vw,12px);margin-top:2px}
+.dollslot .dstat{display:block;font-size:clamp(9px,2.3vw,11px);color:#B8A88F}
+.dollslot.has-item{border-color:#FFD34D}
+.dollslot.drophover{background:rgba(255,211,77,.18);border-color:#FFD34D;box-shadow:0 0 14px rgba(255,211,77,.4)}
+.dollslot.pressing{transform:scale(.985)}
+.dolldelta{position:absolute;right:5px;bottom:5px;font-size:10px;font-weight:800;padding:2px 6px;border-radius:999px;pointer-events:none;z-index:2}
+.dolldelta.up{background:#2E7D46;color:#DFF5E4}
+.dolldelta.down{background:#8C3A2B;color:#FBE3DC}
+.dolldelta.wrong{background:#4A3F35;color:#F2D8B8}
+
+/* ===== v1.4: перетаскивание ===== */
+#heroInv .card,#heroDoll .dollslot{touch-action:none}
+.card.pressing{opacity:.85}
+.card.dragging,.dollslot.dragging{opacity:.35}
+.dragGhost{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;opacity:.95;box-shadow:0 10px 24px rgba(0,0,0,.5)}
+@keyframes shakeX{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.shakeX{animation:shakeX .3s}
+#heroInv.dropzone{outline:2px dashed #FFD34D;outline-offset:5px;border-radius:12px;background:rgba(255,211,77,.07)}
 </style>
 </head>
 <body>
@@ -562,7 +663,7 @@ nav#tabs{
       </div>
       <button id="startBtn" class="btn btn-acc big btn-pulse">НАЧАТЬ РЕЙД</button>
       <p class="hint">Сейв — локальный. Мировая таблица рекордов подключится сама, когда откроешь игру на raidopert.ru. Бой идёт сам: тебе решать, кого кормить, что надеть и когда бросить клубок.</p>
-      <button id="introMenuBtn" class="gearbtn gearbtn-intro" title="Меню: настройки, инвентарь, профиль">⚙</button>
+      <button id="introMenuBtn" class="gearbtn gearbtn-intro" title="Меню: настройки · профиль">⚙</button>
     </div>
   </div>
 
@@ -602,17 +703,19 @@ nav#tabs{
           <canvas id="cv" width="512" height="288"></canvas>
           <div id="bubble" class="bubble hidden"></div>
         </div>
+        <!-- v1.3: овердрайв — тап по арене жжёт полный заряд -->
+        <div id="odWrap" title="Тап по арене — ОВЕРДРАЙВ: ×2 урон и скорость атак на 10 секунд"><div id="odTrack"><div id="odBar"></div></div><span id="odLbl">ОВЕРДРАЙВ 0%</span></div>
         <div class="panel">
-          <div class="rowline"><b id="waveLbl">Волна 1</b><span id="bossLbl"></span><span id="buffChip" class="badge hidden"><svg class="ic"><use href="#i-spark"/></svg> АУРА ×1.5</span></div>
-          <div class="bar hp"><i id="hpBar"></i></div><div class="bartxt" id="hpTxt"></div>
+          <div class="rowline"><b id="waveLbl">Волна 1</b><span id="bossLbl"></span><span id="buffChip" class="badge hidden"><svg class="ic"><use href="#i-spark"/></svg> АУРА ×1.5</span><span id="lootChip" class="badge chip-loot hidden">ЛУТ ×2</span></div>
+          <div class="bar hp"><u id="hpGhost"></u><i id="hpBar"></i></div><div class="bartxt" id="hpTxt"></div>
           <div class="bar mp"><i id="mpBar"></i></div><div class="bartxt" id="mpTxt"></div>
           <div id="bossRow" class="hidden">
-            <div class="bar boss"><i id="bossBar"></i></div><div class="bartxt" id="bossTxt"></div>
+            <div class="bar boss"><u id="bossGhost"></u><i id="bossBar"></i></div><div class="bartxt" id="bossTxt"></div>
           </div>
           <div class="actions">
             <button id="petBtn" class="btn btn-acc"><svg class="ic"><use href="#i-paw"/></svg> ПОГЛАДИТЬ</button>
             <button id="stunBtn" class="btn btn-gold"><svg class="ic"><use href="#i-yarn"/></svg> КЛУБОК В БОССА</button>
-            <button id="menuBtn" class="gearbtn" title="Меню: настройки · инвентарь · профиль (Esc)">⚙</button>
+            <button id="menuBtn" class="gearbtn" title="Меню: настройки · профиль (Esc)">⚙</button>
           </div>
           <div id="log" class="log"></div>
         </div>
@@ -674,12 +777,24 @@ nav#tabs{
             <h3>Статы героя</h3>
             <div id="heroStats" class="stats"></div>
             <button id="bestBtn" class="btn btn-gold">НАДЕТЬ ЛУЧШЕЕ</button>
+            <button id="sellGreyBtn" class="btn btn-red" disabled>ПРОДАТЬ СЕРОЕ</button>
           </div>
-          <div class="panel"><h3>Слоты героя</h3><div id="heroSlots" class="slots"></div><p class="hint">Оружие — атака · Пояс — урон · Броня — жизнь · Шлем — крит · Амулет — мана · Сапоги — уворот.</p></div>
-          <div class="panel"><h3>Сумка (снаряжение)</h3><div id="heroInv" class="grid-inv"></div><p class="hint">Нажми на предмет, чтобы надеть. «Надеть лучшее» укомплектует все слоты.</p></div>
+          <!-- v1.4: бумажная кукла — тащи предмет из сумки прямо на слот -->
+          <div class="panel"><h3>Герой: слоты (можно перетаскивать)</h3>
+            <div id="heroDoll" class="dollgrid">
+              <div class="dollcol" id="dollL"></div>
+              <div class="dollcenter">
+                <canvas id="dollHero" width="64" height="64"></canvas>
+                <div id="dollCore" class="dollcore"></div>
+              </div>
+              <div class="dollcol" id="dollR"></div>
+            </div>
+            <p class="hint">Перетащи предмет из сумки на слот — наденется. С надетого — стяни обратно в сумку. Тап по слоту = выбрать предмет, тап по предмету = надеть.</p>
+          </div>
+          <div class="panel"><h3>Сумка (снаряжение) <span class="bagcnt" id="bagCntH">0/24</span></h3><div id="heroInv" class="grid-inv"></div><p class="hint">Тащи предмет мышью или пальцем на слот героя. «Надеть лучшее» укомплектует все слоты.</p></div>
         </div>
         <div id="catPart" class="hidden">
-          <div class="panel"><h3>Сумка Рыбца (кото-лут)</h3><div id="catInv" class="grid-inv"></div><p class="hint">Нажми на предмет, чтобы надеть на Рыбца (слоты — во вкладке «Кот»).</p></div>
+          <div class="panel"><h3>Сумка Рыбца (кото-лут) <span class="bagcnt" id="bagCntC">0/24</span></h3><div id="catInv" class="grid-inv"></div><p class="hint">Нажми на предмет, чтобы надеть на Рыбца (слоты — во вкладке «Кот»).</p></div>
         </div>
       </section>
 
@@ -716,15 +831,22 @@ nav#tabs{
       <section id="tab-wheel" class="hidden">
         <div class="panel">
           <h3>Колесо Рыбов</h3>
-          <p class="hint">Восемь рыб судьбы: ресурсы, монеты, опыт Рыбца, баффы аур и даже лут. Первый спин дня — бесплатный, дальше — 5 Рыбов за спин. Все шансы видны на глаз: чем шире сектор, тем чаще рыба.</p>
+          <p class="hint">Двенадцать рыб судьбы: улов, клубки, монеты, опыт, баффы, лут — и редчайшие Золотой Полоз, Золотая Рыбка и Рыба-Обсидиан. Есть и холостая Рыба-Бомбочка. Первый спин дня — бесплатный (×1), дальше — 5 Рыбов за ставку. Ставка ×5/×25/×100 умножает награды и цену: чем крупнее ставка, тем гарантированней лут с Рыбы-Меча.</p>
           <div class="wheelwrap">
             <div class="wheelptr"></div>
             <div id="wheelDisc" class="wheeldisc"></div>
             <div class="wheelhub">МУР</div>
           </div>
+          <!-- v1.4: ставки-мультипликаторы -->
+          <div class="betrow">
+            <button class="btn betbtn on" data-bet="1">×1</button>
+            <button class="btn betbtn" data-bet="5">×5</button>
+            <button class="btn betbtn" data-bet="25">×25</button>
+            <button class="btn betbtn" data-bet="100">×100</button>
+          </div>
           <div class="actions">
             <button id="wheelFree" class="btn btn-gold big">БЕСПЛАТНЫЙ СПИН ДНЯ</button>
-            <button id="wheelSpin" class="btn btn-acc"><svg class="ic"><use href="#i-fish"/></svg> КРУТИТЬ (5 Рыбов)</button>
+            <button id="wheelSpin" class="btn btn-acc"><svg class="ic"><use href="#i-fish"/></svg> <span id="wheelCost">КРУТИТЬ (5 Рыбов ×1)</span></button>
           </div>
           <div id="wheelLog" class="log"></div>
         </div>
@@ -813,7 +935,7 @@ nav#tabs{
       </section>
     </main>
 
-    <footer id="ft">Кото-Лут v1.2 · полировка: события двора · ачивки · элиты с характером · гостевые коты · параллакс · онбординг</footer>
+    <footer id="ft">Кото-Лут v1.5 · живой двор: дорожка и походки · рыцарь с ногами и свингом меча · боссы перерисованы и бьют в открытую</footer>
   </div>
 </div>
 
@@ -826,16 +948,16 @@ nav#tabs{
     </div>
     <div class="gmenu-tabs">
       <button class="gtab active" data-gtab="settings">⚙ Настройки</button>
-      <button class="gtab" data-gtab="inv">🎒 Инвентарь</button>
       <button class="gtab" data-gtab="profile">🐱 Профиль</button>
     </div>
     <div id="gsec-settings" class="gsec">
+      <button id="gmHelp" class="gset">📘 Как играть</button>
       <button id="gmMusic" class="gset">🎵 Чиптюн <b>ВКЛ</b></button>
       <button id="gmSfx" class="gset">🔊 Звук <b>ВКЛ</b></button>
       <button id="gmReset" class="gset danger">🗑 Сбросить прогресс</button>
       <p class="ghint">Сейв — локальный, автосохранение каждые 10 секунд.</p>
+      <p class="ghint" id="gver"></p>
     </div>
-    <div id="gsec-inv" class="gsec hidden"></div>
     <div id="gsec-profile" class="gsec hidden"></div>
   </div>
 </div>
@@ -848,6 +970,7 @@ nav#tabs{
   </div>
 </div>
 <div id="toasts"></div>
+<div id="kotoTip" class="kototip hidden"></div>
 <script>
 'use strict';
 /* ===== Кото-Лут v0.1 — данные ===== */
@@ -1199,21 +1322,59 @@ const CAT_ARTIFACTS={
 };
 
 /* ===== Колесо Рыбов: сектора, веса, призы ===== */
+/* v1.4: колесо Рыбов — 12 секторов, ставки ×1/×5/×25/×100 (награды × ставка, цена 5×ставка рыб) */
 const FISH_WHEEL=[
-  {id:'herring', n:'Селёдка',         img:'fish_herring',  col:'#7FA6C9', w:20,  prize:{t:'res',  res:'feed',  v:3,   txt:'+3 Рыбы — корм для Рыбца'}},
-  {id:'cuke',    n:'Огуречная Рыба',  img:'fish_cuke',     col:'#57B54B', w:16,  prize:{t:'res',  res:'yarn',  v:1,   txt:'+1 клубок — валюта извлечения'}},
-  {id:'pirate',  n:'Пиратская Рыба',  img:'fish_pirate',   col:'#8D99AE', w:13,  prize:{t:'coins',             v:0,   txt:'сундук монет: 15–30 монет'}},
-  {id:'moon',    n:'Лунная Рыба',     img:'fish_moon',     col:'#9B8FC9', w:11,  prize:{t:'xp',                v:15,  txt:'+15 опыта Рыбцу'}},
-  {id:'sword',   n:'Рыба-Меч',        img:'fish_sword',    col:'#C9D6E3', w:9,   prize:{t:'gear',              v:0,   txt:'героический предмет из глубин'}},
-  {id:'electric',n:'Электро-Рыба',    img:'fish_electric', col:'#F2D24B', w:8,   prize:{t:'buff',              v:90,  txt:'аура Рыбца ×1.5 на 90 секунд'}},
-  {id:'royal',   n:'Королевская Рыба',img:'fish_royal',    col:'#E76F51', w:6,   prize:{t:'royal',             v:0,   txt:'+2 клубка и +10 монет'}},
-  {id:'gold',    n:'Золотая Рыбка',   img:'fish_gold',     col:'#F4B400', w:2.5, prize:{t:'jackpot',           v:100, txt:'ДЖЕКПОТ: 100 монет или легендарный предмет!'}}
+  {id:'herring', n:'Селёдка',         img:'fish_herring',  col:'#7FA6C9', w:18,  prize:{t:'res',  res:'feed',  v:3,   txt:'+3 Рыбы — корм для Рыбца'}},
+  {id:'swarm',   n:'Стая Рыб',        img:'fish_herring',  col:'#5F8CA8', w:10,  prize:{t:'res',  res:'feed',  v:8,   txt:'+8 Рыбов — целый улов'}},
+  {id:'cuke',    n:'Огуречная Рыба',  img:'fish_cuke',     col:'#57B54B', w:14,  prize:{t:'res',  res:'yarn',  v:1,   txt:'+1 клубок — валюта извлечения'}},
+  {id:'pirate',  n:'Пиратская Рыба',  img:'fish_pirate',   col:'#8D99AE', w:11,  prize:{t:'coins',             v:0,   txt:'сундук монет: 15–30 монет'}},
+  {id:'moon',    n:'Лунная Рыба',     img:'fish_moon',     col:'#9B8FC9', w:9,   prize:{t:'xp',                v:15,  txt:'+15 опыта Рыбцу'}},
+  {id:'sword',   n:'Рыба-Меч',        img:'fish_sword',    col:'#C9D6E3', w:8,   prize:{t:'gear',              v:0,   txt:'героический предмет из глубин'}},
+  {id:'electric',n:'Электро-Рыба',    img:'fish_electric', col:'#F2D24B', w:7,   prize:{t:'buff',              v:90,  txt:'аура Рыбца ×1.5 на 90 секунд'}},
+  {id:'royal',   n:'Королевская Рыба',img:'fish_royal',    col:'#E76F51', w:5,   prize:{t:'royal',             v:0,   txt:'+2 клубка и +10 монет'}},
+  /* v2.0: множители лута — колесо может зарядить дроп ×2/×3 */
+  {id:'rain2',   n:'Рыба-Хамелеон',   img:'fish_electric', col:'#57B54B', w:4.5, prize:{t:'lootmult', v:2, dur:180, txt:'ЛУТ ×2 на 3 минуты!'}},
+  {id:'rain3',   n:'Радужная Рыба',   img:'fish_gold',     col:'#E88AC4', w:1.2, prize:{t:'lootmult', v:3, dur:90,  txt:'ЛУТ ×3 на 90 секунд!'}},
+  {id:'bomb',    n:'Рыба-Бомбочка',   img:'fish_cuke',     col:'#4A3F35', w:8,   prize:{t:'none',              v:0,   txt:'БУХ! Пустота… рыба была холостой'}},
+  {id:'serpent', n:'Золотой Полоз',   img:'fish_royal',    col:'#D4A017', w:1.2, prize:{t:'leg',               v:50,  txt:'ЛЕГЕНДАРНЫЙ предмет + 50 монет!'}},
+  {id:'gold',    n:'Золотая Рыбка',   img:'fish_gold',     col:'#F4B400', w:2,   prize:{t:'jackpot',           v:100, txt:'ДЖЕКПОТ: 100 монет или легендарный предмет!'}},
+  {id:'obsidian',n:'Рыба-Обсидиан',   img:'fish_moon',     col:'#6C5CE7', w:0.5, prize:{t:'mega',              v:200, txt:'МЕГА-ДЖЕКПОТ: космо-пал + 25 клубков + 200 монет!'}}
 ];
 
 const BOTS=[['Мурзик_007',31],['ОгурцеБот',27],['КотоЛордХвост',24],['ПылесосМститель',22],['Слуга_двух_котов',19],['РыжаяСмерч',17],['Комкоед',15],['Мяу-Клинок',13],['ТихийПолоз',11],['Баюн_Фан',9],['Пельмень TG',7],['НовичокВсегда',4]];
 
 /* ===== Состояние ===== */
 let state=null;
+/* v2.1: версия сборки — видна игрокам в меню (Настройки и Профиль) */
+const VERSION='2.2.1'; /* сборка v2.2.1: favicon + apple-touch-icon файл + манифест 512/maskable */
+try{console.log('%cКото-Лут v'+VERSION+' — мур-р!','color:#F4B400;font-weight:700')}catch(e){}
+
+/* ===== v2.1: контекстный туториал — одна подсказка при первом контакте с системой ===== */
+const TUT_STEPS={
+  start:  'Герой бьёт сам — квота вверху арены. Копи ОВЕРДРАЙВ: тап по арене даёт ×2 урон и скорость на 10 с.',
+  boss:   'БОСС! Держи ОВЕРДРАЙВ для решающего рывка, а «СТУПОР» за клубок ставит босса на паузу 3 с.',
+  extract:'Трофеи босса вылетели орбами! Коснись одного за 10 секунд — он твой. Один из трофеев всегда редкий+.',
+  gear:   'Лут падает сам. Вкладка «Лут»: тап по предмету — НАДЕТЬ / УЛУЧШИТЬ за монеты (+12% за ур.) / ПРОДАТЬ.',
+  coins:  'Монеты копятся! Лучшие траты: улучшение вещей, кузница и барахолка Мурзика.',
+  wheel:  'Здесь каждый день бесплатный спин. Рыба-Хамелеон и Радужная Рыба заряжают ЛУТ ×2/×3!'
+};
+function kotoTut(id){
+  if(!state||!state.flags)return;
+  if(!state.flags.tut)state.flags.tut={};
+  if(state.flags.tut[id])return;
+  state.flags.tut[id]=true;
+  /* v2.1a: номер подсказки считаем по факту показанных шагов — не расходится */
+  const n=Object.keys(state.flags.tut).length;
+  state.flags.tutN=n;
+  const box=document.getElementById('kotoTip');
+  if(!box)return;
+  box.innerHTML='<span class="tipic">📘</span><div class="tipbody"><b>Совет '+n+'</b><p>'+TUT_STEPS[id]+'</p></div>';
+  box.classList.remove('hidden');
+  clearTimeout(box._t);
+  box._t=setTimeout(function(){box.classList.add('hidden')},7000);
+  try{SFX.play('ui')}catch(e){}
+}
+
 const R={mobs:[],spawnLeft:0,floats:[],pops:[],t:0,heroAtkT:0,bossX:265,bossIn:false,
   petCd:0,buffUntil:0,stunUntil:0,fishLast:{},bubbleT:null,lastLine:{},lastAction:now(),
   saveT:0,idleSaid:0,started:false,raidCd:0,moodAcc:0};
@@ -1225,22 +1386,27 @@ function defaultState(){
     forge:{atk:0,hp:0,crit:0,regen:0},
     stats:{bossKills:0,bestWave:1,extracts:0,crits:0,dodges:0,mobsKilled:0,feeds:0,coinsEarned:0,pets:0,timePlay:0,maxLvl:1,elites:0},
     combat:{wave:1,quota:4,killed:0,phase:'wave',bossTier:1,bossHp:0,bossMax:0,heroHp:100,heroMana:0},
-    hero:{gear:{weapon:null,armor:null,helm:null,belt:null,amulet:null,boots:null},inv:[]},
+    /* v2.1c: стартовый набор двора — без него голый герой умирал уже на волне 4
+       (входящий урон мобов ~7 DPS против 80 hp и 5% шанса дропа вещи) */
+    hero:{gear:{weapon:{id:'w0',slot:'weapon',tier:0,up:0,st:{atk:3},n:'Меч двора'},
+                armor:{id:'a0',slot:'armor',tier:0,up:0,st:{hp:30},n:'Кожаный фартук'},
+                helm:null,belt:null,amulet:null,boots:null},inv:[]},
     cat:{lvl:1,xp:0,fur:'orange',mood:70,equip:{head:null,paws:null,mouth:null,sleep:null,fur:null,talisman:null},inv:[]},
     toys:{}, pity:{epic:0,legend:0}, ach:{},
     quests:{day:'',list:[]},
     album:{toys:{},fish:{},mods:{},guests:{},mobs:{},bosses:{},rewards:{}},
     bazar:{day:'',offers:[],bought:[]},
     rent:{id:'',until:0}, raid:{week:0,max:0,myDmg:0,botDmg:0,claimed:[false,false,false,false],bossN:1},
-    lb:[], flags:{started:false,tutN:0}
+    lb:[], flags:{started:false,tutN:0,tut:{}}
   };
 }
 function merge(def,src){
-  for(const k in def){
-    if(src && src[k]!==undefined){
-      if(def[k] && typeof def[k]==='object' && !Array.isArray(def[k])) merge(def[k],src[k]);
-      else def[k]=src[k];
-    }
+  /* v2.0a: идём по ключам сейва, а не дефолта — иначе динамические словари
+     (toys, album.*, ach), пустые в defaultState, теряли всё содержимое при загрузке */
+  if(!src||typeof src!=='object'||Array.isArray(src))return def;
+  for(const k in src){
+    if(def[k]&&typeof def[k]==='object'&&!Array.isArray(def[k])&&src[k]&&typeof src[k]==='object'&&!Array.isArray(src[k]))merge(def[k],src[k]);
+    else if(src[k]!==undefined)def[k]=src[k];
   }
   return def;
 }
@@ -1263,20 +1429,26 @@ function randomNick(){
 }
 
 /* ===== Формулы ===== */
-function quotaFor(w){return Math.min(10,4+Math.floor(w/2))}
+function quotaFor(w){return Math.min(9,4+Math.floor(w/2))} /* v2.1d: потолок квоты 9 — конвейер поздних волн короче */
 /* v1.0: виды мобов — базовый спрайт + тонировка, множители HP/урона, бонус лута */
 const MOB_KINDS={
-  cuc:  {n:'Огурец-нахал',    base:'cuc',   tint:null,      hp:1,    dmg:1,    loot:null},
-  clow: {n:'Комок-лежебока',  base:'clow',  tint:null,      hp:1.7,  dmg:0.8,  loot:null},
-  mouse:{n:'Мышь-курьер',     base:'mouse', tint:null,      hp:0.75, dmg:1.2,  loot:null},
-  rat:  {n:'Крыса-снайпер',   base:'mouse', tint:'#5A4A3A', hp:0.9,  dmg:1.45, loot:'stick'},
-  moth: {n:'Мотылёк-щекотун', base:'cuc',   tint:'#9B6FC9', hp:0.6,  dmg:1.0,  loot:'yarn'},
-  moss: {n:'Мох-пузан',       base:'cuc',   tint:'#2E5C26', hp:2.6,  dmg:0.7,  loot:'feed'}
+  cuc:  {n:'Огурец-нахал',    base:'cuc',   tint:null,      hp:1,    dmg:1,    loot:null,  fam:'guard'},
+  clow: {n:'Комок-лежебока',  base:'clow',  tint:null,      hp:1.7,  dmg:0.8,  loot:null,  fam:'night'},
+  mouse:{n:'Мышь-курьер',     base:'mouse', tint:null,      hp:0.75, dmg:1.2,  loot:null,  fam:'thief'},
+  rat:  {n:'Крыса-снайпер',   base:'mouse', tint:'#5A4A3A', hp:0.9,  dmg:1.45, loot:'stick', fam:'thief'},
+  moth: {n:'Мотылёк-щекотун', base:'cuc',   tint:'#9B6FC9', hp:0.6,  dmg:1.0,  loot:'yarn',  fam:'night'},
+  moss: {n:'Мох-пузан',       base:'cuc',   tint:'#2E5C26', hp:2.6,  dmg:0.7,  loot:'feed',  fam:'guard'}
 };
-function mobHp(w,kind){const v=Math.round(16*Math.pow(1.22,w-1));const k=MOB_KINDS[kind];return Math.max(6,Math.round(v*(k?k.hp:1)))}
+/* v1.3: семейства мобов — стаи с тактикой и своим дропом */
+const MOB_FAMS={
+  thief:{n:'Мышинные воришки', d:'быстрые, крадут монеты — щедрый дроп монет'},
+  guard:{n:'Огуречная гвардия',d:'броня −15% урона — жирный дроп рыбы'},
+  night:{n:'Ночной лёт',       d:'12% уклонение — роняют обрывки'}
+};
+function mobHp(w,kind){const v=Math.round(16*Math.pow(1.22,Math.min(w,12)-1)*Math.pow(1.18,Math.max(0,w-12)));const k=MOB_KINDS[kind];return Math.max(6,Math.round(v*(k?k.hp:1)))} /* v2.1d: после 12-й волны рост мягче (1.22→1.18) */
 function mobDmg(w,kind){const v=Math.round(3*Math.pow(1.15,w-1)*10)/10;const k=MOB_KINDS[kind];return k?Math.round(v*k.dmg*10)/10:v}
 function bossMaxHp(t,w){return Math.round(140*Math.pow(1.9,t-1)*(1+w*0.06))}
-function bossAtk(t){return Math.round(5*Math.pow(1.32,t-1)*10)/10}
+function bossAtk(t){return Math.round(4*Math.pow(1.32,t-1)*10)/10} /* v2.1c: первый босс мягче (5→4) — стартовый герой проходит его с вещами из сумки */
 const TIER_NAMES=['Полоз','Витой Полоз','Королевский Полоз','Древний Полоз','Космо-Полоз'];
 const ROMAN=['I','II','III','IV','V'];
 const BOSS_NAMES=['Огурец-Полоз','Робот-Рекс','Швабра-Гидра','Королева Комков','Генеральная Уборка'];
@@ -1312,12 +1484,14 @@ function calcHero(){
   let atk=6,dmg=2,hp=80,mana=40,crit=5,dodge=3,regen=2;
   for(const s in g){
     const it=g[s]; if(!it)continue;
-    if(s==='weapon')atk+=it.st.atk;
-    else if(s==='belt')dmg+=it.st.dmg;
-    else if(s==='armor')hp+=it.st.hp;
-    else if(s==='helm')crit+=it.st.crit;
-    else if(s==='amulet')mana+=it.st.mana;
-    else if(s==='boots')dodge+=it.st.dodge;
+    /* v2.0: уровень улучшения вещи +12% к её статам за уровень */
+    const uv=1+0.12*(it.up||0);
+    if(s==='weapon')atk+=it.st.atk*uv;
+    else if(s==='belt')dmg+=it.st.dmg*uv;
+    else if(s==='armor')hp+=it.st.hp*uv;
+    else if(s==='helm')crit+=it.st.crit*uv;
+    else if(s==='amulet')mana+=it.st.mana*uv;
+    else if(s==='boots')dodge+=it.st.dodge*uv;
   }
   let tAtk=0,tHp=0,tDmg=0,tCrit=0,tDodge=0,tMana=0,tRegen=0,tLuck=0;
   /* v0.6: ауры игрушек через fx-описатели — новые обереги работают без правок формул */
@@ -1674,109 +1848,310 @@ function drawDynamicSky(c){
   }
   c.globalCompositeOperation='source-over';
 }
+/* ===== v1.6: рыцарь 2.0 — слоистые доспехи, щит с лапкой-гербом, золото, свинг ===== */
 function drawHero(c){
-  const im=ART.hero8||ART.hero;
-  const bob=Math.round(Math.sin(R.t*3));
-  const lunge=R.heroLunge>0?12:0;
-  const bx=D(HERO_X)+lunge;
-  if(im){
-    const h=74, w=Math.round(im.width/im.height*h);
-    /* аура-свечение вокруг героя (золотая при баффе поглаживания) */
-    const buff=R.buffUntil>now();
-    const ga=0.12+0.05*Math.sin(R.t*2.6)+(buff?0.12:0);
+  const buff=R.buffUntil>now();
+  const bx=D(HERO_X), gy=D(GROUND);
+  const atk=R.heroLunge>0;
+  const prog=atk?clamp(1-R.heroLunge/0.15,0,1):0; /* 0 замах → 1 удар */
+  const swing=atk?Math.sin(prog*Math.PI):0;
+  const lunge=atk?12*swing:0;
+  const hx=bx+22+lunge, br=Math.sin(R.t*2.4)*1.1;
+  /* v1.7: squash при уроне — весь герой слегка сплющивается */
+  const hsq=(R.heroSquash||0)>0?Math.sin(clamp(R.heroSquash/0.16,0,1)*Math.PI)*0.09:0;
+  c.save();c.translate(bx,gy);c.scale(1+hsq,1-hsq);c.translate(-bx,-gy);
+  shadow(c,hx,gy+6,18);
+  /* аура-свечение вокруг героя (золотая при баффе поглаживания) */
+  const ga=0.12+0.05*Math.sin(R.t*2.6)+(buff?0.12:0);
+  c.globalCompositeOperation='lighter';
+  const g=c.createRadialGradient(hx,gy-36,4,hx,gy-36,38);
+  g.addColorStop(0,(buff?'rgba(255,214,110,':'rgba(255,190,120,')+ga.toFixed(2)+')');
+  g.addColorStop(1,'rgba(255,190,120,0)');
+  c.fillStyle=g;
+  c.beginPath();c.ellipse(hx,gy-36,38,28,0,0,Math.PI*2);c.fill();
+  c.globalCompositeOperation='source-over';
+  /* плащ: тёмная подложка + алый слой + золотая кайма */
+  const fl=Math.sin(R.t*3+prog*4)*3;
+  c.fillStyle='#7E2620';
+  c.beginPath();
+  c.moveTo(hx-6,gy-50+br);
+  c.quadraticCurveTo(hx-18-fl,gy-30,hx-14-fl*1.7,gy-5);
+  c.quadraticCurveTo(hx-8,gy-8,hx-2,gy-26);
+  c.closePath();c.fill();
+  c.fillStyle='#B03A2E';
+  c.beginPath();
+  c.moveTo(hx-6,gy-50+br);
+  c.quadraticCurveTo(hx-14-fl*0.8,gy-29,hx-11-fl,gy-7);
+  c.lineTo(hx-7,gy-9);
+  c.quadraticCurveTo(hx-9,gy-27,hx-3,gy-44);
+  c.closePath();c.fill();
+  stick(c,hx-11-fl,gy-8,hx-14-fl*1.7,gy-6,'#F4B400',1.6); /* кайма */
+  /* v1.8: тёмная складка внутри плаща */
+  c.strokeStyle='rgba(60,20,16,.4)';c.lineWidth=2;c.lineCap='round';
+  c.beginPath();c.moveTo(hx-8,gy-42+br);c.quadraticCurveTo(hx-12-fl,gy-26,hx-9.5-fl,gy-9);c.stroke();
+  /* v1.9: щит с радиальным градиентом и стеклянным бликом */
+  const shX=hx-13, shY=gy-40+br;
+  const sg=c.createRadialGradient(shX-3,shY-5,2,shX,shY+2,15);
+  sg.addColorStop(0,'#6FA8DC');sg.addColorStop(0.55,'#2E6BA8');sg.addColorStop(1,'#1E4A7C');
+  c.fillStyle=sg;
+  c.beginPath();
+  c.moveTo(shX,shY-6);
+  c.quadraticCurveTo(shX+9,shY-8,shX+9,shY+2);
+  c.quadraticCurveTo(shX+9,shY+12,shX,shY+19);
+  c.quadraticCurveTo(shX-9,shY+12,shX-9,shY+2);
+  c.quadraticCurveTo(shX-9,shY-8,shX,shY-6);
+  c.closePath();c.fill();
+  c.strokeStyle='#F4B400';c.lineWidth=1.8;c.stroke();
+  /* стеклянный блик сверху слева */
+  c.fillStyle='rgba(255,255,255,.3)';
+  c.beginPath();
+  c.moveTo(shX-5,shY-4);
+  c.quadraticCurveTo(shX-2,shY-6,shX+3,shY-4);
+  c.quadraticCurveTo(shX-1,shY-1,shX-3,shY+3);
+  c.closePath();c.fill();
+  blob(c,shX,shY+3,3.4,'#F4B400'); /* подушечка лапки */
+  blob(c,shX-3,shY-1,1.5,'#F4B400'); blob(c,shX,shY-2.5,1.5,'#F4B400'); blob(c,shX+3,shY-1,1.5,'#F4B400');
+  /* ноги: поножи-пластины, сапоги с золотой полоской */
+  const step=Math.sin(R.t*2.2)*1.2, bend=atk?swing*7:0;
+  stick(c,bx+16,gy-22,bx+12+step,gy-3,'#6E7B87',4.4);
+  px(c,bx+13+step,gy-14,6,7,'#8FA0AA');
+  px(c,bx+8+step,gy-4,9,4,'#4A5560');
+  px(c,bx+8+step,gy-4,9,1.4,'#F4B400');
+  stick(c,bx+25,gy-22,bx+29+step*0.7,gy-3-bend,'#8FA0AA',4.4);
+  px(c,bx+26+step*0.7,gy-14-bend*0.7,6,7,'#B8C4CC');
+  px(c,bx+25+step*0.7,gy-4-bend,9,4,'#5E6B77');
+  px(c,bx+25+step*0.7,gy-4-bend,9,1.4,'#F4B400');
+  /* v1.8: наколенники-диски */
+  blob(c,bx+13+step,gy-13,3.2,'#8FA0AA');
+  blob(c,bx+26+step*0.7,gy-13-bend*0.7,3.2,'#C7D3DE');
+  /* тарч-юбка с полосами и пряжкой */
+  px(c,hx-9,gy-26+br,20,7,'#6E7B87');
+  px(c,hx-9,gy-26+br,20,2,'#8FA0AA');
+  px(c,hx-3,gy-24+br,3,5,'#F4B400');
+  /* v1.9: кираса с металлическим градиентом и скруглением */
+  const ag=c.createLinearGradient(hx-9,0,hx+11,0);
+  ag.addColorStop(0,'#8A98A6');ag.addColorStop(0.35,'#D7E1EA');ag.addColorStop(0.6,'#B8C6D4');ag.addColorStop(1,'#76838F');
+  rrectFill(c,hx-9,gy-50+br,20,24,4,ag);
+  /* грудная пластина с V-швом и вертикальным бликом */
+  c.strokeStyle='#5E6B77';c.lineWidth=1.4;
+  c.beginPath();c.moveTo(hx-6,gy-45+br);c.lineTo(hx+2,gy-37+br);c.lineTo(hx+9,gy-45+br);c.stroke();
+  px(c,hx+1,gy-48+br,3,12,'#E4ECF2');
+  /* v1.8: клёпки кирасы по углам + перевязь через плечо */
+  px(c,hx-8,gy-49+br,1.6,1.6,'#E4ECF2'); px(c,hx+8.4,gy-49+br,1.6,1.6,'#E4ECF2');
+  px(c,hx-8,gy-31.4+br,1.6,1.6,'#E4ECF2'); px(c,hx+8.4,gy-31.4+br,1.6,1.6,'#E4ECF2');
+  c.strokeStyle='rgba(74,58,40,.5)';c.lineWidth=2;
+  c.beginPath();c.moveTo(hx-8,gy-49+br);c.lineTo(hx+8,gy-31+br);c.stroke();
+  /* пояс с золотой пряжкой */
+  px(c,hx-9,gy-28+br,20,3.4,'#4A3A28');
+  px(c,hx-1,gy-29+br,6,5.4,'#F4B400');
+  px(c,hx+1,gy-27+br,2,2,'#B8860B');
+  /* v1.9: наплечники — объёмные сферы-полусферы с блеском */
+  volBlob(c,hx-10,gy-47+br,6.6,'#9AAAB8','#D5DEE6','#6E7E8C'); blob(c,hx-11.5,gy-49.5+br,2,'#E4ECF2'); px(c,hx-13,gy-49+br,6,1.6,'#F4B400');
+  volBlob(c,hx+12,gy-47+br,6.6,'#A2B2C0','#DFE8EF','#76868F'); blob(c,hx+10.5,gy-49.5+br,2,'#E4ECF2'); px(c,hx+9,gy-49+br,6,1.6,'#F4B400');
+  /* v1.8: клёпка на каждом наплечнике */
+  blob(c,hx-10.5,gy-48.5+br,0.9,'#F4B400'); blob(c,hx+11.5,gy-48.5+br,0.9,'#F4B400');
+  /* v1.9: шлем-купол с металлическим градиентом */
+  const hy=gy-62+br;
+  const hg=c.createRadialGradient(hx-2,hy+3,2,hx+1,hy+8,10.5);
+  hg.addColorStop(0,'#E8F0F6');hg.addColorStop(0.6,'#B8C4D2');hg.addColorStop(1,'#8494A2');
+  blob(c,hx+1,hy+8,9.4,hg);
+  blob(c,hx+1,hy+5,7.4,'#C7D3DE');
+  px(c,hx-6,hy+6,15,10,'#B7C2CE');
+  px(c,hx-4,hy+8,11,3,'#2E2A24');
+  px(c,hx-1,hy+8,3,7,'#2E2A24');
+  blob(c,hx-3,hy+9.5,1.7,'#FFC65C'); blob(c,hx+4,hy+9.5,1.7,'#FFC65C');
+  px(c,hx-4,hy+14,10,3,'#8FA0AA');
+  px(c,hx-7,hy+4,2,12,'#5E6B77');
+  /* v1.8: заклёпки шлема + бровь-дуга над визором */
+  px(c,hx-5,hy+5,1.4,1.4,'#E4ECF2'); px(c,hx+7.4,hy+5,1.4,1.4,'#E4ECF2');
+  c.strokeStyle='#5E6B77';c.lineWidth=1.2;
+  c.beginPath();c.moveTo(hx-4,hy+7);c.lineTo(hx-1,hy+6);c.stroke();
+  c.beginPath();c.moveTo(hx+6,hy+7);c.lineTo(hx+3,hy+6);c.stroke();
+  const pl=Math.sin(R.t*2.8)*1.4;
+  c.fillStyle='#B03A2E';
+  c.beginPath();
+  c.moveTo(hx+1,hy-1);
+  c.quadraticCurveTo(hx-4+pl,hy-10,hx-12+pl*1.4,hy-8);
+  c.quadraticCurveTo(hx-6+pl,hy-5,hx-1,hy+2);
+  c.closePath();c.fill();
+  c.fillStyle='#D9534F';
+  c.beginPath();
+  c.moveTo(hx+1,hy-1);
+  c.quadraticCurveTo(hx-3+pl,hy-8,hx-10+pl,hy-7);
+  c.quadraticCurveTo(hx-5+pl*0.7,hy-4,hx,hy);
+  c.closePath();c.fill();
+  /* рука и меч 2.0: клинок с гранями и фуллером, гарда с рубином, навершие */
+  const ang=atk?(-2.0+swing*2.6):(-0.55+Math.sin(R.t*1.8)*0.06);
+  const swx=hx+12, swy=gy-42+br;
+  stick(c,hx+7,gy-44+br,swx,swy,'#8FA0AA',4.4);
+  blob(c,swx,swy,2.6,'#D5DEE3');
+  c.save();
+  c.translate(swx,swy);
+  c.rotate(ang);
+  const bg2=c.createLinearGradient(0,-2.4,0,3);
+  bg2.addColorStop(0,'#F4F8FB');
+  bg2.addColorStop(0.5,'#C9D6E3');
+  bg2.addColorStop(1,'#9AA6B2');
+  c.fillStyle=bg2;
+  c.beginPath();
+  c.moveTo(4,-2.4);c.lineTo(26,-1.6);c.lineTo(31,0);c.lineTo(26,1.6);c.lineTo(4,2.4);
+  c.closePath();c.fill();
+  c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=0.8;
+  c.beginPath();c.moveTo(5,-0.6);c.lineTo(27,-0.3);c.stroke();
+  /* v1.8: нижняя грань клинка */
+  c.strokeStyle='rgba(154,166,178,.7)';c.lineWidth=0.7;
+  c.beginPath();c.moveTo(5,1.2);c.lineTo(26,0.8);c.stroke();
+  px(c,-4,-5.4,3,11,'#B8860B');
+  px(c,-3.4,-5,2,10,'#F4B400');
+  blob(c,-0.5,0,2,'#F4B400');
+  blob(c,-0.5,0,1,'#E23D28'); /* рубин на гарде */
+  px(c,-9,-1.6,6,3.2,'#7A5A34');
+  blob(c,-10,0,2.2,'#F4B400');
+  if(buff){c.globalCompositeOperation='lighter';c.fillStyle='rgba(255,214,110,.4)';c.beginPath();c.moveTo(4,-3);c.lineTo(31,-1.4);c.lineTo(31,1.4);c.lineTo(4,3);c.closePath();c.fill();c.globalCompositeOperation='source-over';}
+  c.restore();
+  /* след свинга — дуга у клинка */
+  if(atk&&prog>0.15&&prog<0.8){
     c.globalCompositeOperation='lighter';
-    const g=c.createRadialGradient(bx+w*0.5,D(GROUND)-h*0.42,4,bx+w*0.5,D(GROUND)-h*0.42,w*0.85);
-    g.addColorStop(0,(buff?'rgba(255,214,110,':'rgba(255,190,120,')+ga.toFixed(2)+')');
-    g.addColorStop(1,'rgba(255,190,120,0)');
-    c.fillStyle=g;
-    c.beginPath();c.ellipse(bx+w*0.5,D(GROUND)-h*0.42,w*0.85,h*0.62,0,0,Math.PI*2);c.fill();
+    c.strokeStyle='rgba(255,255,255,'+(0.5*(1-prog)).toFixed(2)+')';
+    c.lineWidth=3;
+    c.beginPath();
+    c.arc(swx,swy,24,-1.6+prog*2.2,-0.7+prog*2.2);
+    c.stroke();
     c.globalCompositeOperation='source-over';
-    shadow(c,bx+w*0.5,D(GROUND)+6,w*0.46);
-    /* v0.8: новый арт рыцаря смотрит вправо — зеркало больше не нужно */
-    c.drawImage(im,bx,D(GROUND)-h+bob,w,h);
-    /* блик на клинке раз в ~3с */
-    if(((R.t+1)%3)<0.28){
-      c.globalCompositeOperation='lighter';
-      c.fillStyle='rgba(255,255,255,.8)';
-      c.fillRect(bx+Math.round(w*0.30),D(GROUND)-h+bob+6,3,12);
-      c.globalCompositeOperation='source-over';
-    }
-    /* искры восходят при баффе + v1.2: золотое свечение-аура под героем */
-    if(buff){
-      c.globalCompositeOperation='lighter';
-      const hg=c.createRadialGradient(bx+w*0.5,D(GROUND)-4,2,bx+w*0.5,D(GROUND)-4,w*0.9);
-      hg.addColorStop(0,'rgba(255,200,90,'+(0.16+0.05*Math.sin(R.t*3)).toFixed(2)+')');
-      hg.addColorStop(1,'rgba(255,200,90,0)');
-      c.fillStyle=hg;
-      c.beginPath();c.ellipse(bx+w*0.5,D(GROUND)-4,w*0.9,13,0,0,Math.PI*2);c.fill();
-      c.globalCompositeOperation='source-over';
-      c.fillStyle='#FFD27A';
-      for(let i=0;i<3;i++){
-        const yy=D(GROUND)-((R.t*30+i*22)%66);
-        const al=1-(D(GROUND)-yy)/66;
-        c.globalAlpha=clamp(al,0,1)*0.9;
-        c.fillRect(bx+8+((R.t*40+i*13)%(Math.max(6,w-10))),yy,3,3);
-      }
-      c.globalAlpha=1;
-    }
-  } else {
-    drawSpr(c,SPR.HERO,HERO_X+lunge,GROUND-14+bob,null,true,2);
   }
-}
-function drawCat(c){
-  const im=ART.cat;
-  const bob=Math.round(Math.sin(R.t*1.5));
-  const fur=state.cat.fur||'orange';
-  if(im){
-    const h=52, w=Math.round(im.width/im.height*h);
-    c.save();
-    const f=FUR_FILTER[fur];
-    if(f&&f!=='none')c.filter=f;
-    shadow(c,D(CAT_X)+w*0.5,D(GROUND)+6,w*0.42);
-    /* тёплое свечение-лужайка под котом */
+  /* искры восходят при баффе */
+  if(buff){
     c.globalCompositeOperation='lighter';
-    const cg=c.createRadialGradient(D(CAT_X)+w*0.5,D(GROUND)-8,3,D(CAT_X)+w*0.5,D(GROUND)-8,w*0.85);
-    cg.addColorStop(0,'rgba(255,150,80,'+(0.10+0.04*Math.sin(R.t*2)).toFixed(2)+')');
-    cg.addColorStop(1,'rgba(255,150,80,0)');
-    c.fillStyle=cg;
-    c.beginPath();c.ellipse(D(CAT_X)+w*0.5,D(GROUND)-8,w*0.85,12,0,0,Math.PI*2);c.fill();
+    const hg=c.createRadialGradient(hx,gy-4,2,hx,gy-4,34);
+    hg.addColorStop(0,'rgba(255,200,90,'+(0.16+0.05*Math.sin(R.t*3)).toFixed(2)+')');
+    hg.addColorStop(1,'rgba(255,200,90,0)');
+    c.fillStyle=hg;
+    c.beginPath();c.ellipse(hx,gy-4,34,13,0,0,Math.PI*2);c.fill();
     c.globalCompositeOperation='source-over';
-    c.drawImage(im,D(CAT_X),D(GROUND)-h+bob,w,h);
-    c.restore();
-    /* v1.2: эмоции Рыбца — морда меняется с настроением */
-    {
-      const hx=D(CAT_X)+w*0.38, hy=D(GROUND)-h+bob+9;
-      const mood=state.cat.mood||50;
-      c.strokeStyle='rgba(60,40,20,.85)'; c.lineWidth=1.2; c.lineCap='round';
-      if(mood>=70){
-        c.beginPath();c.arc(hx-3,hy,1.8,Math.PI,Math.PI*1.9);c.stroke();
-        c.beginPath();c.arc(hx+4,hy,1.8,Math.PI,Math.PI*1.9);c.stroke();
-        c.beginPath();c.arc(hx+0.5,hy+3.5,2.4,0.15*Math.PI,0.85*Math.PI);c.stroke();
-      } else if(mood<35){
-        c.beginPath();c.moveTo(hx-5,hy-1);c.lineTo(hx-1.5,hy+0.5);c.stroke();
-        c.beginPath();c.moveTo(hx+6,hy-1);c.lineTo(hx+2.5,hy+0.5);c.stroke();
-        c.beginPath();c.arc(hx+0.5,hy+5.5,2.4,1.15*Math.PI,1.85*Math.PI);c.stroke();
-      }
+    c.fillStyle='#FFD27A';
+    for(let i=0;i<3;i++){
+      const yy=gy-((R.t*30+i*22)%66);
+      const al=1-(gy-yy)/66;
+      c.globalAlpha=clamp(al,0,1)*0.9;
+      c.fillRect(hx-8+((R.t*40+i*13)%34),yy,3,3);
     }
-    /* сердечко, когда Рыбец мур-дольный */
-    if(state.cat.mood>=75&&((R.t%4.5)<1.6)){
-      const ht=(R.t%4.5)/1.6;
-      c.globalAlpha=Math.sin(ht*Math.PI)*0.9;
-      c.font='13px serif';c.textAlign='center';
-      c.fillText('❤',D(CAT_X)+w*0.5+(ht*16-8),D(GROUND)-58-ht*20);
-      c.globalAlpha=1;
-    }
-    if(R.buffUntil>now()){
-      const t=(R.t*4)%3;
-      px(c,D(CAT_X)+10+t*4, D(GROUND)-62, 4,4,'#FFF176');
-      px(c,D(CAT_X)+20, D(GROUND)-58+((R.t*6)%4|0)*3, 4,4,'#FF9F1C');
-    }
+    c.globalAlpha=1;
+  }
+  c.restore();
+}
+/* ===== v1.7: Рыбец 2.0 — процедурный кот: хвост-качели, моргание, ухо, потягивание ===== */
+const FURS2={
+ orange:{m:'#E0913C',d:'#C27B2E',b:'#F7E3C2',s:'#B26822',e:'#7AC46B'},
+ gray:  {m:'#9BA3AC',d:'#7E8790',b:'#E8EAEC',s:'#6E767F',e:'#8AC48A'},
+ siam:  {m:'#E8D9BE',d:'#C9A876',b:'#F7EEDD',s:'#8A5A3A',e:'#7AC46B'},
+ gold:  {m:'#F2B24C',d:'#DB9A38',b:'#FBE0B0',s:'#C58428',e:'#8AD47A'}
+};
+function drawCat(c){
+  const fur=state.cat.fur||'orange', F=FURS2[fur]||FURS2.orange;
+  const gy=D(GROUND), cx=D(CAT_X)+30;
+  const bob=Math.sin(R.t*1.5)*1.4;
+  const cast=R.catCastT||0;
+  const mood=state.cat.mood||50;
+  const blink=((R.t+0.8)%3.7)<0.13;
+  const earPh=(R.t+2.1)%4.3;
+  const earT=earPh<0.25?Math.sin(earPh/0.25*Math.PI)*3:0;
+  const stretch=cast>0?Math.sin(clamp(1-cast/0.45,0,1)*Math.PI):0;
+  shadow(c,cx,gy+6,26);
+  /* тёплое свечение-лужайка под котом */
+  c.globalCompositeOperation='lighter';
+  const cg=c.createRadialGradient(cx,gy-8,3,cx,gy-8,44);
+  cg.addColorStop(0,'rgba(255,150,80,'+(0.10+0.04*Math.sin(R.t*2)).toFixed(2)+')');
+  cg.addColorStop(1,'rgba(255,150,80,0)');
+  c.fillStyle=cg;
+  c.beginPath();c.ellipse(cx,gy-8,44,12,0,0,Math.PI*2);c.fill();
+  c.globalCompositeOperation='source-over';
+  /* v1.9: лежанка — мягкая подушка с градиентом */
+  volBlob(c,cx,gy-2,15,'#A83A4A','#C45060','#8A2A38');
+  blob(c,cx-13,gy,9,'#A83A4A'); blob(c,cx+13,gy,9,'#A83A4A');
+  volBlob(c,cx,gy-5,12,'#C45060','#D95C6C','#A83A4A');
+  /* хвост-качели: два сегмента, кончик светлый; мур-дольный — колесом вверх */
+  const ts=Math.sin(R.t*1.3)*5+(mood>=70?3:0);
+  stick(c,cx-14,gy-7,cx-21,gy-15-ts*0.35,F.d,6);
+  stick(c,cx-21,gy-15-ts*0.35,cx-24,gy-24-ts,F.d,4.4);
+  blob(c,cx-24,gy-25-ts,2.6,F.b);
+  /* бёдра и задние лапки */
+  blob(c,cx-9,gy-8,8.5,F.d);
+  px(c,cx-16,gy-3,8,3.4,F.b);
+  px(c,cx-1,gy-3,8,3.4,F.b);
+  /* v1.9: объёмное тело с мехом — свет сверху, мягкая шерсть по спине */
+  volBlob(c,cx+1,gy-17+bob*0.4,13,F.m,'#F2B264','#C27B2E'===F.d?'#A8681E':F.d);
+  blob(c,cx+2,gy-13,9.5,F.b);
+  hair(c,cx+1,gy-17+bob*0.4,12.4,'rgba(255,235,210,.5)',5,3);
+  px(c,cx+7,gy-24+bob*0.4,3,6,F.s); px(c,cx+10,gy-20+bob*0.4,3,5,F.s); px(c,cx+8,gy-14+bob*0.4,3,4,F.s);
+  /* передние лапы */
+  stick(c,cx-4,gy-12+bob*0.4,cx-5,gy-2,F.m,4.6);
+  blob(c,cx-5,gy-2,2.6,F.b);
+  stick(c,cx+6,gy-12+bob*0.4,cx+7,gy-2,F.m,4.6);
+  blob(c,cx+7,gy-2,2.6,F.b);
+  /* потягивание при касте: лапа тянется вверх к искре */
+  if(stretch>0.25){
+    stick(c,cx+7,gy-14,cx+11,gy-26-stretch*4,F.m,4.2);
+    blob(c,cx+11,gy-27-stretch*4,2.4,F.b);
+    c.globalCompositeOperation='lighter';
+    blob(c,cx+13,gy-30-stretch*4,3+Math.sin(R.t*9),'rgba(255,220,120,.7)');
+    c.globalCompositeOperation='source-over';
+  }
+  /* голова с ушами: правое ухо периодически дёргается */
+  const hy=gy-36+bob-stretch*3;
+  tri(c,cx-9,hy-4,cx-11,hy-15,cx-2,hy-9,F.m);
+  tri(c,cx-8,hy-6,cx-9.6,hy-12,cx-4,hy-8,'#E88A9A');
+  tri(c,cx+2,hy-9,cx+9+earT,hy-16,cx+10,hy-3,F.m);
+  tri(c,cx+4,hy-8,cx+8.6+earT,hy-13,cx+9,hy-5,'#E88A9A');
+  /* v1.9: объёмная голова с пушистым контуром */
+  volBlob(c,cx,hy+2,11,F.m,'#F2B264',F.d);
+  hair(c,cx,hy+2,10.4,'rgba(255,235,210,.55)',7,3.4);
+  blob(c,cx-3,hy-1,7,F.m);
+  px(c,cx-4,hy-8,3,5,F.s); px(c,cx+1,hy-9,3,5,F.s);
+  blob(c,cx-7,hy+6,3.4,F.b); blob(c,cx+7,hy+6,3.4,F.b);
+  /* v1.9: глаза — крупные, с радужкой-градиентом и кошачьим зрачком */
+  if(blink){
+    eyeShut(c,cx-4,hy+1,2.6,'rgba(50,34,20,.9)');
+    eyeShut(c,cx+5,hy+1,2.6,'rgba(50,34,20,.9)');
   } else {
-    drawSpr(c,SPR.CAT,CAT_X,GROUND-16+bob,FURS[fur]||FURS.orange,false,2);
-    if(R.buffUntil>now()){
-      const t=(R.t*4)%3;
-      px(c,D(CAT_X)+4+t*2, D(GROUND)-20, 2,2,'#FFF176');
+    eye(c,cx-4,hy+1,2.9,'#4E8A3C','#8AD47A',0.2);
+    eye(c,cx+5,hy+1,2.9,'#4E8A3C','#8AD47A',0.2);
+    if(mood<35){
+      c.fillStyle=F.m;
+      c.beginPath();c.ellipse(cx-4,hy-0.9,3.1,1.5,0,0,6.283);c.fill();
+      c.beginPath();c.ellipse(cx+5,hy-0.9,3.1,1.5,0,0,6.283);c.fill();
     }
+  }
+  /* нос + рот по настроению */
+  tri(c,cx-1.6,hy+4,cx+1.6,hy+4,cx,hy+6.4,'#E88A9A');
+  c.strokeStyle='rgba(60,40,20,.85)';c.lineWidth=1.2;c.lineCap='round';
+  if(mood>=70){
+    c.beginPath();c.arc(cx-2,hy+6,2.4,0.05*Math.PI,0.95*Math.PI);c.stroke();
+    c.beginPath();c.arc(cx+2.4,hy+6,2.4,0.05*Math.PI,0.95*Math.PI);c.stroke();
+  } else if(mood<35){
+    stick(c,cx-3,hy+7,cx,hy+5.6,'rgba(60,40,20,.85)',1.2);
+    stick(c,cx+3.4,hy+7,cx,hy+5.6,'rgba(60,40,20,.85)',1.2);
+  } else {
+    stick(c,cx-2,hy+6.6,cx,hy+7.6,'rgba(60,40,20,.85)',1.2);
+    stick(c,cx,hy+7.6,cx+2.4,hy+6.6,'rgba(60,40,20,.85)',1.2);
+  }
+  /* усы */
+  c.strokeStyle='rgba(245,240,225,.75)';c.lineWidth=1;
+  for(let i=-1;i<2;i++){
+    c.beginPath();c.moveTo(cx-10,hy+4+i*2);c.lineTo(cx-19,hy+2.4+i*3);c.stroke();
+    c.beginPath();c.moveTo(cx+10,hy+4+i*2);c.lineTo(cx+19,hy+2.4+i*3);c.stroke();
+  }
+  /* сердечко, когда Рыбец мур-дольный */
+  if(mood>=75&&((R.t%4.5)<1.6)){
+    const ht=(R.t%4.5)/1.6;
+    c.globalAlpha=Math.sin(ht*Math.PI)*0.9;
+    c.font='13px serif';c.textAlign='center';
+    c.fillText('❤',cx+(ht*16-8),gy-60-ht*20);
+    c.globalAlpha=1;
+  }
+  if(R.buffUntil>now()){
+    const t=(R.t*4)%3;
+    px(c,D(CAT_X)+10+t*4, gy-64, 4,4,'#FFF176');
+    px(c,D(CAT_X)+20, gy-60+((R.t*6)%4|0)*3, 4,4,'#FF9F1C');
   }
   drawGuestCat(c);
   drawMoodEmote(c);
@@ -1812,7 +2187,10 @@ function wandGeom(){
   const im=ART.cat;
   const h=52, w=im?Math.round(im.width/im.height*h):44;
   const ox=D(CAT_X)+Math.round(w*0.62), oy=D(GROUND)-16;
-  const ang=-0.62+Math.sin(R.t*2)*0.05;
+  /* v1.5: замах палочкой при касте — по catCastT, в покое лёгкое покачивание */
+  const cast=R.catCastT||0;
+  const swing=cast>0?Math.sin((1-cast/0.45)*Math.PI)*0.85-0.35:0;
+  const ang=-0.62+Math.sin(R.t*2)*0.05+swing;
   const tipx=ox+Math.cos(ang)*27, tipy=oy+Math.sin(ang)*27;
   return {ox:ox,oy:oy,ang:ang,tipx:tipx,tipy:tipy};
 }
@@ -1847,58 +2225,357 @@ function drawWand(c){
   c.globalCompositeOperation='source-over';
 }
 function drawMobs(c){
-  const MOB_ART={cuc:'mob_cuc',clow:'mob_clow',mouse:'mob_mouse',rat:'art_rat',moth:'art_moth',moss:'art_moss',cuc0:'cuc',clow0:'clow'};
   for(const m of R.mobs){
-    const im=ART[MOB_ART[m.kind]]||ART[m.kind==='clow'?'clow':'cuc'];
-    const bob=Math.round(Math.sin(R.t*5+m.x)*2);
-    const x=D(m.x), base=D(GROUND)+bob;
-    if(im){
-      const baseH=m.kind==='clow'?30:m.kind==='mouse'?26:36;
-      const h=Math.round(baseH*(m.elite?1.35:1)), w=Math.round(im.width/im.height*h);
-      shadow(c,x+w*0.5,D(GROUND)+6,w*0.45);
-      /* v1.0: элита — золотое свечение у лап */
-      if(m.elite){
-        c.globalCompositeOperation='lighter';
-        const gl=c.createRadialGradient(x+w*0.5,D(GROUND)+2,2,x+w*0.5,D(GROUND)+2,w*0.8);
-        gl.addColorStop(0,'rgba(255,201,61,.45)');
-        gl.addColorStop(1,'rgba(255,201,61,0)');
-        c.fillStyle=gl;
-        c.beginPath();c.arc(x+w*0.5,D(GROUND)+2,w*0.8,0,6.283);c.fill();
-        c.globalCompositeOperation='source-over';
+    const gy=D(GROUND)+D(m.lane||0), x=D(m.x);
+    shadow(c,x,D(GROUND)+D(m.lane||0)+6,(m.kind==='moss'?16:m.kind==='moth'?9:13)*(m.elite?1.3:1));
+    /* v1.0: элита — свечение у лап; v1.3: цвет по ауре (золото/ярость) */
+    if(m.elite){
+      c.globalCompositeOperation='lighter';
+      const gl=c.createRadialGradient(x,D(GROUND)+D(m.lane||0)+2,2,x,D(GROUND)+D(m.lane||0)+2,22);
+      gl.addColorStop(0,m.aura==='red'?'rgba(224,72,54,.5)':'rgba(255,201,61,.45)');
+      gl.addColorStop(1,'rgba(255,201,61,0)');
+      c.fillStyle=gl;
+      c.beginPath();c.arc(x,D(GROUND)+D(m.lane||0)+2,22,0,6.283);c.fill();
+      c.globalCompositeOperation='source-over';
+    }
+    drawCritter(c,m);
+    const wpc=Math.max(0,m.hp/m.max), bw=m.elite?30:22;
+    /* v1.9: стеклянный hp-бар с ghost-следом */
+    if(m.hpGhost===undefined)m.hpGhost=m.hp;
+    hpBar(c,x-bw/2,gy-CRIT_H[m.kind]*(m.elite?1.2:1)-10,bw,m.elite?5:4,wpc,m.hpGhost/m.max);
+    /* корона элиты + аффикс v1.2 */
+    if(m.elite){
+      px(c,x+bw/2-4,top-6,8,4,'#F4B400');
+      px(c,x+bw/2-2,top-8,2,2,'#F4B400');
+      px(c,x+bw/2+1,top-8,2,2,'#F4B400');
+      if(m.aff){
+        c.font='bold 7px Manrope,sans-serif';
+        c.fillStyle=m.aff[1];
+        c.textAlign='center';
+        c.fillText(m.aff[0],x+bw/2-1,top-11);
+        c.textAlign='left';
       }
-      if(m.flashT>0)c.filter='brightness(1.9) saturate(0.55)';
-      c.drawImage(im,x,base-h,w,h);
-      c.filter='none';
-      const wpc=Math.max(0,m.hp/m.max), bw=m.elite?28:20;
-      px(c,x-2,base-h-8,bw,4,'#33291D');
-      px(c,x-1,base-h-7,Math.round((bw-2)*wpc),2,m.kind==='mouse'||m.kind==='rat'?'#F2D24B':'#E76F51');
-      /* корона элиты + аффикс v1.2 */
-      if(m.elite){
-        px(c,x+bw/2-4,base-h-14,8,4,'#F4B400');
-        px(c,x+bw/2-2,base-h-16,2,2,'#F4B400');
-        px(c,x+bw/2+1,base-h-16,2,2,'#F4B400');
-        if(m.aff){
-          c.font='bold 7px Manrope,sans-serif';
-          c.fillStyle=m.aff[1];
-          c.textAlign='center';
-          c.fillText(m.aff[0],x+bw/2-1,base-h-19);
-          c.textAlign='left';
-        }
-      }
-    } else {
-      const s=m.kind==='clow'?SPR.CLOW:SPR.CUC;
-      drawSpr(c,s,Math.round(m.x),GROUND-s.h+bob,null,false,2);
     }
   }
 }
-/* ===== Пиксельные модели боссов — по концепт-артам (габариты и цвета как на арте) ===== */
+/* ===== v1.5: дорожка двора и процедурные мобы — ноги, походка, телеграф удара ===== */
+function drawLane(c){
+  /* тропинка от правого края к герою: утоптанная земля, камушки, следы */
+  const y=D(GROUND);
+  c.fillStyle='rgba(112,84,50,.42)';
+  c.fillRect(D(56),y+3,D(CW-56),14);
+  c.fillStyle='rgba(96,72,44,.28)';
+  c.fillRect(D(56),y+1,D(CW-56),4);
+  c.fillStyle='rgba(70,52,32,.35)';
+  c.fillRect(D(56),y+16,D(CW-56),2);
+  c.fillStyle='rgba(84,110,52,.4)';
+  for(let i=0;i<15;i++){
+    const x=D(60)+i*D(CW-70)/14;
+    c.fillRect(x,y+17,D(7),3);
+  }
+  /* камушки и колейки */
+  for(let i=0;i<11;i++){
+    const lx=74+((i*67)%(CW-90));
+    px(c,lx,y+5+(i%3)*3,3,2,'rgba(60,48,34,.4)');
+    if(i%4===0)px(c,lx+5,y+8+(i%2)*3,4,2,'rgba(60,48,34,.3)');
+  }
+}
+/* парные ножки: стопы переставляются синусоидой в противофазе, подъём на шаге */
+function legs2(c,hx,gy,spread,ph,col,boot,len){
+  for(let s=-1;s<=1;s+=2){
+    const a=ph+s*Math.PI;
+    const fx=hx+s*spread+Math.sin(a)*len*0.55;
+    const lift=Math.max(0,Math.sin(a))*len*0.45;
+    stick(c,hx+s*spread,gy-len-3,fx,gy-lift,col,4);
+    px(c,fx-3,gy-lift-2,7,3,boot);
+  }
+}
+/* четвереньки: передняя и задняя пары в противофазе (галоп) */
+function legs4(c,hx,gy,ph,col,len,frontX,backX,wide){
+  for(let s=-1;s<=1;s+=2){
+    const a=ph+s*Math.PI;
+    const fx=frontX+Math.sin(a)*len*0.6;
+    const lift=Math.max(0,Math.sin(a))*len*0.4;
+    stick(c,frontX,gy-len+1,fx,gy-lift,col,3.4);
+  }
+  for(let s=-1;s<=1;s+=2){
+    const a=ph+s*Math.PI+0.9;
+    const fx=backX+Math.sin(a)*len*0.6;
+    const lift=Math.max(0,Math.sin(a))*len*0.4;
+    stick(c,backX,gy-len+1,fx,gy-lift,col,3.4);
+  }
+}
+/* высоты мобов для хп-бара */
+const CRIT_H={cuc:40,clow:36,mouse:26,rat:30,moth:34,moss:48};
+function drawCritter(c,m){
+  const gy=D(GROUND)+D(m.lane||0), x=D(m.x);
+  const ph=m.phase||0, atk=m.atkT||0;
+  /* фазы атаки: до 0.55 — спокойный шаг, 0.55–0.72 — замах (отсекается назад), 0.72+ — выпад */
+  const wind=atk>0.55&&atk<0.72, strike=atk>=0.72;
+  const lean=wind?-5:(strike?9:0);
+  const shx=R.stunUntil>now()?ri(-2,2):0;
+  const flash=m.flashT>0;
+  const puff=m.kind==='clow'&&wind?Math.sin((atk-0.55)/0.17*Math.PI)*2:0;
+  /* v1.7: squash&stretch — сплющивание от попадания, растяжка на замахе, сжатие в выпаде */
+  const sq=m.flashT>0?Math.sin(clamp(m.flashT/0.12,0,1)*Math.PI)*0.16:0;
+  let skx=1,sky=1;
+  if(sq>0){skx=1+sq;sky=1-sq}
+  else if(wind){skx=0.94;sky=1.07}
+  else if(strike){skx=1.07;sky=0.94}
+  /* v1.7: единая белая вспышка-силуэт: первые кадры — пересвет, дальше — откат */
+  const flashPow=flash?(m.flashT>0.07?'brightness(2.6) saturate(0.2)':'brightness(1.75) saturate(0.55)'):'';
+  if(m.kind==='moth'){
+    c.save();
+    if(m.elite){c.translate(x,gy);c.scale(1.2,1.2);c.translate(-x,-gy);}
+    /* v1.6: мотылёк тоже мордой к герою */
+    c.translate(x,0);c.scale(-1,1);c.translate(-x,0);
+    if(flashPow)c.filter=flashPow;
+    c.translate(x,gy-16);c.scale(skx,sky);c.translate(-x,-(gy-16));
+    paintMoth(c,m,x,gy,ph,wind,strike,shx,flash);
+    c.restore();
+    return;
+  }
+  if(m.kind==='mouse'||m.kind==='rat'){
+    c.save();
+    if(m.elite){c.translate(x,gy);c.scale(1.2,1.2);c.translate(-x,-gy);}
+    /* v1.6: морда к герою — зеркалим модель вокруг оси моба (голова была сзади) */
+    c.translate(x,0);c.scale(-1,1);c.translate(-x,0);
+    if(flashPow)c.filter=flashPow;
+    c.translate(x,gy);c.scale(skx,sky);c.translate(-x,-gy);
+    paintMouse(c,m,x,gy,ph,wind,strike,shx,flash,lean);
+    c.restore();
+    return;
+  }
+  c.save();
+  if(m.elite){c.translate(x,gy);c.scale(1.25,1.25);c.translate(-x,-gy);}
+  if(flashPow)c.filter=flashPow;
+  c.translate(x,gy);c.scale(skx,sky);c.translate(-x,-gy);
+  if(m.kind==='cuc')paintCuc(c,x+lean+shx,gy,ph);
+  else if(m.kind==='clow')paintClow(c,x+lean+shx,gy,ph,puff,m);
+  else if(m.kind==='moss')paintMoss(c,x+lean+shx,gy,ph,wind,strike,m);
+  c.restore();
+}
+/* Огурец-нахал: пузатый огурец на двух ножках, злые брови, качается вразвалку */
+function paintCuc(c,x,gy,ph){
+  const bob=Math.abs(Math.sin(ph))*1.6;
+  legs2(c,x,gy,7,ph*1.7,'#3F8A36','#2E5C26',9);
+  const by=gy-9-bob;
+  /* v1.9: объёмный огурец — три сферических сегмента со светом сверху-слева */
+  volBlob(c,x,by-13,11,'#57B54B','#7BD46A','#3A8A30');
+  volBlob(c,x,by-24,9.5,'#6BC45A','#8CD86E','#4E9E42');
+  volBlob(c,x,by-32,7,'#57B54B','#7BD46A','#3A8A30');
+  px(c,x-3,by-38,6,3,'#3F8A36'); px(c,x+1,by-41,4,3,'#3F8A36'); /* хвостик */
+  /* v1.8: лист-шляпка с черенком */
+  px(c,x-1,by-45,2,6,'#2E5C26');
+  tri(c,x-2,by-44,x-10,by-50,x+1,by-49,'#3F8A36');
+  tri(c,x+2,by-44,x+12,by-51,x+6,by-48,'#57B54B');
+  /* v1.8: пупырышки с бликами + дуга-блик слева */
+  for(let i=0;i<6;i++){
+    const wx=x-8+((i*53)%17), wy=by-35+((i*37)%22);
+    blob(c,wx,wy,1.8,'#3F8A36');
+    blob(c,wx-0.6,wy-0.6,0.8,'#A7E8A0');
+  }
+  px(c,x-7,by-16,3,3,'#A7E8A0'); px(c,x+5,by-11,3,3,'#A7E8A0'); px(c,x-4,by-26,2,2,'#A7E8A0');
+  c.strokeStyle='rgba(220,245,210,.65)';c.lineWidth=2.2;c.lineCap='round';
+  c.beginPath();c.arc(x,by-22,15,-2.35,-1.35);c.stroke();
+  /* v1.9: чёткие наглые глаза с зелёной радужкой */
+  eye(c,x-4,by-27,4,'#2E6B2A','#6BC45A',0.34);
+  eye(c,x+5,by-27,4,'#2E6B2A','#6BC45A',0.34);
+  stick(c,x-7.5,by-32.5,x-1,by-30,'#2E5C26',2); stick(c,x+8.5,by-32.5,x+2,by-30,'#2E5C26',2);
+  /* сердитый рот с зубами */
+  px(c,x-2,by-21,5,2,'#2E5C26');
+  tri(c,x-1.6,by-21,x+0.4,by-21,x-0.6,by-19,'#FFFFFF');
+  tri(c,x+1.6,by-21,x+3.6,by-21,x+2.6,by-19,'#FFFFFF');
+}
+/* Комок-лежебока: пыльный шар с хвостиком, лапки-топотушки, распушается перед ударом */
+function paintClow(c,x,gy,ph,puff,m){
+  const bob=Math.abs(Math.sin(ph*0.9))*1.4;
+  legs2(c,x+2,gy,6,ph*1.3,'#6E7377','#4A5560',7);
+  const by=gy-7-bob, r=13+puff;
+  /* v1.9: пыльная сфера с объёмом */
+  volBlob(c,x,by-r*0.8,r,'#9AA0A6','#B6BCC2','#787E84');
+  volBlob(c,x-4,by-r*0.9-2,r*0.62,'#8E9399','#A2A8AE','#6E747A');
+  /* v1.8: пыльные пятна-текстура */
+  blob(c,x+6,by-r*0.5,3,'rgba(110,116,122,.4)'); blob(c,x-8,by-r*0.3,2.6,'rgba(110,116,122,.35)');
+  /* космы-иголки в два слоя: тёмные длинные + светлые короткие */
+  c.lineWidth=2;
+  for(let i=0;i<9;i++){
+    const a=-2.8+i*0.55;
+    c.strokeStyle='#6E747A';
+    c.beginPath();c.moveTo(x+Math.cos(a)*r*0.7,by-r*0.8+Math.sin(a)*r*0.7);
+    c.lineTo(x+Math.cos(a)*(r+5+puff*1.6),by-r*0.8+Math.sin(a)*(r+5));c.stroke();
+    if(i%2===0){
+      c.strokeStyle='#B4BABE';
+      c.beginPath();c.moveTo(x+Math.cos(a)*r*0.8,by-r*0.8+Math.sin(a)*r*0.8);
+      c.lineTo(x+Math.cos(a)*(r+2+puff),by-r*0.8+Math.sin(a)*(r+2));c.stroke();
+    }
+  }
+  /* v1.9: чёткие сонные глаза */
+  eye(c,x-5,by-r*0.8-1,3,'#3E3428','#8A6E4A',0.34);
+  eye(c,x+5,by-r*0.8-1,3,'#3E3428','#8A6E4A',0.34);
+  /* сонные веки — полуприкрыты */
+  c.fillStyle='#8E9399';
+  c.beginPath();c.ellipse(x-5,by-r*0.8-2.6,3.2,1.6,0,0,6.283);c.fill();
+  c.beginPath();c.ellipse(x+5,by-r*0.8-2.6,3.2,1.6,0,0,6.283);c.fill();
+  px(c,x-1,by-r*0.8+3,4,2,'#2E2A24');
+  stick(c,x+r*0.8,by-r*0.5,x+r*0.8+7,by-r*0.5-6+Math.sin(R.t*3)*2,'#7E848A',2);
+  /* пыльца лениво сыплется */
+  if(((R.t*2|0)%3)===0)px(c,x-10+((R.t*7)%9),by-r-6,2,2,'rgba(154,160,166,.5)');
+}
+/* Мышь-курьер / Крыса-снайпер: галоп на четвереньках, хвост-волна; крыса — с банданой и иглами */
+function paintMouse(c,m,x,gy,ph,wind,strike,shx,flash,lean){
+  const rat=m.kind==='rat';
+  const bob=Math.abs(Math.sin(ph*1.4))*1.2;
+  const s=rat?1.25:1;
+  c.save();
+  if(flash)c.filter='brightness(1.9) saturate(0.55)';
+  const by=gy-bob, bx=x-14*s+lean+shx;
+  legs4(c,bx,by,ph*2.2,rat?'#6E5A44':'#7A8A94',7,bx+30*s,bx+6,s*3);
+  /* вытянутое тело: объёмные сферы со светом сверху-слева */
+  volBlob(c,bx+16*s,by-9*s,9*s,rat?'#8A6E52':'#8E99A3',rat?'#A88E70':'#B2BCC4',rat?'#6E563E':'#6E7882');
+  volBlob(c,bx+26*s,by-8*s,7.5*s,rat?'#8A6E52':'#99A4AC',rat?'#A88E70':'#B6C0C8',rat?'#6E563E':'#7A848E');
+  /* v1.8: объём — светлое подбрюшье, тёмная шерсть на спине, тень по низу */
+  blob(c,bx+18*s,by-6*s,7*s,rat?'#A08268':'#B9C2C9');
+  blob(c,bx+24*s,by-5*s,5.5*s,rat?'#B29478':'#CBD3D8');
+  px(c,bx+10*s,by-16*s,3,2,rat?'#6E5A44':'#7A8A94');
+  px(c,bx+16*s,by-17*s,3,2,rat?'#6E5A44':'#7A8A94');
+  px(c,bx+22*s,by-15*s,3,2,rat?'#6E5A44':'#7A8A94');
+  px(c,bx+9*s,by-2*s,11*s,2,'rgba(46,42,36,.20)');
+  /* голова объёмная, уши с градиентом, нос блестит */
+  volBlob(c,bx+34*s,by-9*s,6.5*s,rat?'#9C7E60':'#A8B2BA',rat?'#B49678':'#C4CED6',rat?'#7E6248':'#8A949E');
+  const eox=bx+33*s, eoy=by-17*s;
+  volBlob(c,eox-4*s,eoy,3.4*s,rat?'#7A6248':'#8E99A3',rat?'#8E7458':'#A4AEB8',rat?'#624C34':'#767E88');
+  volBlob(c,eox+3*s,eoy,3.4*s,rat?'#7A6248':'#8E99A3',rat?'#8E7458':'#A4AEB8',rat?'#624C34':'#767E88');
+  blob(c,eox-4*s,eoy,1.8*s,'#E8B4B4'); blob(c,eox+3*s,eoy,1.8*s,'#E8B4B4');
+  blob(c,bx+40*s,by-10*s,2.2*s,'#E8A0A0'); /* нос */
+  blob(c,bx+39.4*s,by-10.7*s,0.8,'#FFFFFF'); /* блик на носу */
+  /* v1.9: чёткий глаз с радужкой и двойным бликом */
+  eye(c,bx+37.5*s,by-11*s,2*s,'#4A3222','#9A6E42',0.34);
+  /* v1.8: усы в три ряда */
+  c.strokeStyle='rgba(245,240,225,.7)';c.lineWidth=1;
+  for(let i=-1;i<2;i++){
+    c.beginPath();c.moveTo(bx+38*s,by-9.5*s+i*1.6);c.lineTo(bx+48*s,by-10.5*s+i*3.2);c.stroke();
+  }
+  /* хвост волной: два сегмента, утолщение у базы */
+  c.lineCap='round';
+  c.strokeStyle=rat?'#7A6248':'#8E99A3';c.lineWidth=3.2;
+  c.beginPath();
+  c.moveTo(bx+2,by-7*s);
+  c.quadraticCurveTo(bx-5,by-8*s+Math.sin(R.t*6)*1.5,bx-9,by-8*s+Math.sin(R.t*6)*2);
+  c.stroke();
+  c.lineWidth=1.8;
+  c.strokeStyle=rat?'#9C7E60':'#A8B2BA';
+  c.beginPath();
+  c.moveTo(bx-9,by-8*s+Math.sin(R.t*6)*2);
+  c.quadraticCurveTo(bx-13,by-7*s+Math.sin(R.t*6+0.5)*2.5,bx-15,by-6*s+Math.sin(R.t*6+1)*3);
+  c.stroke();
+  /* крыса: красная бандана + колчан игл */
+  if(rat){
+    px(c,bx+22,by-15,10,4,'#B03A2E');
+    px(c,bx+21,by-12,3,5,'#B03A2E');
+    px(c,bx+13,by-14,3,7,'#4A3A28'); /* колчан */
+    px(c,bx+12,by-17,2,4,'#C9D6E3'); px(c,bx+15,by-16,2,4,'#C9D6E3');
+    /* при замахе — прищур и игла наперевес */
+    if(wind||strike){
+      stick(c,bx+36,by-12,bx+46,by-16,'#C9D6E3',2.4);
+      px(c,bx+45,by-18,4,4,'#E8EEF1');
+    }
+  }
+  c.restore();
+}
+/* Мотылёк-щекотун: летит низко над дорожкой, крылья машут, атака — пике-щекотка */
+function paintMoth(c,m,x,gy,ph,wind,strike,shx,flash){
+  const hover=gy-34+Math.sin(R.t*2.2+(m.phaseSeed||0))*5;
+  const dive=strike?10:0;
+  const by=hover+dive, bx=x+shx+(strike?-6:0);
+  const flap=Math.abs(Math.sin(R.t*11+(m.phaseSeed||0)));
+  c.save();
+  if(flash)c.filter='brightness(1.9) saturate(0.55)';
+  /* крылья: верхняя пара машет, нижняя поменьше */
+  c.fillStyle='rgba(155,111,201,.85)';
+  c.save();c.translate(bx-3,by-4);c.scale(0.35+flap*0.75,1);
+  c.beginPath();c.ellipse(-7,-3,9,5,-0.5,0,6.283);c.fill();
+  c.beginPath();c.ellipse(7,-3,9,5,0.5,0,6.283);c.fill();
+  c.restore();
+  c.fillStyle='rgba(122,84,158,.8)';
+  c.save();c.translate(bx-3,by+2);c.scale(0.3+flap*0.7,1);
+  c.beginPath();c.ellipse(-5,3,6,4,-0.3,0,6.283);c.fill();
+  c.beginPath();c.ellipse(5,3,6,4,0.3,0,6.283);c.fill();
+  c.restore();
+  /* v1.8: прожилки и глазчатые пятна на верхних крыльях (масштабируются со взмахом) */
+  c.save();c.translate(bx-3,by-4);c.scale(0.35+flap*0.75,1);
+  c.strokeStyle='rgba(90,60,130,.65)';c.lineWidth=1.2;
+  c.beginPath();c.moveTo(-1,-1);c.lineTo(-13,-6);c.stroke();
+  c.beginPath();c.moveTo(-1,-1);c.lineTo(-12,1);c.stroke();
+  c.beginPath();c.moveTo(1,-1);c.lineTo(13,-6);c.stroke();
+  c.beginPath();c.moveTo(1,-1);c.lineTo(12,1);c.stroke();
+  blob(c,-8,-4,2.2,'rgba(232,206,255,.95)'); blob(c,8,-4,2.2,'rgba(232,206,255,.95)');
+  blob(c,-8,-4,1.1,'rgba(70,45,110,.95)'); blob(c,8,-4,1.1,'rgba(70,45,110,.95)');
+  c.restore();
+  /* объёмное тельце */
+  volBlob(c,bx,by,6,'#9B6FC9','#B88CDD','#7A52A8');
+  volBlob(c,bx,by+3,4.5,'#8A5FB8','#A67ACE','#6E4A98');
+  /* v1.8: полоски на брюшке и пушистый воротник */
+  px(c,bx-3.5,by+1,7,1.4,'#7A50A8'); px(c,bx-3,by+4.4,6,1.4,'#7A50A8');
+  blob(c,bx-4.5,by-1.5,2.3,'#B48AD6'); blob(c,bx+4.5,by-1.5,2.3,'#B48AD6'); blob(c,bx,by+5.5,2.5,'#B48AD6');
+  volBlob(c,bx+1,by-5,4,'#B48AD6','#CC9EE2','#9C72C0'); /* голова */
+  /* v1.9: чёткий глаз */
+  eye(c,bx+2.5,by-5.5,1.8,'#2E2248','#7A5CC9',0.3);
+  /* усики */
+  stick(c,bx,by-8,bx-3,by-13,'#8A5FB8',1.6);
+  stick(c,bx+2,by-8,bx+5,by-13,'#8A5FB8',1.6);
+  blob(c,bx-3,by-13,1.5,'#B48AD6'); blob(c,bx+5,by-13,1.5,'#B48AD6');
+  /* пыльца с крыльев */
+  if(Math.random()<0.3)px(c,bx-10+rnd(0,20),by-8+rnd(0,10),2,2,'rgba(200,160,230,.5)');
+  c.restore();
+}
+/* Мох-пузан: толстый зелёный кубышка с камнями, топает медленно, бьёт сверху */
+function paintMoss(c,x,gy,ph,wind,strike,m){
+  const bob=Math.abs(Math.sin(ph*0.7))*1.4;
+  const jump=strike?-6:(wind?2:0);
+  legs2(c,x-4,gy,10,ph*0.9,'#2E5C26','#1E401A',10);
+  const by=gy-10+bob+jump;
+  /* v1.9: моховой куб — скруглённый, с градиентом света */
+  const mg=c.createLinearGradient(0,by-34,0,by);
+  mg.addColorStop(0,'#6BC45A');mg.addColorStop(0.5,'#4A9E3E');mg.addColorStop(1,'#2E6B28');
+  rrectFill(c,x-15,by-30,30,30,7,mg);
+  rrectFill(c,x-13,by-32,26,8,4,'#57B54B');
+  blob(c,x-9,by-33,5,'#57B54B'); blob(c,x+7,by-32,4,'#6BC45A'); blob(c,x+12,by-20,5,'#3F8A36');
+  /* v1.8: текстура мха — детерминированные кочки по сиду, блик слева */
+  const ms=((m&&m.phaseSeed)||1)*7;
+  for(let i=0;i<7;i++){
+    const mxp=x-12+((ms*(i+3)*31)%25), myp=by-27+((ms*(i+7)*17)%20);
+    blob(c,mxp,myp,2.4,i%2?'#57B54B':'#2E5C26');
+  }
+  px(c,x-14,by-28,4,16,'rgba(120,200,100,.30)');
+  /* камушки в мху + травинки */
+  blob(c,x-8,by-18,3,'#8E99A3'); blob(c,x+6,by-12,2.5,'#7A8A94');
+  blob(c,x-9,by-19,1.2,'rgba(255,255,255,.5)'); blob(c,x+5,by-13,1,'rgba(255,255,255,.5)');
+  stick(c,x-11,by-30,x-13,by-36,'#2E5C26',1.8);
+  stick(c,x+9,by-31,x+11,by-37,'#2E5C26',1.8);
+  /* v1.8: цветок на макушке */
+  stick(c,x+2,by-31,x,by-38,'#2E5C26',1.8);
+  blob(c,x,by-39.5,2.2,'#FFFDF4'); blob(c,x,by-39.5,1,'#F9D71C');
+  /* v1.9: чёткие ленивые глаза с веками */
+  eye(c,x-6,by-22,3.4,'#2E4E2A','#6BC45A',0.32);
+  eye(c,x+5,by-22,3.4,'#2E4E2A','#6BC45A',0.32);
+  c.fillStyle='#4A9E3E';
+  c.beginPath();c.ellipse(x-6,by-23.8,3.6,1.7,0,0,6.283);c.fill();
+  c.beginPath();c.ellipse(x+5,by-23.8,3.6,1.7,0,0,6.283);c.fill();
+  px(c,x-3,by-14,6,2,'#1E401A');
+  /* при выпаде — тень удара растёт */
+  if(strike){c.fillStyle='rgba(30,64,26,.5)';c.beginPath();c.ellipse(x,gy,18,5,0,0,6.283);c.fill()}
+}
+
 function bossStunTxt(c,x,y){
   if(R.stunUntil>now()){
     c.font='bold 13px Manrope,sans-serif'; c.fillStyle='#33291D'; c.textAlign='center';
     c.fillText('*ступор*', x, y);
   }
 }
-function bossShadow(c,dx,w){shadow(c,D(R.bossX)+dx,D(GROUND)+6,w)}
+/* v1.5: смещение атаки босса — замах назад, выпад вперёд; тень следует за телом */
+function bossAtkOff(){return R.bossStrikeT>0?24:(R.tele?-7:0)}
+function bossShadow(c,dx,w){shadow(c,D(R.bossX)+dx+bossAtkOff(),D(GROUND)+6,w)}
 function blob(c,x,y,r,col){c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,6.283);c.fill()}
 function stick(c,x0,y0,x1,y1,col,w){c.strokeStyle=col;c.lineWidth=w||5;c.lineCap='round';c.beginPath();c.moveTo(x0,y0);c.lineTo(x1,y1);c.stroke()}
 
@@ -1908,96 +2585,130 @@ function bossHitY(){
   return [40,70,44,58,72][i];
 }
 
-/* 1. Огурец-Полоз: сегментный змей, голова приподнята, жало мигает */
+/* 1. Огурец-Полоз: сегментный змей из огурцов, голова приподнята, жало мигает (v1.5: плавные формы) */
 function paintBossCuc(c){
-  const bx=D(R.bossX), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
-  bossShadow(c,60,64);
+  const bx=D(R.bossX)+bossAtkOff(), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
+  bossShadow(c,60,66);
   /* хвост-кольцо над задней частью */
   for(let i=0;i<2;i++){
-    const x=bx+126+i*22, y=gy-54-i*13+Math.round(Math.sin(R.t*2.2+i)*3)+shx;
-    px(c,x,y,22,20, i%2?'#3F8A36':'#57B54B');
-    px(c,x+1,y+12,20,7,'#2E5C26');
+    const x=bx+118+i*20, y=gy-58-i*14+Math.round(Math.sin(R.t*2.4+i)*4)+shx;
+    blob(c,x+10,y+10,12,i%2?'#3F8A36':'#57B54B');
+    px(c,x+4,y+16,13,3,'#2E5C26');
   }
-  /* тело волной */
+  /* тело волной: пары «блик+тень» на каждом сегменте (прижато к земле) */
   for(let i=5;i>=1;i--){
-    const x=bx+6+i*26;
-    const y=gy-30-i*3+Math.round(Math.sin(R.t*2.2+i*0.9)*5)+shx;
-    px(c,x,y,26,26, i%2?'#3F8A36':'#57B54B');
-    px(c,x+1,y+1,24,9,'#57B54B');
-    px(c,x+1,y+16,24,9,'#2E5C26');
-    px(c,x+6,y+5,6,6,'#A7E8A0');
+    const x=bx+22+i*22, y=gy-20-i*3+Math.round(Math.sin(R.t*2.4+i*0.9)*4)+shx;
+    blob(c,x,y-6,12,i%2?'#3F8A36':'#57B54B');
+    blob(c,x-3,y-10,8,i%2?'#57B54B':'#6BC45A');
+    px(c,x-6,y-13,3,3,'#A7E8A0');
+    px(c,x+6,y-4,3,3,'#A7E8A0');
+    px(c,x-2,y+2,8,3,'#2E5C26');
   }
+  /* v2.1c: FIX — hx/hy объявлялись ПОСЛЕ использования в шее (TDZ) →
+     ReferenceError каждый кадр рендера босса-огурца → rAF-цикл умирал,
+     и игра зависала «статичной картинкой» в момент встречи с боссом */
+  const hx=bx-8, hy=gy-72+Math.round(Math.sin(R.t*2.4)*5)+shx;
+  /* шея-дуга к голове */
+  stick(c,bx+42,gy-26,bx+12,hy+30,'#3F8A36',9);
   /* приподнятая голова */
-  const hx=bx-10, hy=gy-66+Math.round(Math.sin(R.t*2.2)*5)+shx;
-  px(c,hx,hy,40,36,'#57B54B');
-  px(c,hx+1,hy+1,38,12,'#6BC45A');
-  px(c,hx+1,hy+20,38,15,'#2E5C26');
-  px(c,hx+6,hy+9,8,8,'#FFFFFF'); px(c,hx+26,hy+9,8,8,'#FFFFFF');
-  px(c,hx+9,hy+12,4,6,'#2E2A24'); px(c,hx+29,hy+12,4,6,'#2E2A24');
-  px(c,hx+12,hy+28,16,5,'#3F8A36');
-  px(c,hx+2,hy+2,5,5,'#A7E8A0');
-  if(Math.sin(R.t*6)>0){px(c,hx-9,hy+24,10,3,'#E23D28');px(c,hx-14,hy+23,5,5,'#E23D28');}
-  bossStunTxt(c,hx+20,hy-10);
+  /* v1.9: объёмная голова-огурец с дугой света */
+  volBlob(c,hx+16,hy+16,20,'#57B54B','#7BD46A','#3A8A30');
+  volBlob(c,hx+15,hy+10,17,'#6BC45A','#8CD86E','#4E9E42');
+  volBlob(c,hx+15,hy-1,13,'#57B54B','#7BD46A','#3A8A30');
+  /* v1.9: чёткие глаза с зелёной радужкой */
+  eye(c,hx+8,hy+2,5.4,'#2E6B2A','#7BD46A',0.3);
+  eye(c,hx+24,hy+2,5.4,'#2E6B2A','#7BD46A',0.3);
+  stick(c,hx+1,hy-6,hx+12,hy-3,'#2E5C26',2.8);
+  stick(c,hx+31,hy-6,hx+20,hy-3,'#2E5C26',2.8);
+  px(c,hx+10,hy+22,14,3,'#2E5C26');
+  /* v1.8: ноздри, зубы, дуга-блик на голове */
+  blob(c,hx+12,hy+8,1.4,'#2E5C26'); blob(c,hx+19,hy+8,1.4,'#2E5C26');
+  tri(c,hx+10,hy+22,hx+12.5,hy+22,hx+11.2,hy+26,'#FFFFFF');
+  tri(c,hx+17,hy+22,hx+19.5,hy+22,hx+18.2,hy+26,'#FFFFFF');
+  c.strokeStyle='rgba(220,245,210,.5)';c.lineWidth=2.4;
+  c.beginPath();c.arc(hx+15,hy+14,16,-2.4,-1.5);c.stroke();
+  if(Math.sin(R.t*6)>0){stick(c,hx+4,hy+20,hx-12,hy+17,'#E23D28',3);blob(c,hx-13,hy+17,3,'#E23D28')}
+  /* хохолок-листья */
+  stick(c,hx+14,hy-11,hx+7,hy-25,'#3F8A36',3.4);
+  stick(c,hx+16,hy-11,hx+23,hy-24,'#3F8A36',3);
+  bossStunTxt(c,hx+18,hy-34);
 }
 
-/* 2. Робот-Рекс: хромированный тираннозавр из пылесоса, красный LED-глаз */
+/* 2. Робот-Рекс: хромированный тираннозавр из пылесоса, красный LED-глаз (v1.5: плавный корпус) */
 function paintBossRex(c){
-  const bx=D(R.bossX), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
+  const bx=D(R.bossX)+bossAtkOff(), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
   bossShadow(c,66,70);
   /* лапы на роликах-щёточках */
-  px(c,bx+58,gy-40,20,40+shx,'#8FA0AA');
-  px(c,bx+112,gy-36,20,36+shx,'#A8B6BE');
-  px(c,bx+54,gy-8,30,8,'#4A5560'); px(c,bx+108,gy-6,30,6,'#4A5560');
-  /* корпус-бак с блеском и заклёпками */
-  px(c,bx+30,gy-92,108,56,'#B8C4CC');
-  px(c,bx+30,gy-92,108,14,'#D5DEE3');
-  px(c,bx+30,gy-44,108,8,'#8FA0AA');
-  px(c,bx+40,gy-84,88,10,'#E8EEF1');
-  for(let i=0;i<4;i++)px(c,bx+38+i*24,gy-48,4,4,'#7A8A94');
-  /* шланговая шея дугой вверх-вперёд */
-  for(let i=0;i<3;i++){
-    const x=bx+30-i*12, y=gy-100-i*11+Math.round(Math.sin(R.t*3+i)*2)+shx;
-    px(c,x,y,14,11,'#4A5560');
+  stick(c,bx+66,gy-46,bx+64,gy-12,'#8FA0AA',10);
+  stick(c,bx+114,gy-42,bx+112,gy-10,'#A8B6BE',10);
+  blob(c,bx+64,gy-8,10,'#4A5560'); blob(c,bx+112,gy-6,9,'#4A5560');
+  px(c,bx+56,gy-6,16,4,'#2E3841'); px(c,bx+104,gy-4,16,4,'#2E3841');
+  /* v1.9: корпус-бак с металлическим радиальным градиентом */
+  volBlob(c,bx+86,gy-64,34,'#B8C4CC','#E4EEF2','#8296A2');
+  volBlob(c,bx+80,gy-72,28,'#D5DEE3','#F2F7FA','#AAB8C2');
+  volBlob(c,bx+92,gy-58,26,'#A8B6BE','#C6D4DC','#8A98A4');
+  px(c,bx+62,gy-78,3,3,'#E8EEF1'); px(c,bx+74,gy-90,3,3,'#E8EEF1');
+  for(let i=0;i<3;i++)px(c,bx+72+i*13,gy-46,4,4,'#7A8A94'); /* заклёпки */
+  /* v1.8: швы-панели по корпусу + кольцо заклёпок */
+  c.strokeStyle='rgba(90,103,113,.55)';c.lineWidth=2;
+  c.beginPath();c.arc(bx+86,gy-64,30,0.55,1.5);c.stroke();
+  c.beginPath();c.arc(bx+86,gy-64,30,-0.9,-0.2);c.stroke();
+  for(let i=0;i<7;i++){
+    const a=-2.35+i*0.28;
+    px(c,bx+86+Math.cos(a)*26,gy-64+Math.sin(a)*26,2.4,2.4,'#E8EEF1');
   }
-  /* голова с открытой пастью и зубами */
-  const hx=bx-24, hy=gy-134+Math.round(Math.sin(R.t*3)*2)+shx;
-  px(c,hx,hy,48,22,'#A8B6BE');
-  px(c,hx+4,hy,40,7,'#D5DEE3');
-  px(c,hx+2,hy+22,44,9,'#8FA0AA');
-  for(let i=0;i<5;i++)px(c,hx+8+i*8,hy+20,4,5,'#E8EEF1');
-  px(c,hx+10,hy+31,4,3,'#E8EEF1'); px(c,hx+26,hy+31,4,3,'#E8EEF1'); px(c,hx+40,hy+30,4,3,'#E8EEF1');
+  /* шланговая шея дугой вверх-вперёд */
+  stick(c,bx+62,gy-92,bx+40,gy-116,'#4A5560',9);
+  stick(c,bx+40,gy-116,bx+18,gy-128,'#5A6771',8);
+  /* v1.9: голова объёмная + линза LED-глаза с бликом */
+  const hx=bx-16, hy=gy-140+Math.round(Math.sin(R.t*3)*2)+shx;
+  volBlob(c,hx+16,hy+10,17,'#A8B6BE','#C6D4DC','#8A98A4');
+  volBlob(c,hx+14,hy+4,14,'#D5DEE3','#EFF4F7','#AAB8C2');
+  /* пасть */
+  c.fillStyle='#5A2A22';
+  c.beginPath();c.moveTo(hx-2,hy+12);c.lineTo(hx+26,hy+10);c.lineTo(hx+22,hy+22);c.lineTo(hx,hy+20);c.closePath();c.fill();
+  c.fillStyle='#E8EEF1';
+  for(let i=0;i<4;i++){c.beginPath();c.moveTo(hx+i*6,hy+12);c.lineTo(hx+3+i*6,hy+12);c.lineTo(hx+1.5+i*6,hy+16);c.closePath();c.fill()}
   /* красный LED-глаз со свечением */
   c.globalCompositeOperation='lighter';
-  c.fillStyle='rgba(255,60,40,.35)';c.beginPath();c.arc(hx+38,hy+8,7,0,6.283);c.fill();
+  c.fillStyle='rgba(255,60,40,.35)';c.beginPath();c.arc(hx+20,hy+2,8,0,6.283);c.fill();
   c.globalCompositeOperation='source-over';
-  px(c,hx+35,hy+5,7,7,'#FF3C28'); px(c,hx+37,hy+7,3,3,'#FFD3CC');
+  blob(c,hx+20,hy+2,4,'#FF3C28'); blob(c,hx+21,hy+1,1.6,'#FFD3CC');
   /* шланг-хвост торчит вверх */
-  for(let i=0;i<2;i++){
-    const x=bx+142+i*13, y=gy-84-i*15+Math.round(Math.sin(R.t*2.5+i)*3)+shx;
-    px(c,x,y,13,12,'#4A5560');
-  }
-  bossStunTxt(c,hx+24,hy-10);
+  stick(c,bx+116,gy-70,bx+138,gy-92,'#4A5560',8);
+  stick(c,bx+138,gy-92,bx+142,gy-108,'#5A6771',6);
+  blob(c,bx+142,gy-110,5,'#4A5560');
+  bossStunTxt(c,hx+16,hy-14);
 }
 
-/* 3. Швабра-Гидра: живое ржавое ведро, три швабры-шеи с космами */
+/* 3. Швабра-Гидра: живое ржавое ведро, три швабры-шеи с космами (v1.5: округлое ведро) */
 function paintBossMop(c){
-  const bx=D(R.bossX), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
+  const bx=D(R.bossX)+bossAtkOff(), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
   bossShadow(c,58,58);
-  /* ведро с рёбрами и ржавым низом */
-  px(c,bx+30,gy-62,92,62,'#C8A03C');
-  px(c,bx+30,gy-62,92,9,'#E2C26A');
-  px(c,bx+30,gy-14,92,14,'#8A6A28');
-  for(let i=0;i<4;i++)px(c,bx+38+i*21,gy-48,3,36,'#B08E32');
-  /* злое лицо */
-  px(c,bx+46,gy-44,9,7,'#2E2A24'); px(c,bx+70,gy-44,9,7,'#2E2A24');
-  px(c,bx+45,gy-49,11,3,'#2E2A24'); px(c,bx+69,gy-49,11,3,'#2E2A24');
-  px(c,bx+48,gy-26,26,4,'#7A5A20');
+  /* v1.9: ведро с металлическим градиентом света слева */
+  const bgm=c.createLinearGradient(bx+26,0,bx+110,0);
+  bgm.addColorStop(0,'#E8C970');bgm.addColorStop(0.38,'#C8A03C');bgm.addColorStop(0.75,'#B08E32');bgm.addColorStop(1,'#8E6E24');
+  c.fillStyle=bgm;
+  c.beginPath();c.moveTo(bx+26,gy-66);c.lineTo(bx+110,gy-66);c.lineTo(bx+104,gy-8);c.lineTo(bx+32,gy-8);c.closePath();c.fill();
+  c.fillStyle='#E2C26A';
+  c.beginPath();c.moveTo(bx+28,gy-62);c.lineTo(bx+108,gy-62);c.lineTo(bx+106,gy-52);c.lineTo(bx+30,gy-52);c.closePath();c.fill();
+  c.fillStyle='#8A6A28';
+  c.beginPath();c.moveTo(bx+34,gy-16);c.lineTo(bx+102,gy-16);c.lineTo(bx+104,gy-8);c.lineTo(bx+32,gy-8);c.closePath();c.fill();
+  for(let i=0;i<4;i++)px(c,bx+40+i*17,gy-48,3,30,'#B08E32');
+  /* v1.9: чёткие злые глаза */
+  eye(c,bx+48,gy-42,5,'#4A3418','#A8803C',0.3);
+  eye(c,bx+76,gy-42,5,'#4A3418','#A8803C',0.3);
+  px(c,bx+43,gy-50,12,3,'#2E2A24'); px(c,bx+69,gy-50,12,3,'#2E2A24');
+  px(c,bx+52,gy-30,22,4,'#7A5A20');
+  /* v1.8: ржавые пятна на ведре */
+  blob(c,bx+60,gy-24,6,'rgba(138,90,40,.5)'); blob(c,bx+92,gy-30,5,'rgba(138,90,40,.45)'); blob(c,bx+44,gy-36,4,'rgba(138,90,40,.4)');
+  px(c,bx+84,gy-58,2,10,'rgba(138,90,40,.5)'); px(c,bx+58,gy-40,10,2,'rgba(138,90,40,.4)');
   /* пена через край */
-  blob(c,bx+36,gy-62,7,'rgba(255,255,255,.95)');
-  blob(c,bx+52,gy-66,9,'rgba(255,255,255,.9)');
-  blob(c,bx+70,gy-63,6,'rgba(255,255,255,.95)');
-  blob(c,bx+88,gy-66,8,'rgba(255,255,255,.88)');
-  blob(c,bx+106,gy-61,6,'rgba(255,255,255,.92)');
+  blob(c,bx+32,gy-64,8,'rgba(255,255,255,.95)');
+  blob(c,bx+50,gy-69,10,'rgba(255,255,255,.9)');
+  blob(c,bx+72,gy-65,7,'rgba(255,255,255,.95)');
+  blob(c,bx+90,gy-68,9,'rgba(255,255,255,.88)');
+  blob(c,bx+106,gy-63,7,'rgba(255,255,255,.92)');
   /* капли грязной воды */
   c.fillStyle='rgba(169,176,162,.8)';
   for(let i=0;i<3;i++){
@@ -2007,135 +2718,153 @@ function paintBossMop(c){
   /* три деревянные шеи качаются */
   const sway=Math.sin(R.t*1.8)*4;
   stick(c,bx+50,gy-62,bx+26+sway,gy-112,'#7A5A34',6);
-  stick(c,bx+76,gy-64,bx+74,gy-138,'#7A5A34',7);
+  stick(c,bx+76,gy-64,bx+74,gy-140,'#7A5A34',7);
   stick(c,bx+102,gy-62,bx+124-sway,gy-116,'#7A5A34',6);
-  /* космы-головы */
+  /* космы-головы с глазками */
   const mops=[[bx+26+sway,gy-120,15],[bx+74,gy-148,17],[bx+124-sway,gy-124,14]];
   for(const mm of mops){
     blob(c,mm[0],mm[1],mm[2],'#9AA0A6');
     c.strokeStyle='#7E848A';c.lineWidth=2;
-    for(let i=0;i<4;i++){
-      const a=0.5+i*0.55;
+    for(let i=0;i<5;i++){
+      const a=0.4+i*0.5;
       c.beginPath();c.moveTo(mm[0]+Math.cos(a)*mm[2]*0.5,mm[1]+Math.sin(a)*mm[2]*0.5);
       c.lineTo(mm[0]+Math.cos(a)*(mm[2]+5),mm[1]+Math.sin(a)*(mm[2]+6));c.stroke();
     }
-    blob(c,mm[0]-3,mm[1]-4,mm[2]*0.35,'#B4BABE');
+    blob(c,mm[0]-4,mm[1]-3,mm[2]*0.4,'#B4BABE');
+    blob(c,mm[0]-5,mm[1]-5,2.6,'#2E2A24'); blob(c,mm[0]+3,mm[1]-5,2.6,'#2E2A24');
   }
-  bossStunTxt(c,bx+76,gy-158);
+  bossStunTxt(c,bx+76,gy-160);
 }
 
-/* 4. Королева Комков: гигантский пушистый кот в короне */
+/* 4. Королева Комков: гигантский пушистый кот в короне (v1.5: пух из слоёв, грозные брови) */
 function paintBossQueen(c){
-  const bx=D(R.bossX), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
+  const bx=D(R.bossX)+bossAtkOff(), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
   const sq=Math.round(Math.sin(R.t*1.6)*3);
-  bossShadow(c,74,76);
-  /* пушистая громада из кругов */
-  blob(c,bx+18,gy-26+shx,24,'#8E9399');
-  blob(c,bx+52,gy-50-sq+shx,34,'#8E9399');
-  blob(c,bx+100,gy-44-sq+shx,32,'#8E9399');
-  blob(c,bx+136,gy-26+shx,22,'#8E9399');
-  blob(c,bx+78,gy-22+shx,26,'#9AA0A6');
-  blob(c,bx+120,gy-20+shx,20,'#84898E');
+  bossShadow(c,74,78);
+  /* v1.9: объёмный пух — сферы со светом сверху */
+  volBlob(c,bx+24,gy-30+shx,26,'#84898E','#A2A7AC','#666B70');
+  volBlob(c,bx+56,gy-56-sq+shx,36,'#8E9399','#ACB1B6','#70757A');
+  volBlob(c,bx+108,gy-48-sq+shx,34,'#8E9399','#ACB1B6','#70757A');
+  volBlob(c,bx+138,gy-28+shx,24,'#84898E','#A2A7AC','#666B70');
+  volBlob(c,bx+82,gy-26+shx,28,'#9AA0A6','#B8BEC4','#7A8086');
+  volBlob(c,bx+124,gy-24+shx,22,'#84898E','#A2A7AC','#666B70');
+  /* голова с пуховыми щеками */
+  volBlob(c,bx+34,gy-62-sq+shx,26,'#9AA0A6','#B8BEC4','#7A8086');
+  volBlob(c,bx+22,gy-52-sq+shx,15,'#A6ABAF','#C0C6CA','#8A9095');
+  volBlob(c,bx+48,gy-52-sq+shx,15,'#A6ABAF','#C0C6CA','#8A9095');
   /* блики пуха */
-  c.strokeStyle='#A6ABAF';c.lineWidth=2;
-  c.beginPath();c.arc(bx+52,gy-52-sq+shx,30,-2.6,-1.2);c.stroke();
-  c.beginPath();c.arc(bx+100,gy-46-sq+shx,28,-2.4,-1.0);c.stroke();
-  /* огромные глаза */
-  blob(c,bx+20,gy-56-sq+shx,10,'#FFFFFF');
-  blob(c,bx+44,gy-56-sq+shx,10,'#FFFFFF');
-  blob(c,bx+22,gy-55-sq+shx,5,'#2E2A24');
-  blob(c,bx+42,gy-55-sq+shx,5,'#2E2A24');
-  px(c,bx+24,gy-57-sq+shx,2,2,'#FFFFFF'); px(c,bx+44,gy-57-sq+shx,2,2,'#FFFFFF');
-  px(c,bx+31,gy-48-sq+shx,4,3,'#E76F8A');
+  c.strokeStyle='#B4BABE';c.lineWidth=2;
+  c.beginPath();c.arc(bx+56,gy-58-sq+shx,32,-2.6,-1.2);c.stroke();
+  c.beginPath();c.arc(bx+108,gy-52-sq+shx,30,-2.4,-1.0);c.stroke();
+  /* v1.9: огромные чёткие глаза с янтарной радужкой */
+  eye(c,bx+25,gy-66-sq+shx,9.5,'#4A3418','#C9A23C',0.26);
+  eye(c,bx+45,gy-66-sq+shx,9.5,'#4A3418','#C9A23C',0.26);
+  stick(c,bx+15,gy-78-sq+shx,bx+30,gy-74-sq+shx,'#5E6367',3);
+  stick(c,bx+55,gy-78-sq+shx,bx+40,gy-74-sq+shx,'#5E6367',3);
+  px(c,bx+31,gy-56-sq+shx,8,4,'#E76F8A'); /* носик */
   /* усы */
   c.strokeStyle='#6E7377';c.lineWidth=1.5;
-  c.beginPath();c.moveTo(bx+12,gy-46-sq+shx);c.lineTo(bx-4,gy-44-sq+shx);c.stroke();
-  c.beginPath();c.moveTo(bx+12,gy-42-sq+shx);c.lineTo(bx-4,gy-38-sq+shx);c.stroke();
+  c.beginPath();c.moveTo(bx+14,gy-52-sq+shx);c.lineTo(bx-4,gy-50-sq+shx);c.stroke();
+  c.beginPath();c.moveTo(bx+14,gy-47-sq+shx);c.lineTo(bx-4,gy-43-sq+shx);c.stroke();
+  /* v1.8: табби-полоски на загривке и боку, румянец, рваный пух по контуру */
+  c.strokeStyle='rgba(90,95,100,.55)';c.lineWidth=3;c.lineCap='round';
+  c.beginPath();c.moveTo(bx+44,gy-84-sq+shx);c.lineTo(bx+48,gy-72-sq+shx);c.stroke();
+  c.beginPath();c.moveTo(bx+62,gy-90-sq+shx);c.lineTo(bx+66,gy-78-sq+shx);c.stroke();
+  c.beginPath();c.moveTo(bx+120,gy-70-sq+shx);c.lineTo(bx+128,gy-58-sq+shx);c.stroke();
+  c.globalAlpha=0.4;
+  blob(c,bx+18,gy-56-sq+shx,5,'#E76F8A'); blob(c,bx+54,gy-56-sq+shx,5,'#E76F8A');
+  c.globalAlpha=1;
+  c.strokeStyle='rgba(132,137,142,.8)';c.lineWidth=2;
+  for(let i=0;i<5;i++){
+    const a=-2.9+i*0.42;
+    c.beginPath();c.moveTo(bx+56+Math.cos(a)*36,gy-56-sq+shx+Math.sin(a)*36);
+    c.lineTo(bx+56+Math.cos(a)*42,gy-56-sq+shx+Math.sin(a)*42);c.stroke();
+  }
   /* корона с камнем */
-  px(c,bx+16,gy-80-sq+shx,34,11,'#F4B400');
-  for(let i=0;i<3;i++)px(c,bx+16+i*12,gy-88-sq+shx,7,9,'#F4B400');
-  px(c,bx+30,gy-86-sq+shx,5,5,'#E23D28');
-  px(c,bx+16,gy-72-sq+shx,34,3,'#D9A21B');
+  px(c,bx+18,gy-90-sq+shx,38,11,'#F4B400');
+  for(let i=0;i<3;i++)px(c,bx+18+i*13,gy-99-sq+shx,8,10,'#F4B400');
+  blob(c,bx+37,gy-96-sq+shx,3.5,'#E23D28');
+  /* v1.8: жемчужины на зубцах короны */
+  blob(c,bx+22,gy-100-sq+shx,2.2,'#FFF3B0'); blob(c,bx+35,gy-100-sq+shx,2.2,'#FFF3B0'); blob(c,bx+48,gy-100-sq+shx,2.2,'#FFF3B0');
+  px(c,bx+18,gy-80-sq+shx,38,3,'#D9A21B');
+  /* хвост-комок качается */
+  blob(c,bx+156+Math.sin(R.t*1.4)*5,gy-52-sq+shx,14,'#8E9399');
   /* лапки */
-  px(c,bx+10,gy-10+shx,22,10,'#6E7377');
-  px(c,bx+118,gy-10+shx,22,10,'#6E7377');
-  bossStunTxt(c,bx+60,gy-96-sq+shx);
+  blob(c,bx+22,gy-8+shx,11,'#6E7377');
+  blob(c,bx+130,gy-8+shx,11,'#6E7377');
+  bossStunTxt(c,bx+70,gy-108-sq+shx);
 }
 
-/* 5. Генеральная Уборка: голем-стиралка с головой-шлангом и швабрами-руками */
+/* 5. Генеральная Уборка: голем-стиралка с головой-шлангом и швабрами-руками (v1.5: скруглённый корпус) */
 function paintBossGolem(c){
-  const bx=D(R.bossX), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
+  const bx=D(R.bossX)+bossAtkOff(), shx=R.stunUntil>now()?ri(-3,3):0, gy=D(GROUND);
   bossShadow(c,64,66);
   /* ноги-тумбы */
-  px(c,bx+44,gy-32,20,32,'#5A6068');
-  px(c,bx+96,gy-28,20,28,'#5A6068');
-  px(c,bx+40,gy-8,28,8,'#3A4148'); px(c,bx+92,gy-6,28,6,'#3A4148');
-  /* корпус-стиралка */
-  px(c,bx+28,gy-104,104,72,'#D8DCDE');
-  px(c,bx+28,gy-104,104,12,'#EFF2F4');
-  px(c,bx+28,gy-40,104,8,'#B4BABC');
-  /* люк-барабан крутится */
-  blob(c,bx+62,gy-70,24,'#8FA0AA');
-  blob(c,bx+62,gy-70,18,'#3A4750');
+  stick(c,bx+56,gy-38,bx+56,gy-12,'#5A6068',12);
+  stick(c,bx+104,gy-34,bx+104,gy-10,'#5A6068',12);
+  blob(c,bx+56,gy-9,9,'#3A4148'); blob(c,bx+104,gy-7,9,'#3A4148');
+  /* v1.9: корпус с градиентом белого пластика */
+  volBlob(c,bx+80,gy-72,42,'#D8DCDE','#F4F8FA','#B4BABE');
+  volBlob(c,bx+74,gy-80,36,'#EFF2F4','#FFFFFF','#D5DCDF');
+  volBlob(c,bx+88,gy-62,34,'#C6CBCD','#DDE2E4','#A8AEAF');
+  px(c,bx+52,gy-44,58,5,'#B4BABC');
+  /* люк-барабан крутится: глубокий градиент */
+  volBlob(c,bx+66,gy-70,26,'#8FA0AA','#B0C0CA','#6E808C');
+  volBlob(c,bx+66,gy-70,19,'#3A4750','#4A5A66','#2A343E');
   c.strokeStyle='rgba(255,255,255,.5)';c.lineWidth=3;
-  c.beginPath();c.arc(bx+62,gy-70,12,R.t*2,R.t*2+1.8);c.stroke();
+  c.beginPath();c.arc(bx+66,gy-70,12,R.t*2,R.t*2+1.8);c.stroke();
+  blob(c,bx+62,gy-74,5,'rgba(255,255,255,.25)');
   /* панель управления */
   px(c,bx+102,gy-92,22,4,'#B4BABC');
-  px(c,bx+104,gy-86,5,5,'#6BC45A'); px(c,bx+114,gy-86,5,5,'#E23D28');
+  blob(c,bx+106,gy-86,3,'#6BC45A'); blob(c,bx+116,gy-86,3,'#E23D28');
+  /* v1.8: значок-капля на корпусе, пузырьки мыла у люка, заклёпки по верху */
+  blob(c,bx+100,gy-70,4,'#3B82C4'); blob(c,bx+99,gy-71.5,1.4,'rgba(255,255,255,.8)');
+  blob(c,bx+58,gy-62,2,'rgba(255,255,255,.8)'); blob(c,bx+72,gy-58,2.6,'rgba(255,255,255,.7)'); blob(c,bx+64,gy-55,1.8,'rgba(255,255,255,.8)');
+  for(let i=0;i<5;i++)px(c,bx+52+i*14,gy-108,2.4,2.4,'#9AA0A6');
   /* губки-погоны и бутыли за спиной */
-  px(c,bx+34,gy-112,24,10,'#F2D24B'); px(c,bx+100,gy-112,24,10,'#F2D24B');
-  px(c,bx+118,gy-128,12,24,'#3F8A36'); px(c,bx+121,gy-132,6,5,'#D8DCDE');
-  px(c,bx+134,gy-124,10,20,'#3B82C4'); px(c,bx+136,gy-128,6,5,'#D8DCDE');
+  px(c,bx+42,gy-112,26,10,'#F2D24B'); px(c,bx+96,gy-112,26,10,'#F2D24B');
+  blob(c,bx+120,gy-126,8,'#3F8A36'); blob(c,bx+122,gy-134,3,'#D8DCDE');
+  blob(c,bx+136,gy-122,7,'#3B82C4'); blob(c,bx+138,gy-129,3,'#D8DCDE');
   /* голова-шланг с горящими глазами */
-  const hgx=bx-4, hgy=gy-140+Math.round(Math.sin(R.t*2.4)*3)+shx;
-  px(c,hgx,hgy,42,30,'#4A5560');
-  px(c,hgx,hgy+8,46,8,'#5A6068');
+  const hgx=bx-2, hgy=gy-140+Math.round(Math.sin(R.t*2.4)*3)+shx;
+  blob(c,hgx+20,hgy+14,18,'#4A5560');
+  blob(c,hgx+18,hgy+8,14,'#5A6068');
+  px(c,hgx+2,hgy+6,36,5,'#5A6068');
   c.globalCompositeOperation='lighter';
   c.fillStyle='rgba(255,213,74,.3)';
-  c.beginPath();c.arc(hgx+12,hgy+12,8,0,6.283);c.fill();
-  c.beginPath();c.arc(hgx+30,hgy+12,8,0,6.283);c.fill();
+  c.beginPath();c.arc(hgx+12,hgy+12,9,0,6.283);c.fill();
+  c.beginPath();c.arc(hgx+28,hgy+12,9,0,6.283);c.fill();
   c.globalCompositeOperation='source-over';
-  px(c,hgx+8,hgy+9,8,7,'#FFD54A'); px(c,hgx+26,hgy+9,8,7,'#FFD54A');
-  px(c,hgx+10,hgy+11,4,4,'#FFF3B0'); px(c,hgx+28,hgy+11,4,4,'#FFF3B0');
+  blob(c,hgx+12,hgy+12,5,'#FFD54A'); blob(c,hgx+28,hgy+12,5,'#FFD54A');
+  blob(c,hgx+13,hgy+11,2,'#FFF3B0'); blob(c,hgx+29,hgy+11,2,'#FFF3B0');
   /* руки-швабры в стороны */
-  stick(c,bx+28,gy-92,bx-16,gy-56,'#7A5A34',6);
-  blob(c,bx-16,gy-62,13,'#9AA0A6');
-  stick(c,bx+132,gy-92,bx+152,gy-58,'#7A5A34',6);
-  blob(c,bx+152,gy-64,12,'#9AA0A6');
-  bossStunTxt(c,bx+80,gy-112);
+  stick(c,bx+36,gy-92,bx-12,gy-58,'#7A5A34',6);
+  blob(c,bx-14,gy-60,13,'#9AA0A6');
+  c.strokeStyle='#7E848A';c.lineWidth=2;
+  for(let i=0;i<4;i++){
+    const a=0.7+i*0.45;
+    c.beginPath();c.moveTo(bx-14+Math.cos(a)*8,gy-60+Math.sin(a)*8);
+    c.lineTo(bx-14+Math.cos(a)*18,gy-60+Math.sin(a)*18);c.stroke();
+  }
+  stick(c,bx+124,gy-92,bx+148,gy-58,'#7A5A34',6);
+  blob(c,bx+150,gy-60,12,'#9AA0A6');
+  bossStunTxt(c,bx+80,gy-116);
 }
 
 const BOSS_PAINTERS=[paintBossCuc,paintBossRex,paintBossMop,paintBossQueen,paintBossGolem];
-const BOSS_ART_KEYS=['ogur','robot','shvabra','queen','gen'];
+/* v1.5: масштаб по характеру босса — Королева гигантская, Швабра-Гидра ниже, Рекс и Полоз крупные */
+const BOSS_SCALE=[1.0,1.14,0.92,1.3,1.08];
 function drawBoss(c){
   if(state.combat.phase!=='boss')return;
   const idx=((state.combat.bossTier-1)%5+5)%5;
-  const im=ART['boss_'+BOSS_ART_KEYS[idx]];
-  if(!im){BOSS_PAINTERS[idx](c);return;}
-  /* v0.7: сочный арт-босс вместо пиксельной рисовалки */
-  const bob=Math.round(Math.sin(R.t*2.2)*3);
-  const h=138, w=Math.round(im.width/im.height*h);
-  const x=D(R.bossX)+Math.round(w*0.06);
-  shadow(c,x+w*0.5,D(GROUND)+8,w*0.42);
-  /* багровое свечение-лужайка под боссом */
-  c.globalCompositeOperation='lighter';
-  const bg2=c.createRadialGradient(x+w*0.5,D(GROUND)-8,6,x+w*0.5,D(GROUND)-8,w*0.72);
-  bg2.addColorStop(0,'rgba(255,80,60,'+(0.10+(R.enrage?0.10:0)+0.03*Math.sin(R.t*3)).toFixed(2)+')');
-  bg2.addColorStop(1,'rgba(255,80,60,0)');
-  c.fillStyle=bg2;
-  c.beginPath();c.ellipse(x+w*0.5,D(GROUND)-8,w*0.72,14,0,0,Math.PI*2);c.fill();
-  c.globalCompositeOperation='source-over';
+  /* v1.5: процедурные боссы — основной вид (имена соответствуют внешности), масштаб по боссу */
+  const sc=BOSS_SCALE[idx];
   c.save();
-  if(R.bossFlash>0)c.filter='brightness(1.6) saturate(0.7)';
-  c.drawImage(im,x,D(GROUND)-h+bob,w,h);
+  c.translate(D(R.bossX),D(GROUND));
+  c.scale(sc,sc);
+  c.translate(-D(R.bossX),-D(GROUND));
+  BOSS_PAINTERS[idx](c);
   c.restore();
-  if(R.enrage||R.bossPhase>=2){
-    c.globalCompositeOperation='lighter';
-    c.fillStyle='rgba(255,60,20,'+(0.10+0.06*Math.sin(R.t*5)).toFixed(2)+')';
-    c.beginPath();c.ellipse(x+w/2,D(GROUND)-h*0.45,w*0.62,h*0.62,0,0,Math.PI*2);c.fill();
-    c.globalCompositeOperation='source-over';
-  }
-  bossStunTxt(c,x+w*0.5,D(GROUND)-h-12+bob);
 }
 /* — живой воздух: пыльца/угольки и бабочки — зависят от зоны — */
 function drawAmbient(c){
@@ -2361,6 +3090,32 @@ function drawFx(c){
       c.fillRect(-2.5,-1.5,5,3);
       c.restore();
       c.globalAlpha=1;
+    } else if(f.type==='komix'){
+      /* v1.3: комикс-всплывашка — звезда-вспышка со словом (БАМ!/ХРЯСЬ!/ВЖУХ!) */
+      const sc=0.55+0.45*Math.min(1,p*3.2);
+      const al=clamp(1-(p-0.5)/0.5,0,1);
+      c.save();
+      c.translate(f.x,f.y);
+      c.rotate((f.seed||0)*0.3-0.15);
+      c.scale(sc,sc);
+      c.globalAlpha=al;
+      c.fillStyle=f.col||'#FFD34D';
+      c.beginPath();
+      for(let i=0;i<20;i++){
+        const rr=i%2===0?27:13;
+        const an=i/20*6.283;
+        const kx=Math.cos(an)*rr, ky=Math.sin(an)*rr*0.8;
+        i===0?c.moveTo(kx,ky):c.lineTo(kx,ky);
+      }
+      c.closePath();c.fill();
+      c.strokeStyle='rgba(46,36,24,.9)';c.lineWidth=2.5;c.stroke();
+      c.font='bold 13px Manrope,sans-serif';
+      c.fillStyle='#2E2418';
+      c.textAlign='center';
+      c.fillText(f.txt||'БАМ!',0,4.5);
+      c.restore();
+      c.globalAlpha=1;
+      c.textAlign='left';
     }
   }
 }
@@ -2525,6 +3280,7 @@ function render(){
   if(R.shake>0.01)ctx.translate(rnd(-1,1)*R.shake*5,rnd(-1,1)*R.shake*4);
   drawBG(ctx);
   drawGrassBack(ctx);
+  drawLane(ctx); /* v1.5: дорожка двора — по ней идут мобы */
   drawCat(ctx);
   drawWand(ctx);
   if(typeof drawGuest==='function')drawGuest(ctx); /* v1.2: гостевой кот во дворе */
@@ -2563,6 +3319,7 @@ function fxHeart(x,y){addFx({type:'heart',x:x,y:y,life:0,dur:1.3,col:Math.random
 function fxCoin(x,y){addFx({type:'coin',x:x,y:y,life:0,dur:0.6})}
 function fxBeam(x,col){addFx({type:'beam',x:x,y:GROUND-10,life:0,dur:0.55,col:col})}
 function wandZap(tx,ty){
+  R.catCastT=0.45; /* v1.5: замах палочкой */
   const g=wandGeom();
   R.wandGlow=0.5;
   addFx({type:'proj',x0:g.tipx,y0:g.tipy,x1:tx,y1:ty,life:0,dur:0.38,trail:[]});
@@ -2575,15 +3332,31 @@ function spawnMob(){
   /* v1.0: шесть видов мобов; с 2-й волны каждый 8-й — элита с богатым лутом */
   const r=Math.random();
   const kind=r<0.25?'cuc':r<0.45?'clow':r<0.63?'mouse':r<0.77?'rat':r<0.89?'moth':'moss';
-  const m={x:252,hp:mobHp(w,kind),max:mobHp(w,kind),dmg:mobDmg(w,kind),atkT:rnd(0,0.5),kind:kind,dustT:0,flashT:0};
-  if(w>=2&&Math.random()<0.12*(typeof evtMult==='function'?evtMult('elite'):1)){
+  /* v1.5: мобы заходят с края экрана по дорожке, со своей полосой глубины и фазой шага */
+  /* v2.1d: первый враг волны несётся вдвое быстрее — меньше пустого ожидания на старте волны */
+  const rush=(R.spawnLeft===state.combat.quota);
+  const m={x:CW+16+ri(0,26),lane:[-7,-2,4][ri(0,2)],phase:rnd(0,6),phaseSeed:rnd(0,6),hp:mobHp(w,kind),max:mobHp(w,kind),dmg:mobDmg(w,kind),atkT:0,kind:kind,dustT:0,flashT:0,rush:rush};
+  /* v1.3: анонс семейства */
+  const fk=MOB_KINDS[kind];
+  if(fk&&fk.fam&&R.famToast!==fk.fam){
+    R.famToast=fk.fam;
+    const f=MOB_FAMS[fk.fam];
+    if(f)toast('🐾 Стая: '+f.n+' — '+f.d);
+  }
+  if(w>=1&&Math.random()<0.12*(typeof evtMult==='function'?evtMult('elite'):1)){ /* v2.1c: элиты с 1-й волны — ранний гарантированный лут */
     m.elite=true;
     m.hp=Math.round(m.hp*2.5); m.max=m.hp;
     m.dmg=Math.round(m.dmg*1.4*10)/10;
+    /* v1.3: аура элитки — золото (лут ×2) или ярость (злее) */
+    m.aura=Math.random()<0.6?'gold':'red';
+    if(m.aura==='red'){
+      m.hp=Math.round(m.hp*1.15); m.max=m.hp;
+      m.dmg=Math.round(m.dmg*1.5*10)/10;
+    }
     /* v1.2: аффиксы элит — характер в бою и богатый лут */
     const AFF=[['Липкий','#7AC4E8','замедляет атаки героя'],['Громкий','#E88A7A','зовёт подмогу'],['Добытчик','#FFD34D','двойной лут']];
     m.aff=AFF[ri(0,2)];
-    toast(icon('burst')+' Элитный враг: '+MOB_KINDS[kind].n+' — «'+m.aff[0]+'», '+m.aff[2]+'!');
+    toast(icon('burst')+' Элитный враг: '+MOB_KINDS[kind].n+' — '+(m.aura==='gold'?'аура Золота (лут ×2)':'аура Ярости (злее!)')+', «'+m.aff[0]+'», '+m.aff[2]+'!');
     SFX.play('roar');
   }
   R.mobs.push(m);
@@ -2596,18 +3369,39 @@ function heroHitPower(){
   if(crit)d*=2;
   return {d:Math.round(d),crit:crit};
 }
+/* v1.3: тап по арене — ОВЕРДРАЙВ (×2 урон и скорость на 10 с) */
+function odTap(){
+  if(!R.started||state.combat.phase==='menu')return;
+  if((R.od||0)<100||(R.odT||0)>0)return;
+  R.od=0; R.odT=10;
+  R.floats.push({x:HERO_X+16,y:GROUND-40,txt:'ОВЕРДРАЙВ!',c:'#FF9F1C',life:0,size:18});
+  addFx({type:'komix',x:D(HERO_X)+12,y:D(GROUND)-44,txt:'ВЖУХ!',col:'#FF9F1C'});
+  SFX.play('quest');
+  fishSay('mana',true);
+}
 function lunge(){
   R.heroLunge=0.15;
   fxDust(D(HERO_X)+10,D(GROUND)+4);
 }
 function dealToMob(m){
   const h=heroHitPower(); lunge();
+  /* v1.3: семейства мобов — тактики стай */
+  const k=MOB_KINDS[m.kind];
+  if((R.odT||0)>0)h.d=Math.round(h.d*2); /* овердрайв ×2 */
+  if(k&&k.fam==='night'&&Math.random()<0.12){
+    R.floats.push({x:m.x+6,y:GROUND-30,txt:'МИМО!',c:'#9CC25B',life:0,size:12});
+    SFX.play('dodge');
+    return;
+  }
+  if(k&&k.fam==='guard')h.d=Math.max(1,Math.round(h.d*0.85));
   m.hp-=h.d; m.flashT=0.12;
   fxSlash(D(m.x)+10,D(GROUND)-26,h.crit);
   fxImpact(D(m.x)+10,D(GROUND)-22,h.crit);
   shake(h.crit?0.5:0.16);
   if(h.crit){R.hitstop=Math.max(R.hitstop,0.045);SFX.play('crit');}else SFX.play('hit');
   R.floats.push({x:m.x+4,y:GROUND-14,txt:(h.crit?'КРИТ ':'-')+h.d,c:h.crit?'#F4B400':'#FFFFFF',life:0,size:h.crit?17:13});
+  /* v1.3: комикс-всплывашки */
+  if(h.crit)addFx({type:'komix',x:D(m.x)+10,y:D(GROUND)-38,txt:'БАМ!',col:'#FFD34D'});
   if(h.crit){state.stats.crits++; if(Math.random()<0.25)fishSay('crit');}
 }
 function dealToBoss(){
@@ -2666,13 +3460,23 @@ function heroHurt(raw,m){
   c.heroHp-=raw;
   R.hitstop=Math.max(R.hitstop,0.03);
   shake(0.3);
+  R.heroSquash=0.16; /* v1.7: герой сплющивается от урона */
   R.floats.push({x:HERO_X+5,y:GROUND-20,txt:'-'+Math.round(raw),c:'#E76F51',life:0,size:14});
+  /* v1.3: воришки крадут монету при ударе */
+  {
+    const mk=MOB_KINDS[m&&m.kind];
+    if(mk&&mk.fam==='thief'&&Math.random()<0.10&&state.res.coins>0){
+      state.res.coins=Math.max(0,state.res.coins-1);
+      R.floats.push({x:HERO_X+10,y:GROUND-32,txt:'УКРАЛ МОНЕТУ!',c:'#F4B400',life:0,size:12});
+    }
+  }
   if(c.heroHp<H.hp*0.3 && Math.random()<0.25)fishSay('hurt');
   if(c.heroHp<=0){c.heroHp=0;retreat();}
 }
 function retreat(){
   const c=state.combat;
-  c.wave=Math.max(1,c.wave-3); c.killed=0; c.quota=quotaFor(c.wave);
+  /* v2.1c: откат смягчён: -1 волна вместо -3 — смерть не должна отбрасывать на минуты пустого фарма */
+  c.wave=Math.max(1,c.wave-1); c.killed=0; c.quota=quotaFor(c.wave);
   c.phase='wave'; c.bossHp=0; c.bossMax=0;
   R.mobs.length=0; R.spawnLeft=c.quota; R.bossX=265; R.bossIn=false; R.stunUntil=0;
   const H=calcHero(); c.heroHp=H.hp; c.heroMana=0;
@@ -2685,6 +3489,9 @@ function killMob(m,idx){
   shake(m.elite?0.3:0.12);
   R.mobs.splice(idx,1);
   state.combat.killed++; state.stats.mobsKilled++;
+  /* v1.3: овердрайв копится с убийств + комикс-всплывашка */
+  R.od=Math.min(100,(R.od||0)+(m.elite?14:7));
+  addFx({type:'komix',x:D(m.x)+10,y:D(GROUND)-40,txt:'ХРЯСЬ!',col:'#FF9F1C'});
   if(state.album)state.album.mobs[m.kind]=true;
   if(DM().id==='harvest')state.res.feed+=1;
   lootMob(m.x,m);
@@ -2708,6 +3515,9 @@ function tick(dt){
   R.wandGlow=Math.max(0,R.wandGlow-dt);
   R.shake=Math.max(0,R.shake-dt*2.2);
   R.heroSlow=Math.max(0,(R.heroSlow||0)-dt);
+  R.bossStrikeT=Math.max(0,(R.bossStrikeT||0)-dt);
+  R.catCastT=Math.max(0,(R.catCastT||0)-dt);
+  R.heroSquash=Math.max(0,(R.heroSquash||0)-dt);
   /* смена биома каждые 5 волн */
   const zi=zoneIdx(c.wave);
   if(zi!==R.zone){
@@ -2771,11 +3581,14 @@ function tick(dt){
   updateTapB(dt);
   c.heroMana=Math.min(H.mana, c.heroMana+H.regen*dt);
   c.heroHp=Math.min(H.hp, c.heroHp+H.hp*0.01*dt);
+  /* v1.3: овердрайв — пассивный заряд и таймер действия */
+  R.od=Math.min(100,(R.od||0)+1.2*dt);
+  R.odT=Math.max(0,(R.odT||0)-dt);
   R.heroAtkT+=dt;
-  if(R.heroAtkT>=0.9*((R.heroSlow||0)>0?1.5:1)){
+  if(R.heroAtkT>=0.9*((R.heroSlow||0)>0?1.5:1)*((R.odT||0)>0?0.5:1)){
     R.heroAtkT=0;
     if(c.phase==='boss'){ if(R.bossX<=170)dealToBoss(); }
-    else if(R.mobs.length){ dealToMob(R.mobs[0]); if(R.mobs[0].hp<=0)killMob(R.mobs[0],0); }
+    else if(R.mobs.length){ const t0=R.mobs[0]; if(t0.x<=HERO_X+80){dealToMob(t0); if(t0.hp<=0)killMob(t0,0);} } /* v1.5: меч достаёт только вблизи */
   }
   murkStrike();
   if(c.phase==='wave'){
@@ -2786,14 +3599,42 @@ function tick(dt){
     for(let i=R.mobs.length-1;i>=0;i--){
       const m=R.mobs[i]; if(!m)continue;
       m.flashT=Math.max(0,m.flashT-dt);
+      if(m.hpGhost===undefined)m.hpGhost=m.hp;
+      m.hpGhost+=(m.hp-m.hpGhost)*Math.min(1,dt*5);
       if(m.hp<=0){killMob(m,i);continue}
-      if(m.x>HERO_X+12){
-        const spd=m.kind==='mouse'?38:28;
-        m.x-=((DM().id==='fog')?spd*1.18:spd)*dt;
+      /* v1.5: механика передвижения — идут по дорожке до своей дистанции (снайпер держит дистанцию) */
+      const stopX=m.kind==='rat'?HERO_X+46:(m.kind==='moth'?HERO_X+24:HERO_X+12);
+      if(m.x>stopX){
+        const spd=m.kind==='mouse'?88:m.kind==='rat'?80:m.kind==='moth'?72:m.kind==='moss'?36:m.kind==='clow'?44:56;
+        m.x-=((DM().id==='fog')?spd*1.18:spd)*(m.rush?2.2:1)*dt;
+        m.phase=(m.phase||0)+spd*dt*0.5; /* фаза шага — ноги переставляются по пройденному пути */
         m.dustT+=dt;
-        if(m.dustT>=0.45){m.dustT=0;fxDust(D(m.x)+4,D(GROUND)+4)}
+        if(m.dustT>=0.45&&m.kind!=='moth'){m.dustT=0;fxDust(D(m.x)+4,D(GROUND)+D(m.lane||0)+4)}
       }
-      else { m.atkT+=dt; if(m.atkT>=1.0){m.atkT=0; heroHurt(m.dmg,m);} }
+      else {
+        /* телеграфированная атака: 0.55 замах → 0.72 выпад и удар → 1.5 отдых */
+        m.atkT=(m.atkT||0)+dt;
+        if(m.atkT>=0.72&&!m.hit){
+          m.hit=true;
+          const laneY=D(GROUND)+D(m.lane||0);
+          if(m.kind==='rat'){
+            /* снайпер: игла-снаряд в героя */
+            addFx({type:'proj',x0:D(m.x)-8,y0:laneY-16,x1:D(HERO_X)+22,y1:D(GROUND)-28,life:0,dur:0.2,trail:[]});
+            fxSlash(D(HERO_X)+24,D(GROUND)-28,false);
+          } else if(m.kind==='moth'){
+            fxSlash(D(HERO_X)+20,D(GROUND)-34,false);
+            fxDust(D(HERO_X)+18,D(GROUND)+4);
+          } else if(m.kind==='moss'){
+            shake(0.5); fxDust(D(m.x)-8,laneY+4);
+            fxSlash(D(HERO_X)+22,D(GROUND)-26,false);
+          } else {
+            fxSlash(D(HERO_X)+22,D(GROUND)-26,false);
+            fxDust(D(HERO_X)+14,D(GROUND)+4);
+          }
+          heroHurt(m.dmg,m);
+        }
+        if(m.atkT>=1.5){m.atkT=0;m.hit=false;}
+      }
     }
     if(c.killed>=c.quota && R.mobs.length===0 && R.spawnLeft<=0){
       state.res.feed+=2+Math.floor(c.wave/2);
@@ -2804,10 +3645,12 @@ function tick(dt){
       if(c.wave%5===0){
         c.phase='boss'; c.bossMax=bossMaxHp(c.bossTier,c.wave); c.bossHp=c.bossMax;
         R.bossX=265; R.bossIn=true;
+        R.mobs.length=0; /* v2.1c: свита разбегается — мобы не должны добивать героя в босс-фазе */
         /* №2 спектакль: VS-карточка, фазы с нуля */
         R.vsT=1.4; R.bossPhase=1; R.enrage=false; R.bossFightT=0; R.tele=null;
         shake(0.6); SFX.play('roar');
         fishSay('boss',true); addLog('Босс: '+bossTitle(c.bossTier),'sys');
+        kotoTut('boss');
       } else {
         R.spawnLeft=c.quota;
         if(Math.random()<0.5)fishSay('wave');
@@ -2836,19 +3679,24 @@ function tick(dt){
         }
         if(!R.enrage&&R.bossFightT>60){
           R.enrage=true; shake(0.8); SFX.play('roar');
-          toast('БОСС В ЯРОСТИ: атака +30%!');
+          toast('БОСС В ЯРОСТИ: атака +25%!'); /* v2.1d: ярость мягче */
           addLog('Ярость босса','sys');
         }
         if(R.tele){
           R.tele.wind-=dt;
           if(R.tele.wind<=0){
             const H2=calcHero();
-            const atk=bossAtk(c.bossTier)*(R.enrage?1.3:1)*(DM().id==='wrath'?1.3:1);
+            const atk=bossAtk(c.bossTier)*(R.enrage?1.25:1)*(DM().id==='wrath'?1.3:1);
             if(Math.random()*100<H2.dodge+(R.tele.tap?10:0)){
               state.stats.dodges++;
               R.floats.push({x:HERO_X+5,y:GROUND-20,txt:'УКЛОНЕНИЕ!',c:'#3B82C4',life:0,size:15});
               SFX.play('dodge');
             } else heroHurt(atk);
+            /* v1.5: босс делает видимый выпад: тело летит к герою, пыль и след удара */
+            R.bossStrikeT=0.28;
+            fxImpact(D(HERO_X)+20,D(GROUND)-30,false);
+            fxDust(D(R.bossX)+bossAtkOff()+6,D(GROUND)+4);
+            shake(0.5);
             R.tele=null;
           }
         } else {
@@ -2868,7 +3716,8 @@ function tick(dt){
   /* окно извлечения: таймер и закрытие */
   if(R.extract){
     const e=R.extract;
-    if(!e.done)e.t-=dt;
+    /* v2.1d: таймер извлечения тикает только на арене — уход в «Кот»/«Кузницу» или сворачивание игры не стоит трофеев */
+    if(!e.done&&onArenaTab())e.t-=dt;
     if(!e.done&&e.t<=0)skipExtract();
     if(e.done&&e.after>=0){e.after-=dt;if(e.after<=0)endExtractNow();}
   }
@@ -2893,9 +3742,246 @@ function loop(ts){
       state.stats.timePlay=(state.stats.timePlay||0)+raw;
       if(state.cat.lvl>(state.stats.maxLvl||0))state.stats.maxLvl=state.cat.lvl;
     }
-    tick(d); render(); uiTick();
+    /* v2.1c: страховка — сбой рендера/тика не должен убивать rAF-цикл
+       (раньше одно исключение в отрисовке босса замораживало игру «статичной картинкой») */
+    try{tick(d)}catch(e){if(!R.errT||now()-R.errT>1){R.errT=now();console.error('tick:',e)}}
+    try{render()}catch(e){if(!R.errT||now()-R.errT>1){R.errT=now();console.error('render:',e)}}
+    uiTick();
   }
   requestAnimationFrame(loop);
+}
+/* ===== ЭТАП 1 · v1.7: пиксель-фоны зон — 2 слоя (даль/луг), пре-рендер, параллакс =====
+   Заменяет AI-рендеры: персонажи пиксельные → и мир пиксельный.
+   Каждый слой собирается один раз в offscreen-canvas, дальше только drawImage. */
+const PCACHE={};
+const PW=560, PH=330;               /* запас под панораму и шейк */
+const GY=236;                       /* линия земли в device-пикселях */
+
+function zoneLayer(paint){
+  const cv=document.createElement('canvas');
+  cv.width=PW;cv.height=PH;
+  const g=cv.getContext('2d');
+  g.imageSmoothingEnabled=false;
+  paint(g);
+  return cv;
+}
+/* полосатое небо с редким пиксельным дизерингом на стыках */
+function skyBands(g,bands){
+  for(let i=0;i<bands.length;i++){
+    const y0=bands[i][1], y1=bands[i+1]?bands[i+1][1]:GY;
+    g.fillStyle=bands[i][0];
+    g.fillRect(0,y0,PW,y1-y0);
+    if(i>0){ /* редкие зубчики-переход вместо плотной гребёнки */
+      g.fillStyle=bands[i][0];
+      for(let x=0;x<PW;x+=20)if(((x/20+i)|0)%3===0)g.fillRect(x,y0-4,10,4);
+    }
+  }
+}
+function pxC(x,y,w,h,col,g){g.fillStyle=col;g.fillRect(x,y,w,h)}
+/* пиксельное солнце: центральный блок + крест-лучи */
+function pixelSun(g,x,y){
+  pxC(x-8,y-8,16,16,'#FFF6D8',g);
+  pxC(x-12,y-4,24,8,'#FFE998',g);
+  pxC(x-4,y-12,8,24,'#FFE998',g);
+  pxC(x-16,y-2,4,4,'#FFE08A',g); pxC(x+12,y-2,4,4,'#FFE08A',g);
+  pxC(x-2,y-16,4,4,'#FFE08A',g); pxC(x-2,y+12,4,4,'#FFE08A',g);
+}
+function hillArc(g,cx,cy,rx,ry,col){
+  g.fillStyle=col;
+  g.beginPath();g.ellipse(cx,cy,rx,ry,0,Math.PI,Math.PI*2);g.fill();
+}
+function puff(g,x,y,s,col){ /* кучное облако из блоков */
+  pxC(x,y+4*s,8*s,3*s,col,g);
+  pxC(x+2*s,y,5*s,4*s,col,g);
+  pxC(x-2*s,y+2*s,3*s,3*s,col,g);
+  pxC(x+7*s,y+2*s,3*s,3*s,col,g);
+}
+function tri(g,x1,y1,x2,y2,x3,y3,col){
+  g.fillStyle=col;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.lineTo(x3,y3);g.closePath();g.fill();
+}
+/* — дальний план: небо + светило + силуэты, до линии земли — */
+function farPainters(g,p){
+  skyBands(g,p.sky);
+  if(p.sun)pixelSun(g,p.sun[0],p.sun[1]);
+  if(p.moon){pxC(p.moon[0]-6,p.moon[1]-8,12,16,'#DCE8E8',g);pxC(p.moon[0]-8,p.moon[1]-5,16,10,'#DCE8E8',g);pxC(p.moon[0]+1,p.moon[1]-5,7,9,p.sky[p.sky.length-1][0],g)}
+  for(const cl of p.clouds)puff(g,cl[0],cl[1],cl[2],cl[3]);
+  for(const h of p.hills)hillArc(g,h[0],h[1]+h[2],h[3],h[2],h[4]);
+  for(const t of p.trees){
+    tri(g,t[0],t[1]-t[2],t[0]-t[2]*0.55,t[1],t[0]+t[2]*0.55,t[1],t[3]);
+    pxC(t[0]-1.5,t[1],3,5,t[4],g);
+  }
+  for(const f of p.fog)pxC(0,f[0],PW,f[1],f[2],g);
+  if(p.volc){
+    tri(g,p.volc[0]-130,p.volc[1],p.volc[0],p.volc[1]-150,p.volc[0]+130,p.volc[1],p.volc[2]);
+    pxC(p.volc[0]-16,p.volc[1]-150,32,10,'#FF6B3A',g);
+    tri(g,p.volc[0]-90,p.volc[1],p.volc[0]-70,p.volc[1]-60,p.volc[0]-52,p.volc[1],'#E85A3A');
+    tri(g,p.volc[0]+40,p.volc[1],p.volc[0]+62,p.volc[1]-72,p.volc[0]+88,p.volc[1],'#E85A3A');
+    puff(g,p.volc[0]-10,p.volc[1]-178,5,'#574A50');puff(g,p.volc[0]+26,p.volc[1]-196,4,'#4A3E44');
+  }
+  for(const r of p.rocks)tri(g,r[0]-r[2],r[1],r[0],r[1]-r[2]*1.6,r[0]+r[2],r[1],r[3]);
+  /* тёмная кромка у горизонта, чтобы ближний слой ложился ровно */
+  pxC(0,GY-6,PW,10,p.edge,g);
+}
+/* — ближний план: земля от 228 и вниз — */
+function nearPainters(g,p){
+  pxC(0,228,PW,PH-228,p.base,g);
+  pxC(0,228,PW,6,p.top,g);
+  for(const d of p.dith)pxC(d[0],d[1],d[2]||6,d[3]||4,p.dcol,g);
+  for(const f of p.flowers){
+    pxC(f[0],f[1]-3,2,3,p.stem,g);
+    pxC(f[0]-1,f[1]-6,4,4,f[2],g);
+  }
+  for(const e of p.ember){pxC(e[0],e[1],3,3,e[2],g);pxC(e[0]+1,e[1]-2,2,2,e[3],g)}
+  for(const s of p.stones)pxC(s[0],s[1],s[2],s[3]||5,s[4],g);
+  for(const m of p.shrooms){pxC(m[0],m[1]-4,3,4,'#E8E0D0',g);pxC(m[0]-3,m[1]-7,9,4,m[2],g);pxC(m[0]-1,m[1]-7,2,2,'#FFF',g)}
+}
+function rng(seed){let s=seed;return function(){s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff}}
+/* сборка слоёв конкретной зоны */
+function buildZone(key){
+  const r=rng(key.length*977+31);
+  const Z=ZONE_PIX[key];
+  return {
+    far:zoneLayer(g=>farPainters(g,Z)),
+    near:zoneLayer(g=>{
+      /* разбросанная дизер-крошка и цветы генерируются один раз по сиду */
+      if(!Z.dith.length){for(let i=0;i<90;i++)Z.dith.push([r()*PW,232+r()*(PH-238),5+r()*4|0,4]);}
+      if(Z.gen==='grass'&&!Z.flowers.length){for(let i=0;i<26;i++)Z.flowers.push([10+r()*(PW-20),244+r()*70,Z.fp[i%Z.fp.length]])}
+      if(Z.gen==='wheat'&&!Z.stones.length){for(let i=0;i<70;i++)Z.stones.push([r()*PW,240+r()*80,2,6+r()*8|0,Z.wcol])}
+      if(Z.gen==='dark'&&!Z.shrooms.length){for(let i=0;i<8;i++)Z.shrooms.push([20+r()*(PW-40),248+r()*66,'#C4453A'])}
+      if(Z.gen==='ash'&&!Z.ember.length){for(let i=0;i<40;i++)Z.ember.push([r()*PW,236+r()*80,'#FF7A45','#FFB45E'])}
+      nearPainters(g,Z);
+    })
+  };
+}
+/* палитры зон */
+const ZONE_PIX={
+  bg:{gen:'grass',fp:['#FFFDF4','#F9D71C','#F0A8B8'],
+    sky:[['#7EC8F0',0],['#93D6F7',70],['#A9E3FB',120],['#C4EEFC',170]],
+    sun:[462,54],clouds:[[70,52,3,'#FFFFFF'],[236,34,4,'#FFFFFF'],[408,86,3,'#F4FAFF']],
+    hills:[[120,190,40,'#8FBF6A'],[320,196,52,'#7BAF58'],[500,192,36,'#8FBF6A'],[0,200,60,'#7BAF58']],
+    trees:[[130,196,12,'#3E6B31','#5A4632'],[342,200,15,'#3E6B31','#5A4632'],[520,194,10,'#3E6B31','#5A4632']],
+    fog:[],rocks:[],volc:null,edge:'#6E9E4C',
+    base:'#79B44F',top:'#8CC75E',dcol:'#68A33F',dith:[],stem:'#4E7C3A',flowers:[],stones:[],ember:[],shrooms:[]},
+  bg2:{gen:'wheat',wcol:'#B8913C',
+    sky:[['#5A3A7A',0],['#8A4A7C',52],['#C4606E',104],['#E88A5E',152],['#F2B45E',200]],
+    sun:[300,192],clouds:[[80,66,3,'#D9799E'],[430,52,4,'#E894AC'],[210,96,3,'#C4606E']],
+    hills:[[110,198,44,'#6E4E7C'],[330,204,56,'#59406B'],[510,196,34,'#6E4E7C'],[0,206,50,'#59406B']],
+    trees:[[150,206,11,'#463458','#3A2C48'],[380,210,13,'#463458','#3A2C48']],
+    fog:[[160,10,'rgba(255,190,120,.10)']],rocks:[],volc:null,edge:'#8C6E3C',
+    base:'#C9A44E',top:'#D9B45A',dcol:'#B8913C',dith:[],stem:'#8C6E3C',flowers:[],stones:[],ember:[],shrooms:[]},
+  bg3:{gen:'dark',
+    sky:[['#16303E',0],['#1E4450',80],['#2A5860',140]],
+    moon:[430,50],clouds:[[110,88,4,'rgba(220,235,235,.10)'],[330,60,3,'rgba(220,235,235,.08)']],
+    hills:[[140,206,50,'#122A26'],[360,210,62,'#0E2420'],[520,204,40,'#122A26'],[0,210,56,'#0E2420']],
+    trees:[[90,214,26,'#122A26','#241C16'],[220,208,20,'#122A26','#241C16'],[300,216,30,'#0E2420','#241C16'],[440,206,22,'#122A26','#241C16'],[540,214,18,'#122A26','#241C16']],
+    fog:[[150,12,'rgba(200,230,230,.10)'],[196,8,'rgba(200,230,230,.07)']],
+    rocks:[[500,232,10,'#183832']],volc:null,edge:'#1E3A2C',
+    base:'#2E5238',top:'#3A6244',dcol:'#25452E',dith:[],stem:'#1E3A2C',flowers:[],stones:[],ember:[],shrooms:[]},
+  bg4:{gen:'ash',
+    sky:[['#3A2430',0],['#5A3040',70],['#7A4038',130],['#8C5238',190]],
+    clouds:[[130,44,4,'#574A50'],[400,70,3,'#4A3E44']],
+    hills:[[90,214,40,'#3A3038'],[470,218,46,'#322A30']],
+    trees:[],fog:[[170,10,'rgba(255,120,60,.08)']],
+    rocks:[[60,230,12,'#3A3038'],[240,226,8,'#3A3038'],[510,232,14,'#3A3038'],[430,228,9,'#322A30']],
+    volc:[280,224,'#2E2428'],edge:'#4A3836',
+    base:'#5A4642',top:'#6A5450',dcol:'#4A3836',dith:[],stem:'#4A3836',flowers:[],stones:[],ember:[],shrooms:[]}
+};
+/* — v1.7: новая отрисовка зоны: 2 слоя с разной глубиной панорамы и шейка — */
+function drawZoneImg(c,key,alpha){
+  if(!alpha)return;
+  let z=PCACHE[key];
+  if(!z&&ZONE_PIX[key])z=PCACHE[key]=buildZone(key);
+  if(z){
+    const pan=Math.sin(R.t*0.045)*10, shk=(R.shake||0);
+    const pan2=Math.sin(R.t*0.021)*5;
+    c.imageSmoothingEnabled=false;
+    c.globalAlpha=alpha;
+    c.drawImage(z.far,-16-pan2-shk*1.5,-8-shk*1.1);   /* дальний: ленивый */
+    c.drawImage(z.near,-16-pan-shk*2.8,-8-shk*2.2);  /* ближний: живой */
+    c.globalAlpha=1;
+    return;
+  }
+  /* резерв: прежний путь с AI-картинкой (для bossbg и пр.) */
+  const im=ART[key];
+  if(!im)return;
+  c.globalAlpha=alpha;
+  const pan=Math.sin(R.t*0.045)*10;
+  c.drawImage(im,0,0,im.width,im.height,-12-pan-(R.shake||0)*3,-6-(R.shake||0)*2,CW+24,CH+10);
+  c.globalAlpha=1;
+}
+
+/* ===== v1.9: 3D-помощники — объёмные формы, чёткие глаза, шерсть, стеклянные бары ===== */
+/* объёмная сфера: свет сверху-слева, тень по краю, мягкий блик */
+function volBlob(c,x,y,r,base,hi,lo){
+  const g=c.createRadialGradient(x-r*0.35,y-r*0.42,r*0.12,x+r*0.1,y+r*0.15,r*1.05);
+  g.addColorStop(0,hi||base);
+  g.addColorStop(0.55,base);
+  g.addColorStop(1,lo||base);
+  c.fillStyle=g;
+  c.beginPath();c.arc(x,y,r,0,6.283);c.fill();
+}
+/* чёткий глаз: белок, радужка с градиентом, зрачок, двойной блик */
+function eye(c,x,y,r,iris0,iris1,pupilW){
+  c.fillStyle='#FFFFFF';
+  c.beginPath();c.ellipse(x,y,r,r*0.95,0,0,6.283);c.fill();
+  const g=c.createRadialGradient(x-r*0.25,y-r*0.3,0,x,y,r*0.65);
+  g.addColorStop(0,iris1);
+  g.addColorStop(1,iris0);
+  c.fillStyle=g;
+  c.beginPath();c.arc(x,y,r*0.64,0,6.283);c.fill();
+  c.fillStyle='#1B1712';
+  c.beginPath();c.ellipse(x,y,r*(pupilW||0.32),r*0.46,0,0,6.283);c.fill();
+  c.fillStyle='rgba(255,255,255,.95)';
+  c.beginPath();c.arc(x-r*0.24,y-r*0.3,r*0.24,0,6.283);c.fill();
+  c.fillStyle='rgba(255,255,255,.65)';
+  c.beginPath();c.arc(x+r*0.2,y+r*0.24,r*0.1,0,6.283);c.fill();
+}
+/* закрытый глаз-дуга (моргание) */
+function eyeShut(c,x,y,r,col){
+  c.strokeStyle=col;c.lineWidth=1.6;c.lineCap='round';
+  c.beginPath();c.arc(x,y-r*0.2,r*0.7,0.15*Math.PI,0.85*Math.PI);c.stroke();
+}
+/* шерсть: дуги-штрихи по верхнему контуру сферы */
+function hair(c,x,y,r,col,n,len){
+  c.strokeStyle=col;c.lineWidth=1.4;c.lineCap='round';
+  for(let i=0;i<n;i++){
+    const a=-2.9+i*(2.7/(n-1));
+    const sx=x+Math.cos(a)*r*0.92, sy=y+Math.sin(a)*r*0.92;
+    const ex=x+Math.cos(a+0.14)*(r+len), ey=y+Math.sin(a+0.14)*(r+len*0.72);
+    const mx=x+Math.cos(a+0.05)*(r+len*0.55), my=y+Math.sin(a+0.05)*(r+len*0.55)-1;
+    c.beginPath();c.moveTo(sx,sy);c.quadraticCurveTo(mx,my,ex,ey);c.stroke();
+  }
+}
+/* скруглённый прямоугольник-заливка */
+function rrectFill(c,x,y,w,h,r,col){
+  c.fillStyle=col;
+  c.beginPath();
+  c.moveTo(x+r,y);
+  c.arcTo(x+w,y,x+w,y+h,r);
+  c.arcTo(x+w,y+h,x,y+h,r);
+  c.arcTo(x,y+h,x,y,r);
+  c.arcTo(x,y,x+w,y,r);
+  c.closePath();c.fill();
+}
+/* стеклянный hp-бар: тёмная капсула + ghost-след + градиент + блик */
+function hpBar(c,x,y,w,h,p,ghost,pal){
+  p=clamp(p,0,1); ghost=clamp(ghost===undefined?p:ghost,0,1);
+  const rad=h/2+1;
+  rrectFill(c,x-1.5,y-1.5,w+3,h+3,rad,'#17130E');
+  rrectFill(c,x-0.5,y-0.5,w+1,h+1,rad,'rgba(255,220,150,.28)');
+  rrectFill(c,x,y,w,h,h/2,'rgba(0,0,0,.5)');
+  if(ghost>p){
+    rrectFill(c,x,y,Math.max(h,w*ghost),h,h/2,'rgba(255,235,235,.75)');
+  }
+  if(p>0){
+    const g=c.createLinearGradient(0,y,0,y+h);
+    const pal2=pal||(p>0.55?['#B8EC7A','#5CB83F','#3E9428']:p>0.28?['#FFE08A','#F2C94C','#C9902A']:['#FF9A7A','#E76F51','#B84A32']);
+    g.addColorStop(0,pal2[0]);g.addColorStop(0.5,pal2[1]);g.addColorStop(1,pal2[2]);
+    c.fillStyle=g;
+    rrectFill(c,x,y,Math.max(h,w*p),h,h/2,g);
+    /* стеклянный блик сверху */
+    rrectFill(c,x+0.5,y+0.5,Math.max(h-1,w*p-1),h*0.42,h*0.3,'rgba(255,255,255,.4)');
+  }
 }
 /* ===== Лут ===== */
 function popLoot(icon,x,pal){R.pops.push({icon:SPR.ICONS[icon],x:x,y:GROUND-14,life:0,pal:pal||null})}
@@ -2903,6 +3989,7 @@ function pickHeroSlot(){const s=Object.keys(HERO_SLOTS);return s[ri(0,s.length-1
 function itemGearName(it){return it.n||HERO_NAMES[it.slot][it.tier]}
 function catItemName(it){return it.n||CAT_SLOTS[it.slot].names[it.tier]}
 function addGear(g){
+  kotoTut('gear');
   const inv=state.hero.inv;
   if(inv.length>=24){
     let worst=0;
@@ -2924,20 +4011,84 @@ function addCatItem(it){
   }
   inv.push(it);
 }
+/* ===== v2.0: экономика предметов — множитель лута, улучшение за монеты, продажа ===== */
+function lootMult(){return (R.lootMultUntil||0)>now()?(R.lootMultN||2):1}
+function gearUpCost(it){return ((it.up||0)+1)*(15+35*it.tier)}
+function gearSellVal(it){return (it.tier+1)*((it.up||0)+1)*10}
+function gearEff(it,st){return Math.round((it.st[st]||0)*(1+0.12*(it.up||0)))}
+function showItemModal(kind,id){
+  const inv=kind==='hero'?state.hero.inv:state.cat.inv;
+  const it=inv.find(function(x){return x.id===id});
+  if(!it)return;
+  const T=TIERS[it.tier];
+  const name=kind==='hero'?itemGearName(it):catItemName(it);
+  const ic=kind==='hero'?HERO_SLOTS[it.slot].icon:CAT_SLOTS[it.slot].icon;
+  let h='<h3 style="color:'+T.c+'">'+icon(ic)+' '+name+'</h3>';
+  h+='<p><span class="chipr '+T.bg+'">'+T.n+'</span>'+(it.up?'<span class="chipup">ур. +'+it.up+'</span>':'')+'</p>';
+  if(kind==='hero'){
+    const st=HERO_SLOTS[it.slot].stat;
+    h+='<p class="tstat">'+STAT_N[st]+': <b>+'+gearEff(it,st)+((st==='crit'||st==='dodge')?'%':'')+'</b>'+
+      (it.up?' <span class="hint">(база +'+it.st[st]+')</span>':'')+'</p>';
+  } else {
+    h+='<p class="tstat">'+CAT_SLOTS[it.slot].n+' · '+auraText(it.slot,it.tier)+'</p>';
+  }
+  h+='<div class="actions">';
+  h+='<button class="btn btn-acc" data-act="equip" data-kind="'+kind+'" data-id="'+id+'">НАДЕТЬ</button>';
+  if(kind==='hero'){
+    const uc=gearUpCost(it);
+    h+='<button class="btn" data-act="up" data-kind="hero" data-id="'+id+'"'+(state.res.coins<uc?' disabled':'')+'>УЛУЧШИТЬ · '+uc+' '+icon('coin')+'</button>';
+  }
+  h+='<button class="btn btn-red" data-act="sell" data-kind="'+kind+'" data-id="'+id+'">ПРОДАТЬ · '+gearSellVal(it)+' '+icon('coin')+'</button>';
+  h+='</div>';
+  if(kind==='hero')h+='<p class="hint">Улучшение: +12% к статам за уровень, максимум +5. Продажа освободит место в сумке.</p>';
+  else h+='<p class="hint">Кото-лут усиливает ауры Рыбца. Продажа освободит место в его сумке.</p>';
+  showModal(h);
+}
+function upgradeGear(id){
+  const it=state.hero.inv.find(function(x){return x.id===id});
+  if(!it)return;
+  if((it.up||0)>=5){toast('Максимум улучшений: ур. +5');return;}
+  const cost=gearUpCost(it);
+  if(state.res.coins<cost){toast('Мало монет '+icon('coin')+' — нужно '+cost);return;}
+  state.res.coins-=cost;
+  it.up=(it.up||0)+1;
+  SFX.play(it.up>=3?'epic':'reveal');
+  toast(icon('burst')+' '+itemGearName(it)+' улучшен до ур. +'+it.up+' (+12% к статам)');
+  showItemModal('hero',id);
+  renderLoot(); renderHdr(); save();
+}
+function sellItem(kind,id){
+  const inv=kind==='hero'?state.hero.inv:state.cat.inv;
+  const i=inv.findIndex(function(x){return x.id===id});
+  if(i<0)return;
+  const it=inv.splice(i,1)[0];
+  const v=gearSellVal(it);
+  state.res.coins+=v;
+  state.stats.coinsEarned=(state.stats.coinsEarned||0)+v;
+  SFX.play('coin');
+  toast(icon('coin')+' Продано: '+(kind==='hero'?itemGearName(it):catItemName(it))+' → +'+v+' монет');
+  closeModal();
+  renderLoot(); renderHdr(); save();
+}
 function lootMob(x,m){
-  const c=state.combat, w=c.wave, a=calcAuras();
+  const c=state.combat, w=c.wave, a=calcAuras(), lm=lootMult();
   const kind=m?MOB_KINDS[m.kind]:null;
-  state.res.feed+=Math.round(ri(1,2)*(1+a.feed/100));
+  state.res.feed+=Math.round(ri(1,2)*(1+a.feed/100)*lm);
   if(Math.random()<0.3)popLoot('feed',x);
-  if(Math.random()<0.25){state.res.sticks+=1;popLoot('stick',x);}
-  if(Math.random()<0.25){state.res.ropes+=1;popLoot('rope',x);}
+  if(Math.random()<0.25){state.res.sticks+=lm;popLoot('stick',x);}
+  if(Math.random()<0.25){state.res.ropes+=lm;popLoot('rope',x);}
   /* v1.0: бонус лута вида */
-  if(kind&&kind.loot==='stick'){state.res.sticks+=1;popLoot('stick',x);}
-  if(kind&&kind.loot==='yarn'){state.res.yarn+=1;popLoot('yarn',x);}
-  if(kind&&kind.loot==='feed'){state.res.feed+=2;popLoot('feed',x);}
+  if(kind&&kind.loot==='stick'){state.res.sticks+=lm;popLoot('stick',x);}
+  if(kind&&kind.loot==='yarn'){state.res.yarn+=lm;popLoot('yarn',x);}
+  if(kind&&kind.loot==='feed'){state.res.feed+=2*lm;popLoot('feed',x);}
+  /* v1.3: фирменный дроп стай */
+  if(kind&&kind.fam==='thief'){const c2=ri(2,5)*lm;state.res.coins+=c2;fxCoin(x+8,GROUND-30);}
+  if(kind&&kind.fam==='guard'){state.res.feed+=2*lm;popLoot('feed',x);}
+  if(kind&&kind.fam==='night'&&Math.random()<0.5){state.res.scraps+=lm;popLoot('yarn',x);}
   if(m&&m.elite){
-    /* элита: гарантированный предмет + клубки + обрывок */
-    state.res.yarn+=2; state.res.scraps+=1;
+    /* элита: гарантированный предмет + клубки + обрывок; аура Золота — лут ×2 */
+    state.res.yarn+=2*lm; state.res.scraps+=1*lm;
+    if(m.aura==='gold'){state.res.yarn+=2*lm;state.res.scraps+=1;fxCoin(x+12,GROUND-26);}
     popLoot('yarn',x);
     const g=rollGear(pickHeroSlot(),w,rollTier(gearWeights()));
     addGear(g); popLoot(HERO_SLOTS[g.slot].icon,x); fxBeam(x,TIERS[g.tier].c);
@@ -2951,22 +4102,24 @@ function lootMob(x,m){
     toast(icon('sword')+' '+itemGearName(g)+' ('+TIERS[g.tier].n+')');
     fishSay(g.tier>=3?'legend':'gear',g.tier>=3);
   }
-  if(Math.random()<0.12*(1+(a.yarnM||0)/100)){state.res.yarn+=1;popLoot('yarn',x);}
+  if(Math.random()<0.12*(1+(a.yarnM||0)/100)){state.res.yarn+=lm;popLoot('yarn',x);}
 }
 function bossDefeated(){
-  const c=state.combat, t=c.bossTier, a=calcAuras();
+  const c=state.combat, t=c.bossTier, a=calcAuras(), lm=lootMult();
   state.stats.bossKills++;
+  /* v1.3: босс сильно заряжает овердрайв */
+  R.od=Math.min(100,(R.od||0)+35);
   /* v1.0: альбом боссов + обрывки за победу */
   if(state.album)state.album.bosses['b'+(((t-1)%5+5)%5)]=true;
-  state.res.scraps+=2;
+  state.res.scraps+=2*lm;
   c.bossTier++;
   c.wave++;
   state.stats.bestWave=Math.max(state.stats.bestWave,c.wave);
   if(typeof kotoSubmitBest==='function')kotoSubmitBest();
-  state.res.feed+=Math.round((10+3*t)*(1+a.feed/100));
-  state.res.yarn+=Math.round((5+t)*(1+(a.yarnM||0)/100));
-  state.res.sticks+=ri(2,4);
-  state.res.ropes+=ri(2,4);
+  state.res.feed+=Math.round((10+3*t)*(1+a.feed/100)*lm);
+  state.res.yarn+=Math.round((5+t)*(1+(a.yarnM||0)/100)*lm);
+  state.res.sticks+=ri(2,4)*lm;
+  state.res.ropes+=ri(2,4)*lm;
   addMood(6);
   /* взрыв души босса + сильная тряска */
   shake(1.4);
@@ -2988,7 +4141,7 @@ function bossDefeated(){
   state.lb=state.lb.slice(0,5);
   c.killed=0; c.quota=quotaFor(c.wave);
   /* монеты за босса + урожай дня */
-  const cg=Math.round((20+15*t)*coinMult());
+  const cg=Math.round((20+15*t)*coinMult()*lm);
   state.res.coins+=cg;
   state.stats.coinsEarned=(state.stats.coinsEarned||0)+cg;
   if(DM().id==='harvest')state.res.feed+=Math.floor((10+3*t)*0.5);
@@ -3139,10 +4292,20 @@ function showOdds(){
 /* ===== UI ===== */
 function esc(s){return String(s).replace(/[&<>"]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]})}
 function icon(n){return '<svg class="ic"><use href="#i-'+n+'"/></svg>'}
+/* v2.1b: мини-фид уведомлений — одна строка, мелко, не перекрывает чипы и данные */
+function placeToasts(){
+  const t=$('toasts'), h=$('hdr'), n=$('tabs');
+  if(!t||!h)return;
+  /* на десктопе — под шапкой в правом поле; на мобиле вкладки идут сплошной полосой,
+     поэтому фид опускаем под них (вкладки в один ряд с горизонтальным скроллом) */
+  const mob=window.innerWidth<=640;
+  t.style.top=(h.offsetHeight+(mob&&n?n.offsetHeight:0)+6)+'px';
+}
 function toast(txt){
   const t=$('toasts'), d=document.createElement('div');
   d.className='toast'; d.innerHTML=txt; t.appendChild(d);
-  while(t.children.length>4)t.removeChild(t.firstChild);
+  placeToasts();
+  while(t.children.length>3)t.removeChild(t.firstChild);
   setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d)},2600);
 }
 function showModal(html){$('modalBody').innerHTML=html;$('modal').classList.remove('hidden')}
@@ -3195,12 +4358,14 @@ function uiTick(){
   setRes('resRopes',state.res.ropes);
   setRes('resYarn',state.res.yarn);
   setRes('resCoins',state.res.coins||0);
+  if((state.res.coins||0)>=30)kotoTut('coins');
   const dc=$('dayChip');
   if(dc){const dm=DM();dc.textContent=dm.n;dc.title=dm.n+': '+dm.d;if(state.album)state.album.mods[dm.id]=true;}
   renderQuests();
   $('waveLbl').textContent='Волна '+c.wave+(c.phase==='boss'?' · БОСС':'');
   $('bossLbl').textContent=c.phase==='boss'?bossTitle(c.bossTier):'';
   $('hpBar').style.width=clamp(c.heroHp/H.hp*100,0,100)+'%';
+  $('hpGhost').style.width=clamp(c.heroHp/H.hp*100,0,100)+'%';
   $('hpTxt').innerHTML=icon('heart')+' '+Math.max(0,Math.round(c.heroHp))+' / '+H.hp+' · крит '+H.crit+'% · уворот '+H.dodge+'%';
   $('mpBar').style.width=clamp(c.heroMana/H.mana*100,0,100)+'%';
   $('mpTxt').innerHTML=icon('drop')+' мана '+Math.round(c.heroMana)+' / '+H.mana+' (реген '+H.regen+'/с)';
@@ -3208,9 +4373,16 @@ function uiTick(){
   $('bossRow').classList.toggle('hidden',!bs);
   if(bs){
     $('bossBar').style.width=clamp(c.bossHp/c.bossMax*100,0,100)+'%';
+    $('bossGhost').style.width=clamp(c.bossHp/c.bossMax*100,0,100)+'%';
     $('bossTxt').textContent='босс: '+Math.max(0,Math.round(c.bossHp))+' / '+c.bossMax;
   }
   $('buffChip').classList.toggle('hidden',!(R.buffUntil>now()));
+  /* v2.0: чип множителя лута с колеса */
+  const lmOn=(R.lootMultUntil||0)>now(), lch=$('lootChip');
+  if(lch){
+    lch.classList.toggle('hidden',!lmOn);
+    if(lmOn)lch.innerHTML=icon('burst')+' ЛУТ ×'+(R.lootMultN||2)+' · '+Math.ceil((R.lootMultUntil-now())/1000)+'с';
+  }
   const pcd=R.petCd-now();
   $('petBtn').innerHTML=icon('paw')+' ПОГЛАДИТЬ'+(pcd>0?' ('+Math.ceil(pcd/1000)+'с)':'');
   $('petBtn').disabled=pcd>0;
@@ -3263,8 +4435,10 @@ function renderCat(){
   img.style.filter=ff==='none'?'':ff;
 }
 function statText(it){
-  const st=HERO_SLOTS[it.slot].stat, v=it.st[st];
-  return STAT_N[st]+': +'+v+((st==='crit'||st==='dodge')?'%':'');
+  const st=HERO_SLOTS[it.slot].stat, up=it.up||0;
+  /* v2.0: показываем эффективное значение с учётом уровня улучшения */
+  const v=gearEff(it,st);
+  return STAT_N[st]+': +'+v+((st==='crit'||st==='dodge')?'%':'')+(up?' · ур.'+up:'');
 }
 /* ===== №10: гостевые коты (аренда на сутки) ===== */
 function renderRent(){
@@ -3329,7 +4503,7 @@ function renderRaid(){
 }
 function gearCard(it){
   const art=(it.art&&IMG[it.art])?'<img class="cardimg" src="'+IMG[it.art]+'" alt="">':'';
-  return '<div class="card r'+it.tier+'" data-kind="hero" data-id="'+it.id+'">'+art+'<span class="tname">'+icon(HERO_SLOTS[it.slot].icon)+' '+itemGearName(it)+'</span><span class="chipr '+TIERS[it.tier].bg+'">'+TIERS[it.tier].n+'</span><br><span class="tstat">'+statText(it)+'</span></div>';
+  return '<div class="card r'+it.tier+'" data-kind="hero" data-id="'+it.id+'">'+art+'<span class="tname">'+icon(HERO_SLOTS[it.slot].icon)+' '+itemGearName(it)+(it.up?'<span class="chipup">+'+it.up+'</span>':'')+'</span><span class="chipr '+TIERS[it.tier].bg+'">'+TIERS[it.tier].n+'</span><br><span class="tstat">'+statText(it)+'</span></div>';
 }
 function catCard(it){
   const art=(it.art&&IMG[it.art])?'<img class="cardimg" src="'+IMG[it.art]+'" alt="">':'';
@@ -3339,17 +4513,32 @@ function renderLoot(){
   const H=calcHero();
   const stats=[['sword','Атака',H.atk],['burst','Урон',H.dmg],['heart','Жизнь',H.hp],['target','Крит',H.crit+'%'],['drop','Мана',H.mana],['wind','Уворот',H.dodge+'%'],['spark','Реген маны',H.regen+'/с'],['clover','Удача',H.luck.toFixed(1)+'%']];
   $('heroStats').innerHTML=stats.map(function(s){return '<div class="statrow"><span>'+icon(s[0])+' '+s[1]+'</span><b>'+s[2]+'</b></div>'}).join('');
-  let html='';
-  for(const s in HERO_SLOTS){
+  /* v1.4: бумажная кукла — слоты вокруг портрета, drag-and-drop */
+  const dollSlot=function(s){
     const it=state.hero.gear[s];
-    html+='<div class="slot" data-kind="hero" data-slot="'+s+'"><b>'+icon(HERO_SLOTS[s].icon)+' '+HERO_SLOTS[s].n+'</b>'+
-      (it?'<span style="color:'+TIERS[it.tier].c+'">'+itemGearName(it)+'</span><br><span class="empty">'+statText(it)+'</span>'
-        :'<span class="empty">пусто</span>')+'</div>';
+    return '<div class="dollslot'+(it?' has-item':'')+'" data-kind="hero" data-slot="'+s+'" title="Тап — выбрать, перетащи предмет из сумки">'+/* v1.4 */
+      '<b>'+icon(HERO_SLOTS[s].icon)+' '+HERO_SLOTS[s].n+'</b>'+
+      (it?'<span class="dname" style="color:'+TIERS[it.tier].c+'">'+itemGearName(it)+'</span><span class="dstat">'+statText(it)+'</span>'
+        :'<span class="empty">пусто — тащи сюда</span>')+'</div>';
+  };
+  $('dollL').innerHTML=['helm','amulet','armor'].map(dollSlot).join('');
+  $('dollR').innerHTML=['weapon','belt','boots'].map(dollSlot).join('');
+  $('dollCore').innerHTML='<div class="statrow"><span>'+icon('sword')+' Атака</span><b>'+H.atk+'</b></div><div class="statrow"><span>'+icon('heart')+' Жизнь</span><b>'+H.hp+'</b></div>';
+  if(IMG.hero8&&!$('dollFace')){
+    const im=document.createElement('img');
+    im.id='dollFace'; im.src=IMG.hero8; im.alt='герой';
+    $('dollHero').replaceWith(im);
   }
-  $('heroSlots').innerHTML=html;
   const inv=state.hero.inv;
+  const cinv=state.cat.inv; /* v2.2: перенесён выше счётчиков — был TDZ-сбой renderLoot (вкладка «Лут» не обновляла сумки) */
+  /* v2.1e: счётчики сумок — подсветка при приближении к лимиту 24 */
+  const bcnt=function(el,n){if(!el)return;el.textContent=n+'/24';el.classList.toggle('warn',n>=18&&n<24);el.classList.toggle('full',n>=24);};
+  bcnt($('bagCntH'),inv.length); bcnt($('bagCntC'),cinv.length);
+  /* v2.2b: кнопка массовой распродажи серых вещей — подпись с числом */
+  const greys=inv.filter(function(x){return (x.tier||0)===0});
+  const sgb=$('sellGreyBtn');
+  if(sgb){sgb.textContent='ПРОДАТЬ СЕРOE ('+greys.length+')';sgb.disabled=!greys.length;}
   $('heroInv').innerHTML=inv.length?inv.map(gearCard).join(''):'<p class="hint">Сумка пуста. Снаряжение падает с мобов и боссов само.</p>';
-  const cinv=state.cat.inv;
   $('catInv').innerHTML=cinv.length?cinv.map(catCard).join(''):'<p class="hint">Сумка Рыбца пуста. Кото-лут падает с боссов.</p>';
 }
 function renderGacha(){
@@ -3454,7 +4643,9 @@ function equipBest(){
     let best=cand[0];
     const stat=HERO_SLOTS[s].stat;
     for(const it of cand){
-      if(it.tier>best.tier||(it.tier===best.tier&&(it.st[stat]||0)>(best.st[stat]||0)))best=it;
+      /* v2.0: сравниваем эффективные статы с учётом уровня улучшения */
+      const ev=(it.st[stat]||0)*(1+0.12*(it.up||0)), bv=(best.st[stat]||0)*(1+0.12*(best.up||0));
+      if(it.tier>best.tier||(it.tier===best.tier&&ev>bv))best=it;
     }
     const i=state.hero.inv.indexOf(best);
     state.hero.inv.splice(i,1);
@@ -3467,6 +4658,16 @@ function equipBest(){
 }
 
 /* ===== Вкладки, старт, события ===== */
+/* v2.1d: арена перед глазами игрока? (учитывает и свёрнутую страницу) */
+function onArenaTab(){
+  const b=document.querySelector('.tabbtn.active');
+  return !!b&&b.dataset.tab==='arena'&&!document.hidden;
+}
+/* v2.1d: пульсирующая точка «трофеи ждут» на вкладке Арена */
+function extractBadge(on){
+  const b=document.querySelector('.tabbtn[data-tab="arena"]');
+  if(b)b.classList.toggle('wait',!!on);
+}
 function showTab(name){
   document.querySelectorAll('.tabbtn').forEach(function(b){b.classList.toggle('active',b.dataset.tab===name)});
   ['arena','cat','loot','gacha','bazar','album','forge','wheel','records'].forEach(function(t){
@@ -3496,6 +4697,25 @@ function fmtDur(s){
 function beginPlay(isNew){
   const c=state.combat;
   state.flags.started=true;
+  kotoTut('start');
+  /* v2.1c: голый герой — главная причина ранних смертей и стенки на боссах.
+     Пустые слоты одеваем лучшим из сумки сами (только ПУСТЫЕ — выбор игрока не трогаем). */
+  let autoEq=0;
+  for(const s in HERO_SLOTS){
+    if(state.hero.gear[s])continue;
+    const stat=HERO_SLOTS[s].stat;
+    const cand=state.hero.inv.filter(function(x){return x.slot===s});
+    if(!cand.length)continue;
+    let best=cand[0];
+    for(const it of cand){
+      const ev=(it.st[stat]||0)*(1+0.12*(it.up||0)), bv=(best.st[stat]||0)*(1+0.12*(best.up||0));
+      if(it.tier>best.tier||(it.tier===best.tier&&ev>bv))best=it;
+    }
+    state.hero.gear[s]=best;
+    state.hero.inv.splice(state.hero.inv.indexOf(best),1);
+    autoEq++;
+  }
+  if(autoEq)toast(icon('sword')+' Рыбец нацепил на героя лучшее ('+autoEq+') — глянь вкладку «Лут»');
   c.phase='wave'; c.killed=0; c.quota=quotaFor(c.wave);
   c.bossHp=0; c.bossMax=0;
   R.bossX=265; R.bossIn=false; R.mobs.length=0; R.spawnLeft=c.quota; R.spawnT=0; R.stunUntil=0; R.shake=0;
@@ -3591,6 +4811,7 @@ function init(){
   $('feedBtn').onclick=function(){
     if(state.res.feed<5){toast('Мало Рыбов '+icon('fish'));return;}
     state.res.feed-=5;
+    state.cat.lastFed=now(); /* v2.1e: для подсказки «Рыбец проголодался» */
     state.cat.xp+=Math.round(10*(1+(calcAuras().xp||0)/100));
     state.stats.feeds++;
     addMood(8); SFX.play('pet');
@@ -3601,9 +4822,28 @@ function init(){
     renderCat(); renderHdr(); save();
   };
   $('bestBtn').onclick=equipBest;
+  /* v2.2b: массовая распродажа всех серых (tier 0) вещей из сумки героя */
+  $('sellGreyBtn').onclick=function(){
+    const greys=state.hero.inv.filter(function(x){return (x.tier||0)===0});
+    if(!greys.length){toast('Серых вещей в сумке нет');return;}
+    let sum=0; greys.forEach(function(g){sum+=gearSellVal(g)});
+    state.hero.inv=state.hero.inv.filter(function(x){return (x.tier||0)>0});
+    state.res.coins+=sum;
+    state.stats.coinsEarned=(state.stats.coinsEarned||0)+sum;
+    SFX.play('coin');
+    toast(icon('coin')+' Продано серых вещей: '+greys.length+' → +'+sum+' монет');
+    renderLoot(); renderHdr(); save();
+  };
   $('raidBtn').onclick=raidAttack;
   $('modalClose').onclick=closeModal;
   $('modalBody').addEventListener('click',function(e){
+    const act=e.target.closest('[data-act]');
+    if(act){
+      const k=act.dataset.kind, id=act.dataset.id, a=act.dataset.act;
+      if(a==='equip'){if(k==='hero')equipGear(id);else equipCat(id);closeModal();return;}
+      if(a==='up'){upgradeGear(id);return;}
+      if(a==='sell'){sellItem(k,id);return;}
+    }
     const un=e.target.closest('[data-uneq]');
     if(un){const p=un.dataset.uneq.split(':');unequip(p[0],p[1]);return;}
     const c=e.target.closest('[data-id]');
@@ -3614,13 +4854,14 @@ function init(){
   });
   $('heroInv').addEventListener('click',function(e){
     const c=e.target.closest('[data-id]');
-    if(c&&c.dataset.kind==='hero')equipGear(c.dataset.id);
+    /* v2.0: тап по предмету — модал «надеть / улучшить / продать» */
+    if(c&&c.dataset.kind==='hero')showItemModal('hero',c.dataset.id);
   });
   $('catInv').addEventListener('click',function(e){
     const c=e.target.closest('[data-id]');
-    if(c&&c.dataset.kind==='cat')equipCat(c.dataset.id);
+    if(c&&c.dataset.kind==='cat')showItemModal('cat',c.dataset.id);
   });
-  $('heroSlots').addEventListener('click',function(e){
+  $('heroDoll').addEventListener('click',function(e){
     const s=e.target.closest('[data-slot]');
     if(s&&s.dataset.kind==='hero')showHeroEquip(s.dataset.slot);
   });
@@ -3663,6 +4904,90 @@ function init(){
   requestAnimationFrame(loop);
 }
 init();
+
+/* ===== v1.4: drag-and-drop — перетаскивание лута между сумкой и куклой ===== */
+(function(){
+  let drag=null;
+  function gearById(id){return state.hero.inv.find(function(x){return x.id===id})}
+  document.addEventListener('pointerdown',function(e){
+    if(!state)return;
+    const card=e.target.closest('#heroInv .card[data-kind="hero"]');
+    const slotEl=e.target.closest('#heroDoll .dollslot');
+    if(!card&&!slotEl)return;
+    if(e.button!==undefined&&e.button>0)return;
+    const item=card?{id:card.dataset.id,from:'inv'}
+      :(state.hero.gear[slotEl.dataset.slot]?{slot:slotEl.dataset.slot,from:'doll'}:null);
+    if(!item)return;
+    drag={item:item,x0:e.clientX,y0:e.clientY,ghost:null,moved:false,srcEl:card||slotEl};
+    drag.srcEl.classList.add('pressing');
+  },{passive:true});
+  document.addEventListener('pointermove',function(e){
+    if(!drag)return;
+    if(!drag.moved&&Math.hypot(e.clientX-drag.x0,e.clientY-drag.y0)<8)return;
+    if(!drag.moved){
+      drag.moved=true;
+      drag.srcEl.classList.remove('pressing');
+      drag.srcEl.classList.add('dragging');
+      const g=drag.srcEl.cloneNode(true);
+      g.className=drag.srcEl.className+' dragGhost';
+      g.style.width=drag.srcEl.offsetWidth+'px';
+      document.body.appendChild(g);
+      drag.ghost=g;
+    }
+    e.preventDefault();
+    drag.ghost.style.transform='translate('+(e.clientX-drag.srcEl.offsetWidth/2)+'px,'+(e.clientY-drag.srcEl.offsetHeight/2)+'px) rotate(3deg) scale(1.06)';
+    const el=document.elementFromPoint(e.clientX,e.clientY);
+    document.querySelectorAll('.drophover').forEach(function(x){x.classList.remove('drophover')});
+    document.querySelectorAll('.dolldelta').forEach(function(x){x.remove()});
+    const slotEl=el&&el.closest('#heroDoll .dollslot');
+    if(drag.item.from==='inv'&&slotEl){
+      slotEl.classList.add('drophover');
+      const it=gearById(drag.item.id);
+      if(it){
+        const b=document.createElement('span');
+        if(slotEl.dataset.slot===it.slot){
+          const cur=state.hero.gear[it.slot];
+          const d=(it.st[HERO_SLOTS[it.slot].stat]||0)-(cur?(cur.st[HERO_SLOTS[it.slot].stat]||0):0);
+          b.className='dolldelta '+(d>=0?'up':'down');
+          b.textContent=(d>=0?'+':'')+d+' '+STAT_N[HERO_SLOTS[it.slot].stat];
+        } else {
+          b.className='dolldelta wrong';
+          b.textContent='нужен слот: '+HERO_SLOTS[it.slot].n;
+        }
+        slotEl.appendChild(b);
+      }
+    } else if(drag.item.from==='doll'){
+      const invA=$('heroInv');
+      if(invA)invA.classList.add('dropzone');
+      if(el&&el.closest('#heroInv'))drag.srcEl.classList.add('drophover');
+    }
+  },{passive:false});
+  document.addEventListener('pointerup',function(e){
+    if(!drag)return;
+    const d=drag; drag=null;
+    if(d.ghost)d.ghost.remove();
+    d.srcEl.classList.remove('dragging','pressing','drophover');
+    document.querySelectorAll('.drophover').forEach(function(x){x.classList.remove('drophover')});
+    document.querySelectorAll('.dolldelta').forEach(function(x){x.remove()});
+    const dz=$('heroInv'); if(dz)dz.classList.remove('dropzone');
+    if(!d.moved)return; /* это был тап — сработают обычные click-обработчики */
+    R._dragDone=true;
+    const el=document.elementFromPoint(e.clientX,e.clientY);
+    const slotEl=el&&el.closest('#heroDoll .dollslot');
+    const inv=el&&el.closest('#heroInv');
+    if(d.item.from==='inv'&&slotEl){
+      const it=gearById(d.item.id);
+      if(it&&slotEl.dataset.slot===it.slot)equipGear(it.id);
+      else if(it){toast('Этот предмет — для слота «'+HERO_SLOTS[it.slot].n+'»');SFX.play('ui');slotEl.classList.add('shakeX');setTimeout(function(){slotEl.classList.remove('shakeX')},350);}
+    } else if(d.item.from==='doll'&&(inv||(slotEl&&slotEl.dataset.slot!==d.item.slot))){
+      unequip('hero',d.item.slot);
+    }
+  });
+  /* перетаскивание съедает click — гасим его, чтобы не надеть предмет дважды */
+  document.addEventListener('click',function(e){
+    if(R._dragDone){e.stopPropagation();e.preventDefault();R._dragDone=false;}
+  },true);
+})();
 /* ===== P5: монетки+кузница, окно извлечения, бабочки, день, SFX, тапы ===== */
 
 /* — SFX v0.8: чиптюн-синтезатор (pulse+tri+noise, арпеджио, слайды), без ассетов — */
@@ -3855,6 +5180,7 @@ function tapKill(idx){
 function startExtract(){
   const c=state.combat;
   c.phase='extract';
+  kotoTut('extract');
   const n=DM().id==='fog'?4:3;
   const orbs=[];
   for(let i=0;i<n;i++){
@@ -3871,10 +5197,14 @@ function startExtract(){
   R.extract={orbs:orbs,t:10,chosen:null,done:false,after:-1};
   toast(icon('vortex')+' Извлечение: коснись трофея!');
   addLog('Окно извлечения открыто: '+n+' трофея','loot');
+  /* v2.1d: таймер идёт только на арене — если игрок в другой вкладке, зовём вернуться */
+  extractBadge(true);
+  if(!onArenaTab())toast(icon('vortex')+' Трофеи ждут на арене — вернись, чтобы выбрать!');
 }
 function chooseOrb(i){
   const e=R.extract; if(!e||e.done)return;
   e.done=true; e.chosen=i;
+  extractBadge(false);
   const orb=e.orbs[i], g=orb.gear;
   orb.reveal=true;
   R.hitstop=Math.max(R.hitstop,0.16);
@@ -3893,6 +5223,7 @@ function chooseOrb(i){
 function skipExtract(){
   const e=R.extract; if(!e||e.done)return;
   e.done=true; e.chosen=-1;
+  extractBadge(false);
   state.pity.epic++; state.pity.legend++;
   SFX.play('skip');
   toast('Трофеи улетели · гарантия +1 '+icon('spark'));
@@ -3905,6 +5236,7 @@ function endExtractNow(){
   R.spawnLeft=c.quota;
   R.bossX=265; R.bossIn=false; R.stunUntil=0;
   R.extract=null; R.bossPhase=1; R.tele=null; R.enrage=false; R.bossFightT=0;
+  extractBadge(false); /* v2.1d: страховка — бейдж гаснет при любом закрытии окна */
   renderAll();
 }
 
@@ -3917,9 +5249,11 @@ function onTap(x,y){
   if(c.phase==='extract'&&R.extract){
     const e=R.extract;
     if(!e.done){
+      /* v2.1d: на сенсорных экранах радиус тапа по орбу увеличен */
+      const orbR=(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)?40:26;
       for(let i=0;i<e.orbs.length;i++){
         const o=e.orbs[i];
-        if(Math.hypot(x-o.x,y-o.y)<26){chooseOrb(i);return;}
+        if(Math.hypot(x-o.x,y-o.y)<orbR){chooseOrb(i);return;}
       }
       if(x>CW-104&&x<CW-8&&y>CH-40&&y<CH-8){skipExtract();return;}
     }
@@ -4313,10 +5647,17 @@ function wheelPick(){
 }
 function renderWheel(){
   buildWheel();
+  kotoTut('wheel');
   const free=state.daySpin!==dayKey();
-  const bf=$('wheelFree'), bp=$('wheelSpin');
+  const bf=$('wheelFree'), bp=$('wheelSpin'), wc=$('wheelCost');
   if(bf){bf.disabled=!free||R.wheelBusy;bf.textContent=free?'БЕСПЛАТНЫЙ СПИН ДНЯ':'СПИН ДНЯ УЖЕ БЫЛ — ЗАВТРА';}
-  if(bp){bp.disabled=state.res.feed<5||R.wheelBusy;}
+  const cost=5*(R.wheelBet||1);
+  if(wc)wc.textContent='КРУТИТЬ ('+cost+' Рыбов ×'+(R.wheelBet||1)+')';
+  if(bp){bp.disabled=state.res.feed<cost||R.wheelBusy;}
+  document.querySelectorAll('.betbtn').forEach(function(b){
+    b.classList.toggle('on',+b.dataset.bet===(R.wheelBet||1));
+    b.disabled=!!R.wheelBusy;
+  });
   const log=$('wheelLog');
   if(log&&!log.dataset.init){
     log.dataset.init='1';
@@ -4338,44 +5679,76 @@ function wheelPrizeModal(s,extra){
   showModal(h);
 }
 function awardWheel(s){
-  const p=s.prize;
+  const p=s.prize, b=R.spinBet||1;
+  if(p.t==='none'){
+    /* v1.4: Рыба-Бомбочка — холостой сектор для баланса ставок */
+    wheelPrizeModal(s);
+    wheelLogAdd(s.n+': '+p.txt);
+    SFX.play('ui');
+    uiTick(); save(); return;
+  }
   if(p.t==='res'){
-    state.res[p.res]+=p.v;
-    toast(icon(p.res==='feed'?'fish':'yarn')+' +'+p.v+' '+(p.res==='feed'?'Рыбов':'клубок'));
+    state.res[p.res]+=p.v*b;
+    toast(icon(p.res==='feed'?'fish':'yarn')+' +'+p.v*b+' '+(p.res==='feed'?'Рыбов':'клубок')+(b>1?' (×'+b+' ставка)':''));
   } else if(p.t==='coins'){
-    const v=15+ri(0,15);
+    const v=(15+ri(0,15))*b;
     state.res.coins+=v; state.stats.coinsEarned=(state.stats.coinsEarned||0)+v;
-    toast(icon('coin')+' +'+v+' монет');
+    toast(icon('coin')+' +'+v+' монет'+(b>1?' (×'+b+' ставка)':''));
   } else if(p.t==='xp'){
-    state.cat.xp+=Math.round(p.v*(1+(calcAuras().xp||0)/100));
+    state.cat.xp+=Math.round(p.v*b*(1+(calcAuras().xp||0)/100));
     addMood(1);
     let need=50*state.cat.lvl;
     while(state.cat.xp>=need){state.cat.xp-=need;state.cat.lvl++;need=50*state.cat.lvl;fishSay('lvl',true);toast(icon('cat')+' Рыбец вырос: ур. '+state.cat.lvl);}
     renderCat();
   } else if(p.t==='buff'){
-    R.buffUntil=now()+p.v*1000;
-    toast(icon('spark')+' Ауры Рыбца ×1.5 на '+p.v+' с');
+    R.buffUntil=now()+Math.min(600,p.v*b)*1000;
+    toast(icon('spark')+' Ауры Рыбца ×1.5 на '+Math.min(600,p.v*b)+' с');
   } else if(p.t==='royal'){
-    state.res.yarn+=2; state.res.coins+=10;
-    state.stats.coinsEarned=(state.stats.coinsEarned||0)+10;
-    toast(icon('yarn')+' +2 клубка, +10 монет');
-  } else if(p.t==='gear'||p.t==='jackpot'){
+    state.res.yarn+=2*b; state.res.coins+=10*b;
+    state.stats.coinsEarned=(state.stats.coinsEarned||0)+10*b;
+    toast(icon('yarn')+' +'+2*b+' клубков, +'+10*b+' монет'+(b>1?' (×'+b+' ставка)':''));
+  } else if(p.t==='lootmult'){
+    /* v2.0: множитель лута — ресурсы дропа ×N на заданное время */
+    R.lootMultN=p.v; R.lootMultUntil=now()+p.dur*1000;
+    toast(icon('burst')+' ЛУТ ×'+p.v+' на '+(p.dur>=120?Math.round(p.dur/60)+' мин':p.dur+' с')+'!');
+    fishSay('jackpot');
+  } else if(p.t==='gear'){
+    let tier=rollTier(gearWeights());
+    /* v1.4: крупная ставка гарантирует редкость предмета */
+    if(b>=5)tier=Math.max(tier,1);
+    if(b>=25)tier=Math.max(tier,2);
+    const g=rollGear(pickHeroSlot(),Math.max(1,state.combat.wave),tier);
+    addGear(g);
+    toast(icon('sword')+' Рыба отдала: '+itemGearName(g)+' ('+TIERS[g.tier].n+')'+(b>1?' (×'+b+' ставка)':''));
+  } else if(p.t==='leg'||p.t==='jackpot'||p.t==='mega'){
     if(p.t==='jackpot'&&Math.random()<0.5){
-      state.res.coins+=p.v;
-      state.stats.coinsEarned=(state.stats.coinsEarned||0)+p.v;
-      toast(icon('coin')+' ДЖЕКПОТ: +'+p.v+' монет!');
-      wheelPrizeModal(s,'Золотые чешуйки превратились в '+p.v+' монет. Рыбец одобряет.');
-      wheelLogAdd('Джекпот ушёл в монеты: +'+p.v);
+      const v=p.v*b;
+      state.res.coins+=v;
+      state.stats.coinsEarned=(state.stats.coinsEarned||0)+v;
+      toast(icon('coin')+' ДЖЕКПОТ: +'+v+' монет!');
+      wheelPrizeModal(s,'Золотые чешуйки превратились в '+v+' монет. Рыбец одобряет.');
+      wheelLogAdd('Джекпот ушёл в монеты: +'+v);
       SFX.play('legend'); uiTick(); save(); return;
     }
-    const g=rollGear(pickHeroSlot(),Math.max(1,state.combat.wave),p.t==='jackpot'?3:rollTier(gearWeights()));
+    const g=rollGear(pickHeroSlot(),Math.max(1,state.combat.wave),3);
     addGear(g);
-    toast(icon('sword')+' Рыба отдала: '+itemGearName(g)+' ('+TIERS[g.tier].n+')');
+    if(p.t==='mega'){
+      state.res.yarn+=25*b; state.res.coins+=p.v*b;
+      state.stats.coinsEarned=(state.stats.coinsEarned||0)+p.v*b;
+      toast(icon('burst')+' МЕГА: '+itemGearName(g)+' ('+TIERS[g.tier].n+') +'+25*b+' '+icon('yarn')+' +'+p.v*b+' '+icon('coin'));
+      wheelPrizeModal(s,'Обсидиановая чешуя! Космо-пал, '+25*b+' клубков и '+p.v*b+' монет твои.');
+    } else if(p.t==='leg'){
+      state.res.coins+=p.v*b;
+      state.stats.coinsEarned=(state.stats.coinsEarned||0)+p.v*b;
+      toast(icon('sword')+' ЛЕГЕНДА: '+itemGearName(g)+' ('+TIERS[g.tier].n+') +'+p.v*b+' '+icon('coin'));
+    } else {
+      toast(icon('sword')+' Рыба отдала: '+itemGearName(g)+' ('+TIERS[g.tier].n+')'+(b>1?' (×'+b+' ставка)':''));
+    }
   }
   wheelPrizeModal(s);
-  wheelLogAdd(s.n+': '+p.txt);
-  if(s.id==='gold')fishSay('jackpot',true);else fishSay('wheel');
-  SFX.play(s.id==='gold'?'legend':'reveal');
+  wheelLogAdd(s.n+': '+p.txt+(b>1?' [ставка ×'+b+']':''));
+  if(s.id==='gold'||s.id==='obsidian'||s.id==='serpent')fishSay('jackpot',true);else fishSay('wheel');
+  SFX.play((s.id==='gold'||s.id==='obsidian'||s.id==='serpent')?'legend':'reveal');
   renderHdr(); renderLoot(); uiTick(); save();
 }
 function spinWheel(free){
@@ -4384,9 +5757,11 @@ function spinWheel(free){
     if(state.daySpin===dayKey()){toast('Бесплатный спин уже был — приходи завтра');return;}
     state.daySpin=dayKey();
   } else {
-    if(state.res.feed<5){toast('Мало Рыбов '+icon('fish')+' — лови мобов на арене');return;}
-    state.res.feed-=5;
+    const cost=5*(R.wheelBet||1);
+    if(state.res.feed<cost){toast('Мало Рыбов '+icon('fish')+' — нужно '+cost+' (ставка ×'+(R.wheelBet||1)+')');return;}
+    state.res.feed-=cost;
   }
+  R.spinBet=free?1:(R.wheelBet||1);
   const s=wheelPick();
   R.wheelBusy=true;
   renderWheel();
@@ -4419,6 +5794,10 @@ function spinWheel(free){
   const bp=$('wheelSpin');
   if(bf)bf.onclick=function(){spinWheel(true)};
   if(bp)bp.onclick=function(){spinWheel(false)};
+  /* v1.4: кнопки ставки ×1/×5/×25/×100 */
+  document.querySelectorAll('.betbtn').forEach(function(b){
+    b.onclick=function(){R.wheelBet=+b.dataset.bet;SFX.play('ui');renderWheel();};
+  });
   document.querySelectorAll('.pullmode').forEach(function(b){
     b.onclick=function(){doPull(b.getAttribute('data-pull'))};
   });
@@ -4471,6 +5850,66 @@ const LB={
   api:(/raidopert\.ru$/.test(location.hostname)?location.origin:'https://www.raidopert.ru'),
   online:null, run:null, lastStart:0, lastSubmit:0, me:null
 };
+
+/* ===== v2.1: иконки приложения (apple-touch) и PWA-манифест — генерируются из арта игры ===== */
+(function(){
+  function appIcon(size,padF){
+    return new Promise(function(res){
+      try{
+        const c=document.createElement('canvas'); c.width=c.height=size;
+        const g=c.getContext('2d');
+        const gr=g.createLinearGradient(0,0,0,size);
+        gr.addColorStop(0,'#3A2D1E'); gr.addColorStop(1,'#17120C');
+        g.fillStyle=gr; g.fillRect(0,0,size,size);
+        const im=new Image();
+        im.onload=function(){
+          try{
+            const pad=size*(padF||0.12), s=size-pad*2;
+            g.drawImage(im,0,0,im.width,im.height,pad,pad,s,s);
+            res(c.toDataURL('image/png'));
+          }catch(e){res(null)}
+        };
+        im.onerror=function(){res(null)};
+        im.src=IMG.fish_gold||'';
+      }catch(e){res(null)}
+    });
+  }
+  appIcon(192).then(function(url){
+    if(!url)return;
+    const head=document.head;
+    /* v2.2.1: apple-touch-icon — файл рядом надёжнее data:URI для iOS; фолбэк — канвас-версия */
+    const touch=document.createElement('link');
+    touch.rel='apple-touch-icon'; touch.href=url;
+    head.appendChild(touch);
+    try{fetch('apple-touch-icon.png',{method:'HEAD'}).then(function(r){if(r.ok)touch.href='apple-touch-icon.png'}).catch(function(){})}catch(e){}
+    /* v2.2.1: favicon вкладки браузера */
+    try{appIcon(64).then(function(fu){if(fu){const fav=document.createElement('link');fav.rel='icon';fav.href=fu;head.appendChild(fav)}})}catch(e){}
+    try{
+      const man={
+        name:'Кото-Лут', short_name:'Кото-Лут',
+        description:'Лут-РПГ: кот Рыбец, герой-рыцарь, колесо Рыбов и барахолка.',
+        start_url:'./', display:'standalone',
+        background_color:'#17120C', theme_color:'#F4B400',
+        icons:[{src:url,sizes:'192x192',type:'image/png',purpose:'any'},{src:url,sizes:'512x512',type:'image/png',purpose:'any'}]
+      };
+      /* v2.2.1: маскируемая иконка с большим полем — без обрезки на круглых масках Android */
+      appIcon(512,0.3).then(function(m512){
+        if(m512)man.icons.push({src:m512,sizes:'512x512',type:'image/png',purpose:'maskable'});
+        const link=document.createElement('link');
+        link.rel='manifest';
+        link.href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:'application/manifest+json'}));
+        head.appendChild(link);
+      });
+    }catch(e){}
+  });
+})();
+
+/* ===== v2.1e: сервис-воркер — офлайн-кэш и предложение установки PWA (только http/https) ===== */
+if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol)){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('./sw.js').catch(function(){});
+  });
+}
 
 function kotoDevice(){
   let d=null;
@@ -4567,36 +6006,30 @@ function kotoLBTable(){
     .catch(function(){LB.online=false;});
 }
 
-/* ===== Меню игры: Настройки · Инвентарь · Профиль — минимум описаний, только нужные кнопки ===== */
+/* ===== Меню игры: Настройки · Профиль (v2.1b: вкладка «Инвентарь» убрана — вещи живут во вкладке «Лут») ===== */
 let gtab='settings';
 
 function gSettings(){
   const mm=$('gmMusic'), ss=$('gmSfx');
   if(mm)mm.querySelector('b').textContent=MUSIC.en?'ВКЛ':'ВЫКЛ';
   if(ss)ss.querySelector('b').textContent=SFX.en?'ВКЛ':'ВЫКЛ';
+  const gv=$('gver');
+  if(gv)gv.textContent='Кото-Лут · сборка v'+VERSION+' · сейв №'+(state?state.seq||1:1);
 }
 
-function gInv(){
-  const el=$('gsec-inv'); if(!el)return;
-  const hero=state.hero, cat=state.cat;
-  let h='<h4>🗡 Рыцарь</h4>';
-  for(const s in HERO_SLOTS){
-    const it=hero.gear[s];
-    h+='<div class="ginv-row"><span>'+HERO_SLOTS[s].n+'</span><b>'+
-      (it?'<span style="color:'+TIERS[it.tier].c+'">'+itemGearName(it)+'</span>':'<i>—</i>')+'</b></div>';
-  }
-  h+='<p class="ghint">В сумке: '+hero.inv.length+' · <button id="gmLoot" class="glink">открыть Лут</button></p>';
-  h+='<h4>🐱 Рыбец</h4>';
-  for(const s in CAT_SLOTS){
-    const t=cat.equip[s];
-    h+='<div class="ginv-row"><span>'+CAT_SLOTS[s].n+'</span><b>'+
-      (t?'<span style="color:'+TIERS[t].c+'">'+CAT_SLOTS[s].names[t-1]+'</span>':'<i>—</i>')+'</b></div>';
-  }
-  h+='<p class="ghint">Сумка Рыбца: '+cat.inv.length+' · игрушек-оберегов на полке: '+Object.keys(state.toys||{}).length+'</p>';
-  el.innerHTML=h;
-  const lk=$('gmLoot');
-  if(lk)lk.onclick=function(){gMenuClose();showTab('loot');};
+/* v2.1: «Как играть» — краткая справка по всем системам */
+function gHelp(){
+  showModal('<h3>📘 Кото-Лут за минуту</h3>'+
+    '<p><b>Арена.</b> Герой бьёт мобов сам — добей квоту волны. Полный овердрайв: тап по арене, ×2 урон и скорость на 10 с.</p>'+
+    '<p><b>Боссы.</b> Каждый 5-й бой — босс. «СТУПОР» за клубок ставит его на паузу; после победы трофеи вылетают орбами — коснись одного за 10 с.</p>'+
+    '<p><b>Лут.</b> Снаряжение падает само. Тап по предмету: НАДЕТЬ / УЛУЧШИТЬ (+12% к статам за ур., до +5) / ПРОДАТЬ за монеты. Кнопка «экип-best» подбирает лучшее сразу.</p>'+
+    '<p><b>Рыбец.</b> Корми Рыбов (5 шт = опыт), гладь для настроения — ауры множат силу героя. Кото-лут с боссов — обереги Рыбца по слотам.</p>'+
+    '<p><b>Экономика.</b> Монеты — кузница, улучшения вещей и барахолка Мурзика. Клубки — крутки духов и ступор. Обрывки — обмен у Мурзика.</p>'+
+    '<p><b>Колесо Рыбов.</b> Бесплатный спин каждый день; ставки ×1–×100, а сектора Рыбы-Хамелеона и Радужной Рыбы заряжают ЛУТ ×2/×3 на время.</p>'+
+    '<p><b>Мировой топ.</b> Каждая 5-я волна рапортуется на raidopert.ru — рекорд живёт в мировой таблице.</p>');
 }
+
+/* v2.1b: сетка-инвентарь из меню удалена — сумка и экипировка целиком во вкладке «Лут» */
 
 function gProfile(){
   const el=$('gsec-profile'); if(!el)return;
@@ -4609,6 +6042,7 @@ function gProfile(){
     ['Боссов повержено',s.bossKills|0],
     ['Извлечено духов',s.extracts|0],
     ['Время в игре',fmtTime(s.timePlay)],
+    ['Версия сборки','Кото-Лут v'+VERSION],
     ['Место в мире',LB.me?('№'+LB.me.rank+' · волна '+LB.me.best):(LB.online===false?'нет связи':'…')]
   ];
   el.innerHTML=rows.map(function(r){return '<div class="ginv-row"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>'}).join('')+
@@ -4617,11 +6051,10 @@ function gProfile(){
 
 function gRender(){
   document.querySelectorAll('.gtab').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-gtab')===gtab)});
-  ['settings','inv','profile'].forEach(function(k){
+  ['settings','profile'].forEach(function(k){
     const el=$('gsec-'+k); if(el)el.classList.toggle('hidden',k!==gtab);
   });
-  if(gtab==='inv')gInv();
-  else if(gtab==='profile')gProfile();
+  if(gtab==='profile')gProfile();
   else gSettings();
 }
 function gMenuOpen(){
@@ -4661,10 +6094,15 @@ function gMenuClose(){
   document.addEventListener('click',function(e){
     const t=e.target.closest('.gtab');
     if(t){gtab=t.getAttribute('data-gtab');gRender();return;}
+    if(e.target.closest('#gmHelp')){gHelp();return;}
     if(e.target.closest('#gmMusic')){kotoSetMusic(!MUSIC.en);gSettings();return;}
     if(e.target.closest('#gmSfx')){kotoSetSfx(!SFX.en);gSettings();return;}
     if(e.target.closest('#gmReset')){
       if(confirm('Сбросить весь прогресс?')){
+        /* v2.1a: сначала заменяем state дефолтом — иначе beforeunload-сейв
+           успевает записать старый прогресс обратно после removeItem */
+        state=defaultState();
+        state.flags.started=true; /* сразу в арену, без интро-анкеты */
         try{localStorage.removeItem(SAVE_KEY)}catch(e2){}
         location.reload();
       }
@@ -4892,20 +6330,32 @@ function ambientTick(){
       if(R.guest||Math.random()<0.25)guestSpawn(); /* босс повержен — во двор заглядывает гость */
     };
   }
-  /* тап по гостевому коту */
+  /* тап по гостевому коту + v1.3: тап по арене — овердрайв */
   const cvs=$('cv');
   if(cvs)cvs.addEventListener('pointerdown',function(e){
-    if(!R.guest)return;
     const r=cvs.getBoundingClientRect();
-    const gx=D(R.guest.x)+9/1, gy=D(GROUND)-8;
     const px=(e.clientX-r.left)/r.width*512, py=(e.clientY-r.top)/r.height*288;
-    if(Math.abs(px-gx)<16&&Math.abs(py-gy)<16){
-      R.guest.petted++;
-      fxHeart(gx,gy-14); fxHeart(gx-6,gy-18);
-      addMood(2); SFX.play('pet');
-      if(R.guest.petted===3)toast('🐱 '+R.guest.name+' мурчит от удовольствия');
+    if(R.guest){
+      const gx=D(R.guest.x)+9/1, gy=D(GROUND)-8;
+      if(Math.abs(px-gx)<16&&Math.abs(py-gy)<16){
+        R.guest.petted++;
+        fxHeart(gx,gy-14); fxHeart(gx-6,gy-18);
+        addMood(2); SFX.play('pet');
+        if(R.guest.petted===3)toast('🐱 '+R.guest.name+' мурчит от удовольствия');
+        return;
+      }
     }
+    if(typeof odTap==='function')odTap(); /* остальная арена — ОВЕРДРАЙВ */
   });
+  /* OD-бар: ширина и подпись */
+  setInterval(function(){
+    const bar=$('odBar'), lbl=$('odLbl');
+    if(!bar)return;
+    const active=(R.odT||0)>0;
+    bar.style.width=(active?100:Math.min(100,R.od||0))+'%';
+    bar.classList.toggle('on',active);
+    if(lbl)lbl.textContent=active?('ОВЕРДРАЙВ '+Math.ceil(R.odT)+'с'):((R.od||0)>=100?'ОВЕРДРАЙВ ГОТОВ — ТАП!':'ОВЕРДРАЙВ '+Math.floor(R.od||0)+'%');
+  },250);
 })();
 
 /* — таймеры v1.2: события, ачивки, атмосфера, онбординг — */
@@ -4931,6 +6381,57 @@ setInterval(function(){ if(state)renderAch(); },10000);
   }
   /* панель ачивок и фильтры доступны и без боя (вкладки открыты сразу) */
   setTimeout(function(){invFilterBar();renderAch();},600);
+})();
+
+/* ===== v2.1e: мягкие подсказки менеджмента Рыбца (пункты C из отчёта плей-теста) ===== */
+(function(){
+  if(!state.cat.lastFed)state.cat.lastFed=now(); /* старые сейвы: считаем «только что покормлен» */
+  let cdMood=0,cdFed=0;
+  setInterval(function(){
+    const t=now(),cat=state.cat;
+    if((cat.mood||0)<40&&t>=cdMood){
+      cdMood=t+180000; /* не чаще раза в 3 минуты */
+      toast(icon('paw')+' Рыбец скучает: настроение '+Math.round(cat.mood)+'/100 — погладь или покорми');
+    }
+    if(t-(cat.lastFed||0)>120000&&t>=cdFed&&(state.res.feed|0)>=5){
+      cdFed=t+300000; /* не чаще раза в 5 минут, и только если есть чем кормить */
+      toast(icon('fish')+' Рыбец проголодался — загляни во вкладку «Кот»');
+    }
+  },20000);
+})();
+
+/* ===== v2.2a: офлайн-прогресс «С возвращением» — двор подрабатывает без игрока.
+   Отдельный ключ localStorage (kotolut_lastseen), НЕ state.lastSeen: init-save
+   при каждой загрузке перезаписывал бы lastSeen, и начислений бы не было. ===== */
+(function(){
+  const LSK='kotolut_lastseen';
+  try{localStorage.setItem(LSK,now())}catch(e){}
+  setInterval(function(){try{localStorage.setItem(LSK,now())}catch(e){}},60000); /* heartbeat живой сессии */
+  window.__klsUnload=function(){try{localStorage.setItem(LSK,now())}catch(e){}};
+  window.addEventListener('beforeunload',window.__klsUnload); /* финальный штамп при уходе */
+  window.welcomeBackCheck=function(){
+    if(!state||!state.flags||!state.flags.started)return false;
+    let ls=0; try{ls=+localStorage.getItem(LSK)||0}catch(e){}
+    if(!ls)return false;
+    const away=now()-ls;
+    if(away<600000)return false; /* меньше 10 минут — начислений нет */
+    const minutes=Math.min(Math.floor(away/60000),240); /* кап 4 часа */
+    const rate=Math.max(1,Math.round((state.stats.bestWave||1)*0.8)); /* монет в минуту от рекорда */
+    const coins=rate*minutes, fishes=Math.min(24,Math.floor(minutes/10));
+    if(coins<10)return false;
+    state.res.coins+=coins; state.res.feed+=fishes;
+    state.stats.coinsEarned=(state.stats.coinsEarned||0)+coins;
+    try{localStorage.setItem(LSK,now())}catch(e){}
+    showModal('<h3>🏠 С возвращением!</h3>'+
+      '<p>Тебя не было '+fmtTime(minutes*60)+' — Рыбец устроил двору подработку и отнёс выручку в копилку.</p>'+
+      '<p class="tstat">'+icon('coin')+' Монеты: <b>+'+coins+'</b> (+'+rate+' за минуту покоя)</p>'+
+      '<p class="tstat">'+icon('fish')+' Рыбы: <b>+'+fishes+'</b> — миска ждёт</p>'+
+      '<p class="hint">Начисление растёт вместе с максимальной волной. Учтено не более 4 часов покоя.</p>');
+    addLog('Возвращение: +'+coins+' монет, +'+fishes+' Рыбов за '+fmtTime(minutes*60));
+    renderHdr(); save();
+    return true;
+  };
+  setTimeout(function(){welcomeBackCheck()},1500);
 })();
 /* ===== P7: автостарт чиптюна v0.8 (сам секвенсор MUSIC объявлен в P3) ===== */
 (function(){
